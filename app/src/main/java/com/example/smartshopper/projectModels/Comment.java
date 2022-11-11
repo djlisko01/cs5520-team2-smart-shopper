@@ -2,7 +2,7 @@ package com.example.smartshopper.projectModels;
 
 import org.json.JSONObject;
 
-class Comment implements CommentInterface {
+public class Comment implements CommentInterface {
     User poster;
     String text;
     Long timePosted;

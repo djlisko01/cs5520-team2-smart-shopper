@@ -2,6 +2,7 @@ package com.example.smartshopper.common;
 
 import com.example.smartshopper.projectModels.Deal;
 import com.example.smartshopper.projectModels.User;
+import com.example.smartshopper.projectModels.Comment;
 
 public interface PlatformHelpersInterface {
 
@@ -15,6 +16,6 @@ public interface PlatformHelpersInterface {
     Deal getDeal(String dealId);
     String getDealId(Deal deal);
     void addDeal(Deal deal);
-    void addComment(String comment);
+    void addComment(Comment comment);
     void getDealsBySearch(String search);
 }

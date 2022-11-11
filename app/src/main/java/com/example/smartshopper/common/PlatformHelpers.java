@@ -1,5 +1,6 @@
 package com.example.smartshopper.common;
 
+import com.example.smartshopper.projectModels.Comment;
 import com.example.smartshopper.projectModels.Deal;
 import com.example.smartshopper.projectModels.User;
 
@@ -35,7 +36,7 @@ public class PlatformHelpers implements PlatformHelpersInterface {
     }
 
     @Override
-    public void addComment(String comment) {
+    public void addComment(Comment comment) {
 
     }
 
