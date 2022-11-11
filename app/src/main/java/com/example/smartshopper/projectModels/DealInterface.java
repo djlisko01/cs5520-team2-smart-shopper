@@ -10,7 +10,7 @@ public interface DealInterface {
     String getDescription();
 
     // Time deal was posted
-    String getTimePosted();
+    Long getTimePosted();
 
     // Get store name of deal
     String getStore();

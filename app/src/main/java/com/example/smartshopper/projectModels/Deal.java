@@ -61,8 +61,8 @@ public class Deal implements DealInterface {
     }
 
     @Override
-    public String getTimePosted() {
-        return this.timePosted.toString();
+    public Long getTimePosted() {
+        return this.timePosted;
     }
 
     @Override
