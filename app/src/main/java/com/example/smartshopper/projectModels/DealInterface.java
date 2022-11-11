@@ -16,7 +16,7 @@ public interface DealInterface {
     String getStore();
 
     // Get UPC of deal
-    Integer getUPC();
+    Long getUPC();
 
     // Get original price of deal
     Double getPrice();
@@ -24,13 +24,13 @@ public interface DealInterface {
     // Get sale price of deal
     Double getSalePrice();
 
-    Void addComment(CommentInterface comment);
+    void addComment(Comment comment);
 
     List<Comment> getComments();
 
-    Void upvote();
+    void upvote();
 
-    Void downvote();
+    void downvote();
 
     Integer getVoteScore();
 

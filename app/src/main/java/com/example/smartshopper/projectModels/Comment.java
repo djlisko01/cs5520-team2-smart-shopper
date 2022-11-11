@@ -20,16 +20,14 @@ class Comment implements CommentInterface {
 
     @Override
     public String getText() {
-        return null;
+        return this.text;
     }
 
     @Override
     public Long getTimePosted() {
-        return null;
+        return this.timePosted;
     }
 
     @Override
-    public User getPoster() {
-        return null;
-    }
+    public User getPoster() {return this.poster;}
 }

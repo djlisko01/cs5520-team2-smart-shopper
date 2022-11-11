@@ -16,8 +16,12 @@ public class User implements UserInterface {
 
     @Override
     public String getUsername() {
-        return null;
+        return this.username;
     }
+
+    @Override
+    public String toString() { return this.username; }
+
 
     // Deals the user has saved
 //    public abstract List<AbstractDeal> getSavedDeals();
