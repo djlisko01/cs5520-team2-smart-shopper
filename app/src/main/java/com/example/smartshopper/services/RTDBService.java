@@ -13,66 +13,55 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-public class RTDBService implements RTDBServiceInterface {
+public class RTDBService {
     FirebaseDatabase database = FirebaseDatabase.getInstance();
 
     public RTDBService() {
     }
 
     // Define Queries here
-    @Override
     public Query getAll(String child) {
         return database.getReference().child(child);
     }
-    @Override
     public Query getUser(String username) {
         return database.getReference().child(Constants.USERS).orderByChild(Constants.USERNAME).equalTo(username);
     }
 
 
-    @Override
     public Query getDeal(String dealID) {
         return null;
     }
 
-    @Override
     public Query getSavedDeals(User user) {
         return null;
     }
 
-    @Override
     public Query getPostedDeals(User user) {
         return null;
     }
 
-    @Override
     public Query getComments(User user) {
         return null;
     }
 
-    @Override
     public Query getFriends(User user) {
         return null;
     }
 
-    @Override
     public void writeUser(User user) {
         database.getReference().child(Constants.USERS).child(user.getUsername()).setValue(user);
     }
 
-    @Override
     public void writeDeal(Deal deal) {
 
     }
 
-    @Override
     public Query getDealsBySearch(String search) {
         return null;
     }
 
 
     // Use this to determine whether item exists (bool) for particular query
-    @Override
     public void getStatusResponseFromQuery(Query query, BoolInterface boolInterface) {
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -91,7 +80,6 @@ public class RTDBService implements RTDBServiceInterface {
     }
 
     // Use this to get a single response (object) from a query, may contain children
-    @Override
     public void getDataResponseFromQuery(Query query, ObjectInterface objectInterface) {
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
