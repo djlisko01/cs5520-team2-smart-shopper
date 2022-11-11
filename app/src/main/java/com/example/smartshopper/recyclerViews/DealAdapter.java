@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.smartshopper.R;
 import com.example.smartshopper.projectModels.Deal;
 
+import java.text.DateFormat;
 import java.util.List;
 
 public class DealAdapter extends RecyclerView.Adapter<DealViewHolder> {
@@ -38,7 +39,7 @@ public class DealAdapter extends RecyclerView.Adapter<DealViewHolder> {
         Drawable drawableReference = ContextCompat.getDrawable(context, context.getResources().getIdentifier(stringUri, "drawable", context.getPackageName()));
         holder.iv_itemPicture.setImageDrawable(drawableReference);
 
-        holder.tv_dealPostedTime.setText(deals.get(position).getTimePosted().toString());
+        holder.tv_dealPostedTime.setText(formatTime(deals.get(position).getTimePosted()));
         holder.tv_dealPostedBy.setText(String.valueOf(deals.get(position).getPoster()));
     }
 
@@ -50,5 +51,11 @@ public class DealAdapter extends RecyclerView.Adapter<DealViewHolder> {
     public void updateData(List<Deal> messages) {
         this.deals = messages;
         notifyDataSetChanged();
+    }
+
+    public String formatTime(long timestamp) {
+        String date = DateFormat.getDateInstance(DateFormat.LONG).format(timestamp)
+                + '\n' + DateFormat.getTimeInstance(DateFormat.LONG).format(timestamp);
+        return date;
     }
 }
