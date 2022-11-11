@@ -29,5 +29,7 @@ public class Comment implements CommentInterface {
     }
 
     @Override
-    public User getPoster() {return this.poster;}
+    public User getPoster() {
+        return this.poster;
+    }
 }

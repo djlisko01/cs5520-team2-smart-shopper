@@ -36,6 +36,26 @@ public class RTDBService implements RTDBServiceInterface {
     }
 
     @Override
+    public Query getSavedDeals(User user) {
+        return null;
+    }
+
+    @Override
+    public Query getPostedDeals(User user) {
+        return null;
+    }
+
+    @Override
+    public Query getComments(User user) {
+        return null;
+    }
+
+    @Override
+    public Query getFriends(User user) {
+        return null;
+    }
+
+    @Override
     public void writeUser(User user) {
         database.getReference().child(Constants.USERS).child(user.getUsername()).setValue(user);
     }

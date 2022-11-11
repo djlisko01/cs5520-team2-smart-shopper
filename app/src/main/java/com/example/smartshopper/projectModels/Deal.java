@@ -81,13 +81,19 @@ public class Deal implements DealInterface {
     }
 
     @Override
-    public Double getSalePrice() { return this.salePrice; }
+    public Double getSalePrice() {
+        return this.salePrice;
+    }
 
     @Override
-    public Double getSavings() { return this.price - this.salePrice; }
+    public Double getSavings() {
+        return this.price - this.salePrice;
+    }
 
     @Override
-    public void addComment(Comment comment) { this.comments.add(comment); }
+    public void addComment(Comment comment) {
+        this.comments.add(comment);
+    }
 
     @Override
     public List<Comment> getComments() {
