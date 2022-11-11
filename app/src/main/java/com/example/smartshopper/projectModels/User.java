@@ -16,20 +16,13 @@ public class User implements UserInterface {
 
     @Override
     public String getUsername() {
-        return null;
+        return this.username;
     }
 
-    // Deals the user has saved
-//    public abstract List<AbstractDeal> getSavedDeals();
-//
-//    // Deals the user has posted
-//    public abstract List<AbstractDeal> getPostedDeals();
-//
-//    // List of user's comments
-//    public abstract List<AbstractComment> getComments();
-//
-//    // List of user's friends - does this go here or in a separate class?
-//    public abstract List<AbstractUser> getFriends();
+    @Override
+    public String toString() {
+        return this.username;
+    }
 
 
 }

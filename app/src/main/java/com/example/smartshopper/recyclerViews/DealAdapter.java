@@ -38,7 +38,7 @@ public class DealAdapter extends RecyclerView.Adapter<DealViewHolder> {
         Drawable drawableReference = ContextCompat.getDrawable(context, context.getResources().getIdentifier(stringUri, "drawable", context.getPackageName()));
         holder.iv_itemPicture.setImageDrawable(drawableReference);
 
-        holder.tv_dealPostedBy.setText(deals.get(position).getTimePosted());
+        holder.tv_dealPostedTime.setText(deals.get(position).getTimePosted().toString());
         holder.tv_dealPostedBy.setText(String.valueOf(deals.get(position).getPoster()));
     }
 

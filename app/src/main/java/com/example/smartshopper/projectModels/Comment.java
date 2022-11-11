@@ -2,7 +2,7 @@ package com.example.smartshopper.projectModels;
 
 import org.json.JSONObject;
 
-class Comment implements CommentInterface {
+public class Comment implements CommentInterface {
     User poster;
     String text;
     Long timePosted;
@@ -20,16 +20,16 @@ class Comment implements CommentInterface {
 
     @Override
     public String getText() {
-        return null;
+        return this.text;
     }
 
     @Override
     public Long getTimePosted() {
-        return null;
+        return this.timePosted;
     }
 
     @Override
     public User getPoster() {
-        return null;
+        return this.poster;
     }
 }

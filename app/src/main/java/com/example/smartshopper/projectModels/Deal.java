@@ -52,72 +52,77 @@ public class Deal implements DealInterface {
 
     @Override
     public String getTitle() {
-        return null;
+        return this.title;
     }
 
     @Override
     public String getDescription() {
-        return null;
+        return this.description;
     }
 
     @Override
-    public String getTimePosted() {
-        return null;
+    public Long getTimePosted() {
+        return this.timePosted;
     }
 
     @Override
     public String getStore() {
-        return null;
+        return this.store;
     }
 
     @Override
-    public Integer getUPC() {
-        return null;
+    public Long getUPC() {
+        return this.upc;
     }
 
     @Override
     public Double getPrice() {
-        return null;
+        return this.price;
     }
 
     @Override
     public Double getSalePrice() {
-        return null;
+        return this.salePrice;
     }
 
     @Override
-    public Void addComment(CommentInterface comment) {
-        return null;
+    public Double getSavings() {
+        return this.price - this.salePrice;
+    }
+
+    @Override
+    public void addComment(Comment comment) {
+        this.comments.add(comment);
     }
 
     @Override
     public List<Comment> getComments() {
-        return null;
+        return this.comments;
     }
 
     @Override
-    public Void upvote() {
-        return null;
+    public void upvote() {
+        voteScore++;
     }
 
     @Override
-    public Void downvote() {
-        return null;
+    public void downvote() {
+        voteScore--;
     }
 
     @Override
     public Integer getVoteScore() {
-        return null;
+        return this.voteScore;
     }
 
     @Override
     public Integer getCommentsCount() {
-        return null;
+        return comments.size();
     }
 
     @Override
-    public UserInterface getPoster() {
-        return null;
+    public User getPoster() {
+        return this.poster;
     }
 
     @Override

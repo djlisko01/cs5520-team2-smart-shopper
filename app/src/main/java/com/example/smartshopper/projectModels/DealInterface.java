@@ -10,13 +10,13 @@ public interface DealInterface {
     String getDescription();
 
     // Time deal was posted
-    String getTimePosted();
+    Long getTimePosted();
 
     // Get store name of deal
     String getStore();
 
     // Get UPC of deal
-    Integer getUPC();
+    Long getUPC();
 
     // Get original price of deal
     Double getPrice();
@@ -24,13 +24,16 @@ public interface DealInterface {
     // Get sale price of deal
     Double getSalePrice();
 
-    Void addComment(CommentInterface comment);
+    // Get ammount saved
+    Double getSavings();
+
+    void addComment(Comment comment);
 
     List<Comment> getComments();
 
-    Void upvote();
+    void upvote();
 
-    Void downvote();
+    void downvote();
 
     Integer getVoteScore();
 
