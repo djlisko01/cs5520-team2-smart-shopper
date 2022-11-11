@@ -24,6 +24,9 @@ public interface DealInterface {
     // Get sale price of deal
     Double getSalePrice();
 
+    // Get ammount saved
+    Double getSavings();
+
     void addComment(Comment comment);
 
     List<Comment> getComments();
