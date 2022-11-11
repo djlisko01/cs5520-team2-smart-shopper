@@ -1,4 +1,4 @@
-package com.example.team2.projectModels;
+package com.example.smartshopper.projectModels;
 
 public interface CommentInterface {
     // Get comment text

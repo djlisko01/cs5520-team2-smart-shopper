@@ -1,4 +1,4 @@
-package com.example.team2.projectModels;
+package com.example.smartshopper.projectModels;
 
 import org.json.JSONObject;
 
