@@ -4,7 +4,7 @@ import org.json.JSONObject;
 
 import java.util.List;
 
-class Deal implements DealInterface {
+public class Deal implements DealInterface {
     Long upc;
     String title;
     String description;
@@ -15,6 +15,7 @@ class Deal implements DealInterface {
     User poster;
     List<Comment> comments;
     Integer voteScore;
+    String imageURI;
 
     // Initial Creation - For deals that have a UPC
     public Deal(Long upc, String title, Double price, Double salePrice, String description, String store, User poster) {
@@ -27,6 +28,7 @@ class Deal implements DealInterface {
         this.store = store;
         this.poster = poster;
         this.voteScore = 0;
+        this.imageURI = "";
     }
 
     // Initial Creation - For inserting a deal that lacks a UPC (e.g. Tomatoes 0.99/lb)
@@ -40,6 +42,7 @@ class Deal implements DealInterface {
         this.store = store;
         this.poster = poster;
         this.voteScore = 0;
+        this.imageURI = "";
     }
 
     // For use with firebase to make a deal object from a json object (what snapshot.getValue returns)
@@ -115,6 +118,11 @@ class Deal implements DealInterface {
     @Override
     public UserInterface getPoster() {
         return null;
+    }
+
+    @Override
+    public String getImageURI() {
+        return imageURI;
     }
 
 
