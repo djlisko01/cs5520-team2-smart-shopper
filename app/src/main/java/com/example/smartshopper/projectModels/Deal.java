@@ -12,6 +12,7 @@ public class Deal implements DealInterface {
     String store;
     Double price;
     Double salePrice;
+    Double savings;
     User poster;
     List<Comment> comments;
     Integer voteScore;
@@ -23,6 +24,7 @@ public class Deal implements DealInterface {
         this.title = title;
         this.price = price;
         this.salePrice = salePrice;
+        this.savings = price - salePrice;
         this.description = description;
         this.timePosted = System.currentTimeMillis();
         this.store = store;
@@ -37,6 +39,7 @@ public class Deal implements DealInterface {
         this.title = title;
         this.price = price;
         this.salePrice = salePrice;
+        this.savings = price - salePrice;
         this.description = description;
         this.timePosted = System.currentTimeMillis();
         this.store = store;
