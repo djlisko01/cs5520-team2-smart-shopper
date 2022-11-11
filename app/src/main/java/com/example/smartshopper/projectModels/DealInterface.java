@@ -37,4 +37,6 @@ public interface DealInterface {
     Integer getCommentsCount();
 
     UserInterface getPoster();
+
+    String getImageURI();
 }

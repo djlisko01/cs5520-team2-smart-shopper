@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Smart Shopper</string>
+    <!-- to toggle the open close button of the navigation drawer -->
+    <string name="nav_open">Open</string>
+    <string name="nav_close">Close</string>
+    <string name="picture_of_the_on_sale_item">Picture of the on sale item</string>
+    <string name="dealpostedtime">dealPostedTime</string>
+    <string name="dealpostedby">dealPostedBy</string>
 </resources>

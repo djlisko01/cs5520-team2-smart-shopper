@@ -2,7 +2,7 @@ package com.example.smartshopper.projectModels;
 
 import org.json.JSONObject;
 
-class User implements UserInterface {
+public class User implements UserInterface {
     String username;
 
     public User(String username) {
