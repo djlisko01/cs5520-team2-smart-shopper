@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "185881877890",
+    "firebase_url": "https://smart-shopper-team-2-default-rtdb.firebaseio.com",
+    "project_id": "smart-shopper-team-2",
+    "storage_bucket": "smart-shopper-team-2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:185881877890:android:7e839493dced1f16c9039b",
+        "android_client_info": {
+          "package_name": "com.example.smartshopper"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "185881877890-85leofmum19udghi79dere2rjp82tgai.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDXkOeWPXGWBfUOrmitTNLEpTQ4m-LSyyI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "185881877890-85leofmum19udghi79dere2rjp82tgai.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
