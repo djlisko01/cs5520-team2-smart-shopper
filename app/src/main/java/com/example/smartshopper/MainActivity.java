@@ -11,11 +11,8 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.example.smartshopper.common.PlatformHelpers;
-import com.example.smartshopper.models.Deal;
 import com.example.smartshopper.recyclerViews.DealAdapter;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
