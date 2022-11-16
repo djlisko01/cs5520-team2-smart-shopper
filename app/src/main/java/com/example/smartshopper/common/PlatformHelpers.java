@@ -1,6 +1,7 @@
 package com.example.smartshopper.common;
 
 import android.content.Context;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -83,12 +84,13 @@ public class PlatformHelpers {
         });
     }
 
-    public void updateMainRecyclerView() {
+    public void updateMainRecyclerView(Context context) {
         MainActivity mainActivity = (MainActivity) context;
         this.getPopularDeals(response -> {
             DealAdapter adapter = new DealAdapter(response, mainActivity);
-            adapter.updateData(response);
-            mainActivity.updateRecycler(adapter);
+//            adapter.updateData(response);
+            mainActivity.rv_dealsRecyclerView.setLayoutManager(new LinearLayoutManager(mainActivity));
+            mainActivity.rv_dealsRecyclerView.setAdapter(adapter);
         });
     }
 }
