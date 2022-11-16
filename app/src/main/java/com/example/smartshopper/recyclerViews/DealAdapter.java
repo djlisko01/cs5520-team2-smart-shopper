@@ -70,7 +70,6 @@ public class DealAdapter extends RecyclerView.Adapter<DealViewHolder> {
     }
 
     public String formatDate(long timestamp) {
-        String date = DateFormat.getDateInstance(DateFormat.LONG).format(timestamp);
-        return date;
+        return DateFormat.getDateInstance(DateFormat.LONG).format(timestamp);
     }
 }
