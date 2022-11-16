@@ -1,6 +1,6 @@
 package com.example.smartshopper.responseInterfaces;
 
-import com.example.smartshopper.projectModels.Deal;
+import com.example.smartshopper.models.Deal;
 
 import java.util.List;
 

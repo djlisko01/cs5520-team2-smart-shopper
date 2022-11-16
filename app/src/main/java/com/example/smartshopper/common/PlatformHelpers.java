@@ -1,19 +1,13 @@
 package com.example.smartshopper.common;
 
 import android.content.Context;
-import android.view.View;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.smartshopper.MainActivity;
-import com.example.smartshopper.R;
-import com.example.smartshopper.projectModels.Comment;
-import com.example.smartshopper.projectModels.Deal;
-import com.example.smartshopper.projectModels.User;
+import com.example.smartshopper.models.Comment;
+import com.example.smartshopper.models.Deal;
+import com.example.smartshopper.models.User;
 import com.example.smartshopper.recyclerViews.DealAdapter;
-import com.example.smartshopper.responseInterfaces.ListInterface;
 import com.example.smartshopper.services.RTDBService;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -64,7 +58,8 @@ public class PlatformHelpers {
 
     }
 
-    public void getPopularDeals(ListInterface listInterface) {
+    public void getDealsAndUpdateMainRV(DealAdapter adapter) {
+        //TODO case switch queryEnum to get the correct query from FireBase
         Query query = rtdbDatabase.getBestDeals();
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -73,24 +68,13 @@ public class PlatformHelpers {
                 for (DataSnapshot child : snapshot.getChildren()) {
                     deals.add(child.getValue(Deal.class));
                 }
-                // having trouble getting abstract Response Class to work here...
-//                responseClass.onCallback(deals);
-                listInterface.onCallback(deals);
+                adapter.updateData(deals);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
-        });
-    }
-
-    public void updateMainRecyclerView(Context context) {
-        MainActivity mainActivity = (MainActivity) context;
-        this.getPopularDeals(response -> {
-            DealAdapter adapter = new DealAdapter(response, mainActivity);
-            mainActivity.rv_dealsRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-            mainActivity.rv_dealsRecyclerView.setAdapter(adapter);
         });
     }
 }

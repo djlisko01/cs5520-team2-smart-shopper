@@ -4,15 +4,18 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.example.smartshopper.common.PlatformHelpers;
+import com.example.smartshopper.models.Deal;
 import com.example.smartshopper.recyclerViews.DealAdapter;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
@@ -21,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     PlatformHelpers platformHelpers;
     public RecyclerView rv_dealsRecyclerView;
     DealAdapter adapter;
+    List<Deal> deals;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +46,15 @@ public class MainActivity extends AppCompatActivity {
         // to make the Navigation drawer icon always appear on the action bar
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
+        // Recycler View setup
+        deals = new ArrayList<>(); // initiate an empty stickers array (begins with empty recycler view)
+        adapter = new DealAdapter(deals, this);
+        rv_dealsRecyclerView = findViewById(R.id.rv_dealsRecyclerView);
+        rv_dealsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        rv_dealsRecyclerView.setAdapter(adapter);
+
         // Get deals from firebase:
-        platformHelpers.updateMainRecyclerView(this);
+        platformHelpers.getDealsAndUpdateMainRV(adapter);
 
     }
 

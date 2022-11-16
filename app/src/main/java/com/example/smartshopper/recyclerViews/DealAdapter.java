@@ -2,20 +2,16 @@ package com.example.smartshopper.recyclerViews;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.smartshopper.R;
-import com.example.smartshopper.projectModels.Deal;
+import com.example.smartshopper.models.Deal;
 
-import java.io.InputStream;
 import java.text.DateFormat;
 import java.util.List;
 
