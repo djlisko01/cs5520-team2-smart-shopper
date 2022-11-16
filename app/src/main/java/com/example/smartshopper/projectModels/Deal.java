@@ -49,7 +49,6 @@ public class Deal {
     }
 
     // For use with firebase to make a deal object from a json object (what snapshot.getValue returns)
-    // TODO: implement
     public Deal() {
     }
 
