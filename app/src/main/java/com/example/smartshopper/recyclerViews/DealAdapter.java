@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.smartshopper.R;
 import com.example.smartshopper.common.Constants;
 import com.example.smartshopper.models.Deal;
+import com.example.smartshopper.responseInterfaces.RecyclerViewInterface;
 import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
@@ -23,16 +24,19 @@ import java.util.List;
 public class DealAdapter extends RecyclerView.Adapter<DealViewHolder> {
     private List<Deal> deals;
     private final Context context;
+    private final RecyclerViewInterface recyclerViewInterface;
 
-    public DealAdapter(List<Deal> deals, Context context) {
+    public DealAdapter(List<Deal> deals, Context context, RecyclerViewInterface recyclerViewInterface) {
         this.deals = deals;
         this.context = context;
+        this.recyclerViewInterface = recyclerViewInterface;
     }
 
     @NonNull
     @Override
     public DealViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new DealViewHolder(LayoutInflater.from(context).inflate(R.layout.deal, null));
+        return new DealViewHolder(LayoutInflater.from(context).inflate(R.layout.deal, null),
+                recyclerViewInterface);
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -71,5 +75,9 @@ public class DealAdapter extends RecyclerView.Adapter<DealViewHolder> {
 
     public String formatDate(long timestamp) {
         return DateFormat.getDateInstance(DateFormat.LONG).format(timestamp);
+    }
+
+    public Deal getDeal(int position){
+        return deals.get(position);
     }
 }
