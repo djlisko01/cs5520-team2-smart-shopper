@@ -48,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Recycler View setup
         adapter = new DealAdapter(this);
-        rv_dealsRecyclerView = findViewById(R.id.rv_dealsRecyclerView);
         rv_dealsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         rv_dealsRecyclerView.setAdapter(adapter);
 
