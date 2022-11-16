@@ -11,8 +11,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.example.smartshopper.common.PlatformHelpers;
-import com.example.smartshopper.projectModels.Deal;
-import com.example.smartshopper.projectModels.User;
+import com.example.smartshopper.models.Deal;
 import com.example.smartshopper.recyclerViews.DealAdapter;
 
 import java.util.ArrayList;
@@ -23,14 +22,19 @@ public class MainActivity extends AppCompatActivity {
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
     PlatformHelpers platformHelpers;
-    RecyclerView rv_dealsRecyclerView;
-    List<Deal> deals;
+    public RecyclerView rv_dealsRecyclerView;
     DealAdapter adapter;
+    List<Deal> deals;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Instantiate platforhelpers
+        platformHelpers = new PlatformHelpers(this);
+        rv_dealsRecyclerView = findViewById(R.id.rv_dealsRecyclerView);
+
 
         // https://www.geeksforgeeks.org/navigation-drawer-in-android/
         // drawer layout instance to toggle the menu icon to open drawer and back button to close drawer
@@ -44,18 +48,14 @@ public class MainActivity extends AppCompatActivity {
 
         // Recycler View setup
         deals = new ArrayList<>(); // initiate an empty stickers array (begins with empty recycler view)
-        // Temporary placeholder to display cards in recyclerView
-        User tempuser = new User("megaDeals100");
-        for (int i=0; i < 10; i++) {
-            String dealNumber = String.valueOf(i);
-            Deal tempDeal = new Deal("Deal"+ dealNumber , (double) (i+10), (double) (i+3),dealNumber + "description", "Target", tempuser);
-            deals.add(tempDeal);
-        }
-
         adapter = new DealAdapter(deals, this);
         rv_dealsRecyclerView = findViewById(R.id.rv_dealsRecyclerView);
         rv_dealsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         rv_dealsRecyclerView.setAdapter(adapter);
+
+        // Get deals from firebase:
+        platformHelpers.getDealsAndUpdateMainRV(adapter);
+
     }
 
     @Override

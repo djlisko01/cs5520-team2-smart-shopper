@@ -1,8 +1,8 @@
-package com.example.smartshopper.projectModels;
+package com.example.smartshopper.models;
 
 import org.json.JSONObject;
 
-public class User implements UserInterface {
+public class User {
     String username;
 
     public User(String username) {
@@ -10,16 +10,13 @@ public class User implements UserInterface {
     }
 
     // For use with firebase to make a user object from a json object (what snapshot.getValue returns)
-    // TODO: implement
-    public User(JSONObject json) {
+    public User() {
     }
 
-    @Override
     public String getUsername() {
         return this.username;
     }
 
-    @Override
     public String toString() {
         return this.username;
     }

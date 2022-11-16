@@ -1,10 +1,8 @@
-package com.example.smartshopper.projectModels;
-
-import org.json.JSONObject;
+package com.example.smartshopper.models;
 
 import java.util.List;
 
-public class Deal implements DealInterface {
+public class Deal {
     Long upc;
     String title;
     String description;
@@ -14,7 +12,8 @@ public class Deal implements DealInterface {
     Double salePrice;
     User poster;
     List<Comment> comments;
-    Integer voteScore;
+    Integer upvotes;
+    Integer downvotes;
     String imageURI;
 
     // Initial Creation - For deals that have a UPC
@@ -27,7 +26,8 @@ public class Deal implements DealInterface {
         this.timePosted = System.currentTimeMillis();
         this.store = store;
         this.poster = poster;
-        this.voteScore = 0;
+        this.upvotes = 0;
+        this.downvotes = 0;
         this.imageURI = "";
     }
 
@@ -41,94 +41,72 @@ public class Deal implements DealInterface {
         this.timePosted = System.currentTimeMillis();
         this.store = store;
         this.poster = poster;
-        this.voteScore = 0;
+        this.upvotes = 0;
+        this.downvotes = 0;
         this.imageURI = "";
     }
 
     // For use with firebase to make a deal object from a json object (what snapshot.getValue returns)
-    // TODO: implement
-    public Deal(JSONObject json) {
+    public Deal() {
     }
 
-    @Override
     public String getTitle() {
         return this.title;
     }
 
-    @Override
     public String getDescription() {
         return this.description;
     }
 
-    @Override
     public Long getTimePosted() {
         return this.timePosted;
     }
 
-    @Override
     public String getStore() {
         return this.store;
     }
 
-    @Override
     public Long getUPC() {
         return this.upc;
     }
 
-    @Override
     public Double getPrice() {
         return this.price;
     }
 
-    @Override
     public Double getSalePrice() {
         return this.salePrice;
     }
 
-    @Override
     public Double getSavings() {
         return this.price - this.salePrice;
     }
 
-    @Override
     public void addComment(Comment comment) {
         this.comments.add(comment);
     }
 
-    @Override
     public List<Comment> getComments() {
         return this.comments;
     }
 
-    @Override
     public void upvote() {
-        voteScore++;
+        upvotes++;
     }
 
-    @Override
     public void downvote() {
-        voteScore--;
+        downvotes--;
     }
 
-    @Override
-    public Integer getVoteScore() {
-        return this.voteScore;
+    public Integer getUpvotes() {
+        return this.upvotes;
     }
 
-    @Override
-    public Integer getCommentsCount() {
-        return comments.size();
-    }
+    public Integer getDownvotes() { return this.downvotes; }
 
-    @Override
-    public User getPoster() {
-        return this.poster;
-    }
+    public Integer getCommentsCount() { return comments.size(); }
 
-    @Override
-    public String getImageURI() {
-        return imageURI;
-    }
+    public User getPoster() { return this.poster; }
 
-
+    public String getImageURI() { return imageURI; }
 }

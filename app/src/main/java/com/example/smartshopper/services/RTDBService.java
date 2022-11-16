@@ -3,8 +3,8 @@ package com.example.smartshopper.services;
 import androidx.annotation.NonNull;
 
 import com.example.smartshopper.common.Constants;
-import com.example.smartshopper.projectModels.Deal;
-import com.example.smartshopper.projectModels.User;
+import com.example.smartshopper.models.Deal;
+import com.example.smartshopper.models.User;
 import com.example.smartshopper.responseInterfaces.BoolInterface;
 import com.example.smartshopper.responseInterfaces.ObjectInterface;
 import com.google.firebase.database.DataSnapshot;
@@ -25,6 +25,10 @@ public class RTDBService {
     }
     public Query getUser(String username) {
         return database.getReference().child(Constants.USERS).orderByChild(Constants.USERNAME).equalTo(username);
+    }
+
+    public Query getBestDeals() {
+        return database.getReference().child(Constants.DEALS).orderByChild("upvotes");
     }
 
 

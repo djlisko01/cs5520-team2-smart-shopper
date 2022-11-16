@@ -1,35 +1,32 @@
-package com.example.smartshopper.projectModels;
+package com.example.smartshopper.models;
 
 import org.json.JSONObject;
 
-public class Comment implements CommentInterface {
-    User poster;
+public class Comment {
+    User author;
     String text;
     Long timePosted;
 
     // Constructor for use with initialization
-    public Comment(User poster, String text) {
-        this.poster = poster;
+    public Comment(User author, String text) {
+        this.author = author;
         this.text = text;
         this.timePosted = System.currentTimeMillis();
     }
 
     // For use with firebase to make a comment object from a json object (what snapshot.getValue returns)
-    public Comment(JSONObject json) {
+    public Comment() {
     }
 
-    @Override
     public String getText() {
         return this.text;
     }
 
-    @Override
     public Long getTimePosted() {
         return this.timePosted;
     }
 
-    @Override
-    public User getPoster() {
-        return this.poster;
+    public User getAuthor() {
+        return this.author;
     }
 }
