@@ -18,6 +18,7 @@ import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 public class DealAdapter extends RecyclerView.Adapter<DealViewHolder> {
@@ -26,6 +27,11 @@ public class DealAdapter extends RecyclerView.Adapter<DealViewHolder> {
 
     public DealAdapter(List<Deal> deals, Context context) {
         this.deals = deals;
+        this.context = context;
+    }
+
+    public DealAdapter(Context context) {
+        this.deals = new ArrayList<>();
         this.context = context;
     }
 

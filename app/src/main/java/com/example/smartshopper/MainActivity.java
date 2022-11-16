@@ -11,30 +11,25 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.example.smartshopper.common.PlatformHelpers;
-import com.example.smartshopper.models.Deal;
 import com.example.smartshopper.recyclerViews.DealAdapter;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
-    public DrawerLayout drawerLayout;
-    public ActionBarDrawerToggle actionBarDrawerToggle;
+    DrawerLayout drawerLayout;
+    ActionBarDrawerToggle actionBarDrawerToggle;
+    RecyclerView rv_dealsRecyclerView;
     PlatformHelpers platformHelpers;
-    public RecyclerView rv_dealsRecyclerView;
     DealAdapter adapter;
-    List<Deal> deals;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Instantiate platforhelpers
+        // Instantiate objects
         platformHelpers = new PlatformHelpers(this);
-        rv_dealsRecyclerView = findViewById(R.id.rv_dealsRecyclerView);
-
+        adapter = new DealAdapter(this);
 
         // https://www.geeksforgeeks.org/navigation-drawer-in-android/
         // drawer layout instance to toggle the menu icon to open drawer and back button to close drawer
@@ -47,8 +42,6 @@ public class MainActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         // Recycler View setup
-        deals = new ArrayList<>(); // initiate an empty stickers array (begins with empty recycler view)
-        adapter = new DealAdapter(deals, this);
         rv_dealsRecyclerView = findViewById(R.id.rv_dealsRecyclerView);
         rv_dealsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         rv_dealsRecyclerView.setAdapter(adapter);
