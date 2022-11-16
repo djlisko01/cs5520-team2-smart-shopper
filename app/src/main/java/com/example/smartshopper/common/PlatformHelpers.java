@@ -1,13 +1,11 @@
 package com.example.smartshopper.common;
 
 import android.content.Context;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.smartshopper.MainActivity;
-import com.example.smartshopper.R;
 import com.example.smartshopper.projectModels.Comment;
 import com.example.smartshopper.projectModels.Deal;
 import com.example.smartshopper.projectModels.User;

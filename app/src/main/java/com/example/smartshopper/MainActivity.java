@@ -4,20 +4,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.smartshopper.common.PlatformHelpers;
-import com.example.smartshopper.projectModels.Deal;
 import com.example.smartshopper.recyclerViews.DealAdapter;
-import com.example.smartshopper.responseInterfaces.ListInterface;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
