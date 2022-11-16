@@ -7,20 +7,18 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.example.smartshopper.common.PlatformHelpers;
 import com.example.smartshopper.models.Deal;
 import com.example.smartshopper.recyclerViews.DealAdapter;
-import com.example.smartshopper.responseInterfaces.RecyclerViewInterface;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class MainActivity extends AppCompatActivity implements RecyclerViewInterface {
+public class MainActivity extends AppCompatActivity{
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
     PlatformHelpers platformHelpers;
@@ -50,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewInter
 
         // Recycler View setup
         deals = new ArrayList<>(); // initiate an empty stickers array (begins with empty recycler view)
-        adapter = new DealAdapter(deals, this, this);
+        adapter = new DealAdapter(deals, this);
         rv_dealsRecyclerView = findViewById(R.id.rv_dealsRecyclerView);
         rv_dealsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         rv_dealsRecyclerView.setAdapter(adapter);
@@ -67,14 +65,5 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewInter
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onItemClick(int position) {
-        Deal dealClicked = adapter.getDeal(position);
-
-        Intent intent = new Intent(this, DealDetails.class);
-        intent.putExtra("dealItem", dealClicked);
-        startActivity(intent);
     }
 }

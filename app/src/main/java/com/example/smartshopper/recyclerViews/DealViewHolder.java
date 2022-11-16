@@ -1,14 +1,13 @@
 package com.example.smartshopper.recyclerViews;
 
+import android.content.Context;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.smartshopper.R;
-import com.example.smartshopper.responseInterfaces.RecyclerViewInterface;
 
 public class DealViewHolder extends RecyclerView.ViewHolder {
 
@@ -20,7 +19,7 @@ public class DealViewHolder extends RecyclerView.ViewHolder {
     public TextView tv_salePrice;
     public TextView tv_store;
 
-    public DealViewHolder(@NonNull View itemView, RecyclerViewInterface recyclerViewInterface) {
+    public DealViewHolder(@NonNull View itemView, Context context) {
         super(itemView);
         this.iv_itemPicture = itemView.findViewById(R.id.iv_itemPicture);
         this.tv_dealPostedBy = itemView.findViewById(R.id.tv_dealPostedBy);
@@ -29,16 +28,6 @@ public class DealViewHolder extends RecyclerView.ViewHolder {
         this.tv_originalPrice = itemView.findViewById(R.id.tv_originalPrice);
         this.tv_salePrice = itemView.findViewById(R.id.tv_salePrice);
         this.tv_store = itemView.findViewById(R.id.tv_store);
-
-
-        itemView.setOnClickListener(view -> {
-            if (recyclerViewInterface != null){
-                int position = getBindingAdapterPosition();
-                if (position != RecyclerView.NO_POSITION){
-                    recyclerViewInterface.onItemClick(position);
-                }
-            }
-        });
     }
 }
 
