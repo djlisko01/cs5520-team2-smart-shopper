@@ -1,11 +1,14 @@
 package com.example.smartshopper.common;
 
 import android.content.Context;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.smartshopper.MainActivity;
+import com.example.smartshopper.R;
 import com.example.smartshopper.projectModels.Comment;
 import com.example.smartshopper.projectModels.Deal;
 import com.example.smartshopper.projectModels.User;
@@ -86,8 +89,7 @@ public class PlatformHelpers {
         MainActivity mainActivity = (MainActivity) context;
         this.getPopularDeals(response -> {
             DealAdapter adapter = new DealAdapter(response, mainActivity);
-//            adapter.updateData(response);
-            mainActivity.rv_dealsRecyclerView.setLayoutManager(new LinearLayoutManager(mainActivity));
+            mainActivity.rv_dealsRecyclerView.setLayoutManager(new LinearLayoutManager(context));
             mainActivity.rv_dealsRecyclerView.setAdapter(adapter);
         });
     }

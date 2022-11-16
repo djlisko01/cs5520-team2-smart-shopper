@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.example.smartshopper.common.PlatformHelpers;
 import com.example.smartshopper.recyclerViews.DealAdapter;
@@ -28,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Instantiate platforhelpers
         platformHelpers = new PlatformHelpers(this);
+        rv_dealsRecyclerView = findViewById(R.id.rv_dealsRecyclerView);
 
 
         // https://www.geeksforgeeks.org/navigation-drawer-in-android/
