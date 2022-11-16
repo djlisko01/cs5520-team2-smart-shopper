@@ -4,6 +4,7 @@ import com.example.smartshopper.models.Deal;
 
 import java.util.List;
 
+// TODO: Had problems replacing the different interfaces with this
 public abstract class Response {
     public abstract void onCallback(Object response);
 

@@ -28,7 +28,7 @@ public class RTDBService {
     }
 
     public Query getBestDeals() {
-        return database.getReference().child(Constants.DEALS).orderByChild("upvotes");
+        return database.getReference().child(Constants.DEALS).orderByChild(Constants.UPVOTES);
     }
 
 
