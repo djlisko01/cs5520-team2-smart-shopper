@@ -47,8 +47,7 @@ public class MainActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         // Recycler View setup
-        deals = new ArrayList<>(); // initiate an empty stickers array (begins with empty recycler view)
-        adapter = new DealAdapter(deals, this);
+        adapter = new DealAdapter(this);
         rv_dealsRecyclerView = findViewById(R.id.rv_dealsRecyclerView);
         rv_dealsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         rv_dealsRecyclerView.setAdapter(adapter);
