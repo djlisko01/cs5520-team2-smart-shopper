@@ -3,10 +3,14 @@ package com.example.smartshopper.common;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.example.smartshopper.MainActivity;
+import com.example.smartshopper.R;
 import com.example.smartshopper.projectModels.Comment;
 import com.example.smartshopper.projectModels.Deal;
 import com.example.smartshopper.projectModels.User;
+import com.example.smartshopper.recyclerViews.DealAdapter;
 import com.example.smartshopper.responseInterfaces.ListInterface;
 import com.example.smartshopper.services.RTDBService;
 import com.google.firebase.database.DataSnapshot;
@@ -69,13 +73,22 @@ public class PlatformHelpers {
                 }
                 // having trouble getting abstract Response Class to work here...
 //                responseClass.onCallback(deals);
-                  listInterface.onCallback(deals);
+                listInterface.onCallback(deals);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
+        });
+    }
+
+    public void updateMainRecyclerView() {
+        MainActivity mainActivity = (MainActivity) context;
+        this.getPopularDeals(response -> {
+            DealAdapter adapter = new DealAdapter(response, mainActivity);
+            adapter.updateData(response);
+            mainActivity.updateRecycler(adapter);
         });
     }
 }

@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import com.example.smartshopper.common.PlatformHelpers;
 import com.example.smartshopper.projectModels.Deal;
 import com.example.smartshopper.recyclerViews.DealAdapter;
+import com.example.smartshopper.responseInterfaces.ListInterface;
 
 import java.util.Arrays;
 import java.util.List;
@@ -63,15 +64,9 @@ public class MainActivity extends AppCompatActivity {
 //        rv_dealsRecyclerView.setAdapter(adapter);
 
 
+        // Get all deals from firebase:
 
-        rv_dealsRecyclerView = findViewById(R.id.rv_dealsRecyclerView);
-
-
-        platformHelpers.getPopularDeals(deals -> {
-            adapter = new DealAdapter(deals, this);
-            adapter.updateData(deals);
-            updateRecycler(adapter);
-        });
+        platformHelpers.updateMainRecyclerView();
 
     }
 
