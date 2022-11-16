@@ -30,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
         // Instantiate objects
         platformHelpers = new PlatformHelpers(this);
         adapter = new DealAdapter(this);
-        rv_dealsRecyclerView = findViewById(R.id.rv_dealsRecyclerView);
 
         // https://www.geeksforgeeks.org/navigation-drawer-in-android/
         // drawer layout instance to toggle the menu icon to open drawer and back button to close drawer
@@ -43,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         // Recycler View setup
+        rv_dealsRecyclerView = findViewById(R.id.rv_dealsRecyclerView);
         rv_dealsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         rv_dealsRecyclerView.setAdapter(adapter);
 
