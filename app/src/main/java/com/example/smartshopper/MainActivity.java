@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Instantiate platforhelpers
         platformHelpers = new PlatformHelpers(this);
+        rv_dealsRecyclerView = findViewById(R.id.rv_dealsRecyclerView);
 
 
         // https://www.geeksforgeeks.org/navigation-drawer-in-android/
