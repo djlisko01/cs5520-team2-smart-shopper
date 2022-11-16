@@ -25,7 +25,6 @@ public class MainActivity extends AppCompatActivity {
     public ActionBarDrawerToggle actionBarDrawerToggle;
     PlatformHelpers platformHelpers;
     public RecyclerView rv_dealsRecyclerView;
-//    List<Deal> deals;
     DealAdapter adapter;
 
     @Override
