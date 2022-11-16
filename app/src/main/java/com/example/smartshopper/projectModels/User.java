@@ -10,7 +10,6 @@ public class User {
     }
 
     // For use with firebase to make a user object from a json object (what snapshot.getValue returns)
-    // TODO: implement
     public User() {
     }
 
