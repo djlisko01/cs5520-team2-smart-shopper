@@ -6,4 +6,11 @@
     <string name="picture_of_the_on_sale_item">Picture of the on sale item</string>
     <string name="dealpostedtime">dealPostedTime</string>
     <string name="dealpostedby">dealPostedBy</string>
+    <string name="deal_title">Deal Title</string>
+    <string name="store_item_found_at">Store item found at</string>
+    <string name="original_price">Original Price</string>
+    <string name="sale_price">Sale Price</string>
+    <string name="_0">0</string>
+    <string name="thumbs_up_icon">Thumbs up icon</string>
+    <string name="thumbs_down_icon">Thumbs down icon</string>
 </resources>

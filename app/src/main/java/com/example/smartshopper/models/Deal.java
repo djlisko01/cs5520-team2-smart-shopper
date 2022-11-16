@@ -3,51 +3,59 @@ package com.example.smartshopper.models;
 import java.util.List;
 
 public class Deal {
-    Long upc;
+    //TODO NOTE FIREBASE DOES NOT LIKE ARRAYS
+    // https://firebase.blog/posts/2014/04/best-practices-arrays-in-firebase
+    String dealID;
+    String upc;
+    String gtin;
+    String asin;
+    String isbn;
+    String tags;
+    Integer totalWatched;
     String title;
     String description;
     Long timePosted;
     String store;
-    Double price;
+    Double originalPrice;
     Double salePrice;
-    User poster;
+    User dealPostedBy;
     List<Comment> comments;
-    Integer upvotes;
-    Integer downvotes;
-    String imageURI;
-
-    // Initial Creation - For deals that have a UPC
-    public Deal(Long upc, String title, Double price, Double salePrice, String description, String store, User poster) {
-        this.upc = upc;
-        this.title = title;
-        this.price = price;
-        this.salePrice = salePrice;
-        this.description = description;
-        this.timePosted = System.currentTimeMillis();
-        this.store = store;
-        this.poster = poster;
-        this.upvotes = 0;
-        this.downvotes = 0;
-        this.imageURI = "";
-    }
-
-    // Initial Creation - For inserting a deal that lacks a UPC (e.g. Tomatoes 0.99/lb)
-    public Deal(String title, Double price, Double salePrice, String description, String store, User poster) {
-        this.upc = null;
-        this.title = title;
-        this.price = price;
-        this.salePrice = salePrice;
-        this.description = description;
-        this.timePosted = System.currentTimeMillis();
-        this.store = store;
-        this.poster = poster;
-        this.upvotes = 0;
-        this.downvotes = 0;
-        this.imageURI = "";
-    }
+    Integer numUpVotes;
+    Integer numDownVotes;
+    String productImg;
 
     // For use with firebase to make a deal object from a json object (what snapshot.getValue returns)
     public Deal() {
+    }
+
+    // Initial Creation - For deals that have a UPC
+    public Deal(Long upc, String title, Double originalPrice, Double salePrice, String description, String store, User dealPostedBy) {
+        this.upc = String.valueOf(upc);
+        this.title = title;
+        this.originalPrice = originalPrice;
+        this.salePrice = salePrice;
+        this.description = description;
+        this.timePosted = System.currentTimeMillis();
+        this.store = store;
+        this.dealPostedBy = dealPostedBy;
+        this.numUpVotes = 0;
+        this.numDownVotes = 0;
+        this.productImg = "";
+    }
+
+    // Initial Creation - For inserting a deal that lacks a UPC (e.g. Tomatoes 0.99/lb)
+    public Deal(String title, Double originalPrice, Double salePrice, String description, String store, User dealPostedBy) {
+        this.upc = null;
+        this.title = title;
+        this.originalPrice = originalPrice;
+        this.salePrice = salePrice;
+        this.description = description;
+        this.timePosted = System.currentTimeMillis();
+        this.store = store;
+        this.dealPostedBy = dealPostedBy;
+        this.numUpVotes = 0;
+        this.numDownVotes = 0;
+        this.productImg = "";
     }
 
     public String getTitle() {
@@ -66,12 +74,12 @@ public class Deal {
         return this.store;
     }
 
-    public Long getUPC() {
+    public String getUPC() {
         return this.upc;
     }
 
-    public Double getPrice() {
-        return this.price;
+    public Double getOriginalPrice() {
+        return this.originalPrice;
     }
 
     public Double getSalePrice() {
@@ -79,7 +87,7 @@ public class Deal {
     }
 
     public Double getSavings() {
-        return this.price - this.salePrice;
+        return this.originalPrice - this.salePrice;
     }
 
     public void addComment(Comment comment) {
@@ -91,22 +99,30 @@ public class Deal {
     }
 
     public void upvote() {
-        upvotes++;
+        numUpVotes++;
     }
 
     public void downvote() {
-        downvotes--;
+        numDownVotes--;
     }
 
-    public Integer getUpvotes() {
-        return this.upvotes;
+    public Integer getNumUpVotes() {
+        return this.numUpVotes;
     }
 
-    public Integer getDownvotes() { return this.downvotes; }
+    public Integer getNumDownVotes() {
+        return this.numDownVotes;
+    }
 
-    public Integer getCommentsCount() { return comments.size(); }
+    public Integer getCommentsCount() {
+        return comments.size();
+    }
 
-    public User getPoster() { return this.poster; }
+    public User getDealPostedBy() {
+        return this.dealPostedBy;
+    }
 
-    public String getImageURI() { return imageURI; }
+    public String getProductImg() {
+        return productImg;
+    }
 }

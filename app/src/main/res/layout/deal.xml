@@ -23,8 +23,8 @@
 
             <ImageView
                 android:id="@+id/iv_itemPicture"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
                 android:layout_centerVertical="true"
                 android:contentDescription="@string/picture_of_the_on_sale_item"
                 app:layout_constraintBottom_toTopOf="@id/tv_dealPostedTime"
@@ -39,6 +39,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:text="@string/dealpostedtime"
+                android:textSize="11sp"
                 app:layout_constraintBottom_toTopOf="@id/tv_dealPostedBy"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/iv_itemPicture" />
@@ -49,9 +50,104 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:text="@string/dealpostedby"
+                android:textSize="11sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_dealPostedTime" />
+
+            <TextView
+                android:id="@+id/tv_dealTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="1dp"
+                android:text="@string/deal_title"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintStart_toEndOf="@+id/iv_itemPicture"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_store"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:text="@string/store_item_found_at"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintStart_toEndOf="@+id/iv_itemPicture"
+                app:layout_constraintTop_toBottomOf="@id/tv_dealTitle" />
+
+            <ImageView
+                android:id="@+id/iv_upVote"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="10dp"
+                android:contentDescription="@string/thumbs_up_icon"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintStart_toEndOf="@+id/iv_itemPicture"
+                app:layout_constraintTop_toBottomOf="@+id/tv_store"
+                app:srcCompat="@drawable/ic_up_vote" />
+
+            <ImageView
+                android:id="@+id/iv_downVote"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:contentDescription="@string/thumbs_down_icon"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_upVote"
+                app:layout_constraintStart_toEndOf="@id/tv_numUpvotes"
+                app:layout_constraintTop_toTopOf="@+id/iv_upVote"
+                app:srcCompat="@drawable/ic_down_vote" />
+
+            <TextView
+                android:id="@+id/tv_numUpvotes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:text="@string/_0"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_upVote"
+                app:layout_constraintStart_toEndOf="@+id/iv_upVote"
+                app:layout_constraintTop_toTopOf="@+id/iv_upVote" />
+
+            <TextView
+                android:id="@+id/tv_numDownVotes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="15dp"
+                android:text="@string/_0"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_upVote"
+                app:layout_constraintStart_toEndOf="@id/iv_downVote"
+                app:layout_constraintTop_toTopOf="@+id/iv_upVote" />
+
+            <TextView
+                android:id="@+id/tv_salePrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
+                android:text="@string/sale_price"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toTopOf="@+id/tv_originalPrice"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_originalPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="5dp"
+                android:text="@string/original_price"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
