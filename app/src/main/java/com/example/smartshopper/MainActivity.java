@@ -18,8 +18,8 @@ import java.util.Objects;
 public class MainActivity extends AppCompatActivity {
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
-    PlatformHelpers platformHelpers;
     public RecyclerView rv_dealsRecyclerView;
+    PlatformHelpers platformHelpers;
     DealAdapter adapter;
 
     @Override
