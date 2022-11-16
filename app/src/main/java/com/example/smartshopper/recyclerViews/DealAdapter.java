@@ -3,16 +3,19 @@ package com.example.smartshopper.recyclerViews;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.smartshopper.R;
 import com.example.smartshopper.projectModels.Deal;
 
+import java.io.InputStream;
 import java.text.DateFormat;
 import java.util.List;
 
@@ -34,10 +37,14 @@ public class DealAdapter extends RecyclerView.Adapter<DealViewHolder> {
     @SuppressLint("UseCompatLoadingForDrawables")
     @Override
     public void onBindViewHolder(@NonNull DealViewHolder holder, int position) {
-        String stringUri = deals.get(position).getImageURI().isEmpty() ?
-                "@drawable/ic_baseline_shopping_basket_24" : "@drawable/" + deals.get(position).getImageURI();
-        Drawable drawableReference = ContextCompat.getDrawable(context, context.getResources().getIdentifier(stringUri, "drawable", context.getPackageName()));
-        holder.iv_itemPicture.setImageDrawable(drawableReference);
+//        String stringUri = deals.get(position).getImageURI().isEmpty() ?
+//                "@drawable/ic_baseline_shopping_basket_24" : "@drawable/" + deals.get(position).getImageURI();
+//        Drawable drawableReference = ContextCompat.getDrawable(context, context.getResources().getIdentifier(stringUri, "drawable", context.getPackageName()));
+//        holder.iv_itemPicture.setImageDrawable(drawableReference);
+
+       // not sure how to set image from uri
+        String imageUri = deals.get(position).getImageURI();
+        Log.d("imageUri", imageUri);
 
         holder.tv_dealPostedTime.setText(formatTime(deals.get(position).getTimePosted()));
         holder.tv_dealPostedBy.setText(String.valueOf(deals.get(position).getPoster()));
@@ -48,8 +55,8 @@ public class DealAdapter extends RecyclerView.Adapter<DealViewHolder> {
         return deals.size();
     }
 
-    public void updateData(List<Deal> messages) {
-        this.deals = messages;
+    public void updateData(List<Deal> deals) {
+        this.deals = deals;
         notifyDataSetChanged();
     }
 

@@ -2,14 +2,14 @@ package com.example.smartshopper.projectModels;
 
 import org.json.JSONObject;
 
-public class Comment implements CommentInterface {
-    User poster;
+public class Comment {
+    User author;
     String text;
     Long timePosted;
 
     // Constructor for use with initialization
-    public Comment(User poster, String text) {
-        this.poster = poster;
+    public Comment(User author, String text) {
+        this.author = author;
         this.text = text;
         this.timePosted = System.currentTimeMillis();
     }
@@ -18,18 +18,15 @@ public class Comment implements CommentInterface {
     public Comment(JSONObject json) {
     }
 
-    @Override
     public String getText() {
         return this.text;
     }
 
-    @Override
     public Long getTimePosted() {
         return this.timePosted;
     }
 
-    @Override
-    public User getPoster() {
-        return this.poster;
+    public User getAuthor() {
+        return this.author;
     }
 }

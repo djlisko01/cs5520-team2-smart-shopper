@@ -2,7 +2,7 @@ package com.example.smartshopper.projectModels;
 
 import org.json.JSONObject;
 
-public class User implements UserInterface {
+public class User {
     String username;
 
     public User(String username) {
@@ -14,12 +14,10 @@ public class User implements UserInterface {
     public User(JSONObject json) {
     }
 
-    @Override
     public String getUsername() {
         return this.username;
     }
 
-    @Override
     public String toString() {
         return this.username;
     }

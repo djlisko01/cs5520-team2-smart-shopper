@@ -27,6 +27,10 @@ public class RTDBService {
         return database.getReference().child(Constants.USERS).orderByChild(Constants.USERNAME).equalTo(username);
     }
 
+    public Query getBestDeals() {
+        return database.getReference().child(Constants.DEALS).orderByChild("upvotes");
+    }
+
 
     public Query getDeal(String dealID) {
         return null;
