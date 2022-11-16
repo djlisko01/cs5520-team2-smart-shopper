@@ -1,6 +1,4 @@
-package com.example.smartshopper.projectModels;
-
-import org.json.JSONObject;
+package com.example.smartshopper.models;
 
 import java.util.List;
 
