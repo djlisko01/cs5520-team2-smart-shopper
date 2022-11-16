@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
     public ActionBarDrawerToggle actionBarDrawerToggle;
     PlatformHelpers platformHelpers;
     RecyclerView rv_dealsRecyclerView;
-    List<Deal> deals;
+//    List<Deal> deals;
     DealAdapter adapter;
 
     @Override
@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Instantiate platforhelpers
-        PlatformHelpers platformHelpers = new PlatformHelpers(this);
+        platformHelpers = new PlatformHelpers(this);
 
 
         // https://www.geeksforgeeks.org/navigation-drawer-in-android/
@@ -70,11 +70,15 @@ public class MainActivity extends AppCompatActivity {
         platformHelpers.getPopularDeals(deals -> {
             adapter = new DealAdapter(deals, this);
             adapter.updateData(deals);
-            rv_dealsRecyclerView = findViewById(R.id.rv_dealsRecyclerView);
-            rv_dealsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-            rv_dealsRecyclerView.setAdapter(adapter);
+            updateRecycler(adapter);
         });
 
+    }
+
+    public void updateRecycler(DealAdapter adapter) {
+        rv_dealsRecyclerView = findViewById(R.id.rv_dealsRecyclerView);
+        rv_dealsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        rv_dealsRecyclerView.setAdapter(adapter);
     }
 
     @Override
