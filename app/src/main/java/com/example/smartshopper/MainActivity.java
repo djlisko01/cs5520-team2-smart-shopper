@@ -24,7 +24,6 @@ public class MainActivity extends AppCompatActivity {
     PlatformHelpers platformHelpers;
     public RecyclerView rv_dealsRecyclerView;
     DealAdapter adapter;
-    List<Deal> deals;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
