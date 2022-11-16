@@ -29,8 +29,8 @@ public class Deal {
     }
 
     // Initial Creation - For deals that have a UPC
-    public Deal(Long upc, String title, Double originalPrice, Double salePrice, String description, String store, User dealPostedBy) {
-        this.upc = String.valueOf(upc);
+    public Deal(String upc, String title, Double originalPrice, Double salePrice, String description, String store, User dealPostedBy) {
+        this.upc = upc;
         this.title = title;
         this.originalPrice = originalPrice;
         this.salePrice = salePrice;
