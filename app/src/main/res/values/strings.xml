@@ -13,4 +13,14 @@
     <string name="_0">0</string>
     <string name="thumbs_up_icon">Thumbs up icon</string>
     <string name="thumbs_down_icon">Thumbs down icon</string>
+    <string name="my_account_button">My Account</string>
+    <string name="settings_button">Settings</string>
+    <string name="logout_button">Logout</string>
+    <string name="smart_shopper_label">Smart Shopper</string>
+    <string name="app_icon">app icon</string>
+    <string name="email_hint">Email</string>
+    <string name="password_hint">Password</string>
+    <string name="login_button_text">Login</string>
+    <string name="forgot_password_button">Forgot Password</string>
+    <string name="create_account_button">Create Account</string>
 </resources>
