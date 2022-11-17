@@ -3,14 +3,17 @@
 
     <item
         android:id="@+id/nav_account"
-        android:title="My Account" />
+        android:title="@string/my_account_button" />
+
 
     <item
         android:id="@+id/nav_settings"
-        android:title="Settings" />
+        android:title="@string/settings_button" />
 
     <item
         android:id="@+id/nav_logout"
-        android:title="Logout" />
+        android:title="@string/signin_button"
+        android:onClick="sendToLoginActivity"
+        />
 
 </menu>
