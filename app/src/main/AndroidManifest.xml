@@ -17,9 +17,13 @@
         android:theme="@style/Theme.SmartShopper"
         tools:targetApi="31">
         <activity
-            android:name=".LoginActivity"
+            android:name=".CreateAccountActivity"
             android:configChanges="orientation|screenSize"
             android:exported="false"/>
+        <activity
+            android:name=".LoginActivity"
+            android:configChanges="orientation|screenSize"
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".ForgotPasswordActivity"
             android:configChanges="orientation|screenSize"
