@@ -1,13 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.drawerlayout.widget.DrawerLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/home_page_drawer_layout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".LoginActivity">
-<androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".LoginActivity">
@@ -107,8 +102,10 @@
 
     <Button
         android:id="@+id/forgotPasswordButton"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="100dp"
+        android:layout_marginRight="100dp"
         android:text="@string/forgot_password_button"
         tools:layout_editor_absoluteX="155dp"
         tools:layout_editor_absoluteY="301dp"
@@ -120,15 +117,17 @@
 
     <Button
         android:id="@+id/createAccountButton"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/create_account_button"
+        android:layout_marginLeft="100dp"
+        android:layout_marginRight="100dp"
         tools:layout_editor_absoluteX="151dp"
         tools:layout_editor_absoluteY="357dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/forgotPasswordButton"/>
+        app:layout_constraintTop_toBottomOf="@id/forgotPasswordButton"
+        android:onClick="sendToCreateAccountActivity"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.drawerlayout.widget.DrawerLayout>
