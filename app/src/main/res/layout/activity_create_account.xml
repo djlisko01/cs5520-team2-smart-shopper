@@ -117,10 +117,24 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:text="@string/create_account_hint"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/agreeToTermsCheckboxWrapper"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/create_confirm_password_text_input_layout"
         />
-
+    <LinearLayout
+        android:id="@+id/agreeToTermsCheckboxWrapper"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/createAccountButton">
+    <CheckBox
+        android:id="@+id/agreeToTermsCheckbox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/agree_to_terms_checkbox" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

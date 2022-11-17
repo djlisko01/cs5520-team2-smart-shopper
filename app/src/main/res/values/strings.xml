@@ -29,4 +29,5 @@
     <string name="helper_text">To reset your password, please provide the username or email attached to your account. If an email or username for the account exists, the reset password link will be sent to that email.</string>
     <string name="confirm_password_hint">Confirm Password</string>
     <string name="create_account_hint">Create Account</string>
+    <string name="agree_to_terms_checkbox">Agree To Terms</string>
 </resources>
