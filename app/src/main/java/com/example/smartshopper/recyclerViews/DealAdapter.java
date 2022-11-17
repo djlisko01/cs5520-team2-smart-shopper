@@ -2,7 +2,6 @@ package com.example.smartshopper.recyclerViews;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
@@ -12,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.smartshopper.DealDetails;
 import com.example.smartshopper.R;
 import com.example.smartshopper.common.Constants;
 import com.example.smartshopper.models.Deal;
@@ -40,8 +38,7 @@ public class DealAdapter extends RecyclerView.Adapter<DealViewHolder> {
     @NonNull
     @Override
     public DealViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new DealViewHolder(LayoutInflater.from(context).inflate(R.layout.deal, null),
-                context);
+        return new DealViewHolder(LayoutInflater.from(context).inflate(R.layout.deal, null));
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -66,14 +63,6 @@ public class DealAdapter extends RecyclerView.Adapter<DealViewHolder> {
         holder.tv_originalPrice.setText(NumberFormat.getCurrencyInstance().format(deals.get(position).getOriginalPrice()));
         holder.tv_originalPrice.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG); // strike-through OG price
         holder.tv_salePrice.setText(NumberFormat.getCurrencyInstance().format(deals.get(position).getSalePrice()));
-
-        holder.itemView.setOnClickListener(v -> {
-            if (context != null){
-                Intent intent = new Intent(context, DealDetails.class);
-                intent.putExtra("dealItem", deals.get(holder.getAbsoluteAdapterPosition()));
-                context.startActivity(intent);
-            }
-        });
     }
 
     @Override

@@ -1,9 +1,8 @@
 package com.example.smartshopper.models;
 
-import java.io.Serializable;
 import java.util.List;
 
-public class Deal implements Serializable {
+public class Deal {
     //TODO NOTE FIREBASE DOES NOT LIKE ARRAYS
     // https://firebase.blog/posts/2014/04/best-practices-arrays-in-firebase
     String dealID;

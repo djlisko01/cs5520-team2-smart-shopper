@@ -1,12 +1,12 @@
 package com.example.smartshopper.recyclerViews;
 
-import android.content.Context;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.smartshopper.R;
 
 public class DealViewHolder extends RecyclerView.ViewHolder {
@@ -19,7 +19,7 @@ public class DealViewHolder extends RecyclerView.ViewHolder {
     public TextView tv_salePrice;
     public TextView tv_store;
 
-    public DealViewHolder(@NonNull View itemView, Context context) {
+    public DealViewHolder(@NonNull View itemView) {
         super(itemView);
         this.iv_itemPicture = itemView.findViewById(R.id.iv_itemPicture);
         this.tv_dealPostedBy = itemView.findViewById(R.id.tv_dealPostedBy);
