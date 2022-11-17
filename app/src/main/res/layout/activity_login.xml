@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".LoginActivity">
 
     <TextView
         android:id="@+id/appHeader"
@@ -95,7 +96,8 @@
         app:layout_constraintBottom_toTopOf="@id/forgotPasswordButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/password_text_input_layout"/>
+        app:layout_constraintTop_toBottomOf="@id/password_text_input_layout"
+        />
 
     <Button
         android:id="@+id/forgotPasswordButton"
@@ -107,7 +109,8 @@
         app:layout_constraintBottom_toTopOf="@id/createAccountButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/loginButton"/>
+        app:layout_constraintTop_toBottomOf="@id/loginButton"
+        android:onClick="sendToForgotPasswordActivity"/>
 
     <Button
         android:id="@+id/createAccountButton"
@@ -120,6 +123,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/forgotPasswordButton"/>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

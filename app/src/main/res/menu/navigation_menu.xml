@@ -12,7 +12,7 @@
 
     <item
         android:id="@+id/nav_logout"
-        android:title="@string/logout_button"
+        android:title="@string/signin_button"
         android:onClick="sendToLoginActivity"
         />
 
