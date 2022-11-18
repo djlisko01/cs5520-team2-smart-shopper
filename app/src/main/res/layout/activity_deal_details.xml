@@ -23,14 +23,14 @@
       android:id="@+id/constraintLayout2"
       android:layout_width="325dp"
       android:layout_height="143dp"
-      app:layout_constraintBottom_toTopOf="@+id/constraintLayout3"
+      app:layout_constraintBottom_toTopOf="@+id/deal_details"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintHorizontal_bias="0.5"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/sv_searchBar">
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/iv_deal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -41,11 +41,11 @@
   </androidx.constraintlayout.widget.ConstraintLayout>
 
   <androidx.constraintlayout.widget.ConstraintLayout
-      android:id="@+id/constraintLayout3"
+      android:id="@+id/deal_details"
       android:layout_width="392dp"
       android:layout_height="64dp"
       android:layout_marginEnd="12dp"
-      app:layout_constraintBottom_toTopOf="@+id/recyclerView"
+      app:layout_constraintBottom_toTopOf="@+id/rv_comments"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintHorizontal_bias="0.5"
       app:layout_constraintStart_toStartOf="parent"
@@ -66,37 +66,37 @@
   </androidx.constraintlayout.widget.ConstraintLayout>
 
   <androidx.recyclerview.widget.RecyclerView
-      android:id="@+id/recyclerView"
+      android:id="@+id/rv_comments"
       android:layout_width="397dp"
       android:layout_height="246dp"
-      app:layout_constraintBottom_toTopOf="@+id/textView3"
+      app:layout_constraintBottom_toTopOf="@+id/txt_input_comment"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintHorizontal_bias="0.5"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/constraintLayout3" />
+      app:layout_constraintTop_toBottomOf="@+id/deal_details" />
 
   <TextView
-      android:id="@+id/textView3"
+      android:id="@+id/txt_input_comment"
       android:layout_width="270dp"
       android:layout_height="55dp"
       android:layout_marginStart="16dp"
       android:text="TextView"
       app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintEnd_toStartOf="@+id/floatingActionButton3"
+      app:layout_constraintEnd_toStartOf="@+id/btn_add_comment"
       app:layout_constraintHorizontal_bias="0.5"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/recyclerView" />
+      app:layout_constraintTop_toBottomOf="@+id/rv_comments" />
 
   <com.google.android.material.floatingactionbutton.FloatingActionButton
-      android:id="@+id/floatingActionButton3"
+      android:id="@+id/btn_add_comment"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:clickable="true"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintHorizontal_bias="0.5"
-      app:layout_constraintStart_toEndOf="@+id/textView3"
-      app:layout_constraintTop_toBottomOf="@+id/recyclerView"
+      app:layout_constraintStart_toEndOf="@+id/txt_input_comment"
+      app:layout_constraintTop_toBottomOf="@+id/rv_comments"
       app:srcCompat="@android:drawable/ic_menu_send" />
 
 
