@@ -59,6 +59,13 @@ public class Deal implements Serializable {
         this.productImg = "";
     }
 
+    public void setDealID(String dealID){
+        this.dealID = dealID;
+    }
+
+    public String getDealID(){
+        return this.dealID;
+    }
     public String getTitle() {
         return this.title;
     }
@@ -91,13 +98,13 @@ public class Deal implements Serializable {
         return this.originalPrice - this.salePrice;
     }
 
-    public void addComment(Comment comment) {
-        this.comments.add(comment);
-    }
+//    public void addComment(Comment comment) {
+//        this.comments.add(comment);
+//    }
 
-    public List<Comment> getComments() {
-        return this.comments;
-    }
+//    public List<Comment> getComments() {
+//        return this.comments;
+//    }
 
     public void upvote() {
         numUpVotes++;

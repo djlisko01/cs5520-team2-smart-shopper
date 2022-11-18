@@ -15,7 +15,10 @@ public class Comment {
     }
 
     // For use with firebase to make a comment object from a json object (what snapshot.getValue returns)
-    public Comment() {
+    public Comment(User author, String text, Long timePosted) {
+        this.author = author;
+        this.text = text;
+        this.timePosted = timePosted;
     }
 
     public String getText() {

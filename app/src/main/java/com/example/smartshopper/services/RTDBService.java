@@ -48,6 +48,13 @@ public class RTDBService {
         return null;
     }
 
+    public Query getComments(Deal deal) {
+        String dealId = deal.getDealID();
+        return database.getReference().child(Constants.DEALS)
+                .child(dealId).child("comments")
+                .orderByChild(Constants.TIME_POSTED);
+    }
+
     public Query getFriends(User user) {
         return null;
     }

@@ -1,6 +1,7 @@
 package com.example.smartshopper.common;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -58,6 +59,34 @@ public class PlatformHelpers {
 
     }
 
+    public void getCommentsAndUpdateRv(Deal deal){
+        Query query = rtdbDatabase.getComments(deal);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<Comment> comments = new ArrayList<>();
+
+                for (DataSnapshot child : snapshot.getChildren()){
+                    Log.v("COMMENT", child.toString());
+                    String author = (String) child.child("author").getValue();
+                    String text = (String) child.child("text").getValue();
+                    Long timeStamp = (Long) child.child("timePosted").getValue();
+
+                    Comment comment = new Comment(new User(author), text, timeStamp);
+
+                    Log.v("COMMENTS", comment.getTimePosted().toString());
+                    comments.add(comment);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
     public void getDealsAndUpdateMainRV(DealAdapter adapter) {
         //TODO case switch queryEnum to get the correct query from FireBase
         Query query = rtdbDatabase.getBestDeals();
@@ -66,7 +95,10 @@ public class PlatformHelpers {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 List<Deal> deals = new ArrayList<>();
                 for (DataSnapshot child : snapshot.getChildren()) {
-                    deals.add(child.getValue(Deal.class));
+                    Deal deal = child.getValue(Deal.class);
+                    assert deal != null;
+                    deal.setDealID(child.getKey());
+                    deals.add(deal);
                 }
                 adapter.updateData(deals);
             }
