@@ -2,13 +2,15 @@ package com.example.smartshopper.models;
 
 import org.json.JSONObject;
 
-public class Comment {
-    User author;
+import java.io.Serializable;
+
+public class Comment implements Serializable {
+    String author;
     String text;
     Long timePosted;
 
     // Constructor for use with initialization
-    public Comment(User author, String text) {
+    public Comment(String author, String text) {
         this.author = author;
         this.text = text;
         this.timePosted = System.currentTimeMillis();
@@ -26,7 +28,7 @@ public class Comment {
         return this.timePosted;
     }
 
-    public User getAuthor() {
+    public String getAuthor() {
         return this.author;
     }
 }
