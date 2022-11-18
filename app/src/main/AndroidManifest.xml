@@ -31,13 +31,17 @@
                 android:value="" />
         </activity>
         <activity
+            android:name=".CreateAccountActivity"
+            android:configChanges="orientation|screenSize"
+            android:parentActivityName=".LoginActivity"/>
+        <activity
             android:name=".LoginActivity"
             android:configChanges="orientation|screenSize"
-            android:exported="false" />
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".ForgotPasswordActivity"
             android:configChanges="orientation|screenSize"
-            android:exported="false"/>
+            android:parentActivityName=".LoginActivity"/>
         <activity
             android:name=".MainActivity"
             android:exported="true">

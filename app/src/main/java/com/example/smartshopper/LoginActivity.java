@@ -1,9 +1,7 @@
 package com.example.smartshopper;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-
 import androidx.appcompat.app.AppCompatActivity;
 
 public class LoginActivity extends AppCompatActivity {
@@ -17,4 +15,10 @@ public class LoginActivity extends AppCompatActivity {
     Intent forgotPasswordIntent = new Intent(this, ForgotPasswordActivity.class);
     startActivity(forgotPasswordIntent);
   }
+
+  public void sendToCreateAccountActivity(View view) {
+    Intent createAccountIntent = new Intent(this, CreateAccountActivity.class);
+    startActivity(createAccountIntent);
+  }
+
 }
