@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setNavigationViewListener() {
-        NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        NavigationView navigationView = findViewById(R.id.navigation_view);
         navigationView.setNavigationItemSelectedListener(navigationDrawer);
     }
 
