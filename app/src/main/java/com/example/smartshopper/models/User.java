@@ -18,6 +18,10 @@ public class User implements Serializable {
         return userID;
     }
 
+    public void setUserID(String userID) {
+        this.userID = userID;
+    }
+
     public String getUsername() {
         return this.username;
     }
