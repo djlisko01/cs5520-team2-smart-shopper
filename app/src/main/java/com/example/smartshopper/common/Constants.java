@@ -3,6 +3,8 @@ package com.example.smartshopper.common;
 public class Constants {
     public static final String USERS = "users";
     public static final String USERNAME = "username";
+    public static final String EMAIL = "email";
+    public static final String PASSWORD = "password";
     public static final String DEALS = "deals";
     public static final String UPVOTES = "numUpVotes";
     public static final String DOWNVOTES = "numDownVotes";

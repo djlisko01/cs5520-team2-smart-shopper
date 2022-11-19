@@ -29,6 +29,10 @@ public class RTDBService {
         return database.getReference().child(Constants.USERS).child(userUUID);
     }
 
+    public Query getUserByEmailAddress(String emailAddress) {
+        return database.getReference().child(Constants.USERS).orderByChild(Constants.EMAIL).equalTo(emailAddress);
+    }
+
     public Query getBestDeals() {
         return database.getReference().child(Constants.DEALS).orderByChild(Constants.UPVOTES);
     }
