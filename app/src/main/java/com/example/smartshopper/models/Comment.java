@@ -3,6 +3,7 @@ package com.example.smartshopper.models;
 import java.io.Serializable;
 
 public class Comment implements Serializable {
+    String commentID;
     User author;
     String text;
     Long timePosted;
@@ -22,6 +23,14 @@ public class Comment implements Serializable {
         this.author = author;
         this.text = text;
         this.timePosted = timePosted;
+    }
+
+    public String getCommentID() {
+        return commentID;
+    }
+
+    public void setCommentID(String commentID) {
+        this.commentID = commentID;
     }
 
     public String getText() {
