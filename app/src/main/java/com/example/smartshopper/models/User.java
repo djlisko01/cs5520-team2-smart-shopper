@@ -3,7 +3,7 @@ package com.example.smartshopper.models;
 import java.io.Serializable;
 
 public class User implements Serializable {
-    String userUUID;
+    String userID;
     String username;
 
     // For use with firebase to make a user object from a json object (what snapshot.getValue returns)
@@ -14,8 +14,12 @@ public class User implements Serializable {
         this.username = username;
     }
 
-    public String getUserUUID() {
-        return userUUID;
+    public String getUserID() {
+        return userID;
+    }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
     }
 
     public String getUsername() {
