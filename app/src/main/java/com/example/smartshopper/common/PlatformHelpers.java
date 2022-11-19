@@ -34,8 +34,16 @@ public class PlatformHelpers {
         this.context = context;
     }
 
+    // Get logged in user
     public User getCurrentUser() {
         return null;
+    }
+
+    // Set logged in user
+    public void setCurrentUser(String username) {
+        // TODO: Implement
+//        this.currentUser = username;
+
     }
 
     // Get user by id
@@ -81,12 +89,6 @@ public class PlatformHelpers {
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
-    }
-
-    public void setCurrentUser(String username) {
-        // TODO: Implement
-//        this.currentUser = username;
-
     }
 
 
