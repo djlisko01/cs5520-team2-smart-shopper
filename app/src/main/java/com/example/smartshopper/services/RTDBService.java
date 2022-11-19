@@ -51,8 +51,7 @@ public class RTDBService {
     public Query getComments(Deal deal) {
         String dealId = deal.getDealID();
         return database.getReference().child(Constants.DEALS)
-                .child(dealId).child("comments")
-                .orderByChild(Constants.TIME_POSTED);
+                .child(dealId).child("comments");
     }
 
     public Query getFriends(User user) {
@@ -77,11 +76,7 @@ public class RTDBService {
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    boolInterface.onCallback(true);
-                } else {
-                    boolInterface.onCallback(false);
-                }
+                boolInterface.onCallback(snapshot.exists());
             }
 
             @Override

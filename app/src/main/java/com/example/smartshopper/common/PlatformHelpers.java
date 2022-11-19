@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import com.example.smartshopper.models.Comment;
 import com.example.smartshopper.models.Deal;
 import com.example.smartshopper.models.User;
+import com.example.smartshopper.recyclerViews.CommentsAdapter;
 import com.example.smartshopper.recyclerViews.DealAdapter;
 import com.example.smartshopper.services.RTDBService;
 import com.google.firebase.database.DataSnapshot;
@@ -59,7 +60,7 @@ public class PlatformHelpers {
 
     }
 
-    public void getCommentsAndUpdateRv(Deal deal){
+    public void getCommentsAndUpdateRv(Deal deal, CommentsAdapter adapter){
         Query query = rtdbDatabase.getComments(deal);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -67,17 +68,13 @@ public class PlatformHelpers {
                 List<Comment> comments = new ArrayList<>();
 
                 for (DataSnapshot child : snapshot.getChildren()){
-                    Log.v("COMMENT", child.toString());
                     String author = (String) child.child("author").getValue();
                     String text = (String) child.child("text").getValue();
                     Long timeStamp = (Long) child.child("timePosted").getValue();
-
                     Comment comment = new Comment(new User(author), text, timeStamp);
-
-                    Log.v("COMMENTS", comment.getTimePosted().toString());
                     comments.add(comment);
                 }
-
+                adapter.updateComments(comments);
             }
 
             @Override

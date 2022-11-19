@@ -48,7 +48,8 @@ public class DealAdapter extends RecyclerView.Adapter<DealViewHolder> {
         ImageLoader imageLoader = new ImageLoader();
         imageLoader.loadPicassoImg(context,
                 deals.get(position).getProductImg(),
-                holder.iv_itemPicture);
+                holder.iv_itemPicture,
+                R.drawable.ic_baseline_shopping_basket_24);
 
         holder.tv_dealPostedTime.setText(formatDate(deals.get(position).getTimePosted()));
         holder.tv_dealPostedBy.setText(String.valueOf(deals.get(position).getDealPostedBy()));

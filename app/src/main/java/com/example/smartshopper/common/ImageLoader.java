@@ -13,12 +13,13 @@ import java.io.Serializable;
 
 public class ImageLoader implements Serializable {
 
-    public Picasso loadPicassoImg(Context context, String imgUri, ImageView view) {
+    public Picasso loadPicassoImg(Context context, String imgUri, ImageView view, int defaultImg) {
         Picasso picasso = new Picasso.Builder(context).build();
-        int defaultImg = R.drawable.ic_baseline_shopping_basket_24 ;
+//        int defaultImg = R.drawable.ic_baseline_shopping_basket_24;
         picasso.load(imgUri)
                 .placeholder(defaultImg)
-                .error(defaultImg).into(view);
+                .error(defaultImg)
+                .into(view);
         return picasso;
     }
 }

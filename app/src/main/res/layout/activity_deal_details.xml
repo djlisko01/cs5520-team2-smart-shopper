@@ -69,6 +69,8 @@
       android:id="@+id/rv_comments"
       android:layout_width="397dp"
       android:layout_height="246dp"
+      android:clipToPadding="false"
+      android:padding="4dp"
       app:layout_constraintBottom_toTopOf="@+id/txt_input_comment"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintHorizontal_bias="0.5"
