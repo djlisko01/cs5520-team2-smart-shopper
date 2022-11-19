@@ -10,9 +10,9 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.smartshopper.DealDetails;
+import com.example.smartshopper.DealDetailsActivity;
 import com.example.smartshopper.R;
-import com.example.smartshopper.common.ImageLoader;
+import com.example.smartshopper.common.PlatformHelpers;
 import com.example.smartshopper.models.Deal;
 
 import java.text.DateFormat;
@@ -23,15 +23,12 @@ import java.util.List;
 public class DealAdapter extends RecyclerView.Adapter<DealViewHolder> {
     private List<Deal> deals;
     private final Context context;
-
-    public DealAdapter(List<Deal> deals, Context context) {
-        this.deals = deals;
-        this.context = context;
-    }
+    private final PlatformHelpers platformHelpers;
 
     public DealAdapter(Context context) {
         this.deals = new ArrayList<>();
         this.context = context;
+        this.platformHelpers = new PlatformHelpers(this.context);
     }
 
     @NonNull
@@ -44,15 +41,18 @@ public class DealAdapter extends RecyclerView.Adapter<DealViewHolder> {
     @SuppressLint("UseCompatLoadingForDrawables")
     @Override
     public void onBindViewHolder(@NonNull DealViewHolder holder, int position) {
-
-        ImageLoader imageLoader = new ImageLoader();
-        imageLoader.loadPicassoImg(context,
+        // Image
+        PlatformHelpers.loadPicassoImg(context,
                 deals.get(position).getProductImg(),
                 holder.iv_itemPicture,
                 R.drawable.ic_baseline_shopping_basket_24);
 
+        // Username
+        String userUUID = deals.get(position).getUserUUID();
+        platformHelpers.getUserByUUID(userUUID,
+                user -> holder.tv_dealPostedBy.setText(user.getUsername()));
+
         holder.tv_dealPostedTime.setText(formatDate(deals.get(position).getTimePosted()));
-        holder.tv_dealPostedBy.setText(String.valueOf(deals.get(position).getDealPostedBy()));
         holder.tv_dealTitle.setText(deals.get(position).getTitle());
         holder.tv_store.setText(deals.get(position).getStore());
         holder.tv_originalPrice.setText(NumberFormat.getCurrencyInstance().format(deals.get(position).getOriginalPrice()));
@@ -60,8 +60,8 @@ public class DealAdapter extends RecyclerView.Adapter<DealViewHolder> {
         holder.tv_salePrice.setText(NumberFormat.getCurrencyInstance().format(deals.get(position).getSalePrice()));
 
         holder.itemView.setOnClickListener(v -> {
-            if (context != null){
-                Intent intent = new Intent(context, DealDetails.class);
+            if (context != null) {
+                Intent intent = new Intent(context, DealDetailsActivity.class);
                 intent.putExtra("dealItem", deals.get(holder.getAbsoluteAdapterPosition()));
                 context.startActivity(intent);
             }

@@ -5,13 +5,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
-
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 
-import com.example.smartshopper.common.ImageLoader;
 import com.example.smartshopper.common.PlatformHelpers;
 import com.example.smartshopper.models.Comment;
 import com.example.smartshopper.models.Deal;
@@ -19,16 +15,14 @@ import com.example.smartshopper.models.User;
 import com.example.smartshopper.recyclerViews.CommentsAdapter;
 import com.example.smartshopper.services.RTDBService;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class DealDetails extends AppCompatActivity {
+public class DealDetailsActivity extends AppCompatActivity {
     PlatformHelpers platformHelpers;
     ImageView iv_deal_img;
     FloatingActionButton btn_AddComment;
     RecyclerView rv_comments;
-    ImageLoader imgLoader = new ImageLoader();
     CommentsAdapter adapter;
     Deal deal;
 
@@ -45,17 +39,17 @@ public class DealDetails extends AppCompatActivity {
         if (getIntent().getExtras() != null) {
             deal = (Deal) getIntent().getSerializableExtra("dealItem");
 
-        adapter = new CommentsAdapter(this);
-        rv_comments = findViewById(R.id.rv_comments);
-        rv_comments.setLayoutManager(new LinearLayoutManager(this));
-        rv_comments.setAdapter(adapter);
-        platformHelpers.getCommentsAndUpdateRv(deal, adapter);
+            adapter = new CommentsAdapter(this);
+            rv_comments = findViewById(R.id.rv_comments);
+            rv_comments.setLayoutManager(new LinearLayoutManager(this));
+            rv_comments.setAdapter(adapter);
+            platformHelpers.getCommentsAndUpdateRv(deal, adapter);
 
             //  This works, but maybe a better way is to pass a picasso obj.
-        Picasso picasso = imgLoader.loadPicassoImg(this,
-                deal.getProductImg(),
-                iv_deal_img,
-                R.drawable.ic_baseline_shopping_basket_24);
+            PlatformHelpers.loadPicassoImg(this,
+                    deal.getProductImg(),
+                    iv_deal_img,
+                    R.drawable.ic_baseline_shopping_basket_24);
         }
 
 
@@ -66,9 +60,9 @@ public class DealDetails extends AppCompatActivity {
 
                 Comment comment = new Comment(
                         new User("JaeAndDan"),
-                        "TEST From the Bay",System.currentTimeMillis());
+                        "TEST From the Bay", System.currentTimeMillis());
 
-                rtdbService.submitComment(deal.getDealID(),comment);
+                rtdbService.submitComment(deal.getDealID(), comment);
 
                 List<Comment> comments = adapter.getComments();
                 comments.add(comment);
