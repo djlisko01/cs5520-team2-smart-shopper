@@ -1,6 +1,7 @@
 package com.example.smartshopper.common;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
@@ -10,6 +11,9 @@ import com.example.smartshopper.models.Deal;
 import com.example.smartshopper.models.User;
 import com.example.smartshopper.recyclerViews.CommentsAdapter;
 import com.example.smartshopper.recyclerViews.DealAdapter;
+import com.example.smartshopper.responseInterfaces.CommentInterface;
+import com.example.smartshopper.responseInterfaces.DealInterface;
+import com.example.smartshopper.responseInterfaces.ListInterface;
 import com.example.smartshopper.responseInterfaces.UserInterface;
 import com.example.smartshopper.services.RTDBService;
 import com.google.firebase.database.DataSnapshot;
@@ -34,8 +38,9 @@ public class PlatformHelpers {
         return null;
     }
 
+    // Get user by id
     public void getUserByUUID(String userUUID, UserInterface userInterface) {
-        Query query = rtdbDatabase.getUserByUUID(userUUID);
+        Query query = rtdbDatabase.getUserByKey(userUUID);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -48,24 +53,59 @@ public class PlatformHelpers {
         });
     }
 
-    public void setUser(String username) {
+    // get deal by id (key)
+    public void getDealByKey(String key, DealInterface dealInterface) {
+        Query query = rtdbDatabase.getDeal(key);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                dealInterface.onCallback(snapshot.getValue(Deal.class));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
+
+    // get comment by id (key)
+    public void getCommentByKey(String key, CommentInterface commentInterface) {
+        Query query = rtdbDatabase.getComment(key);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                commentInterface.onCallback(snapshot.getValue(Comment.class));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
+
+    public void setCurrentUser(String username) {
+        // TODO: Implement
+//        this.currentUser = username;
 
     }
 
-    public Deal getDeal(String dealId) {
-        return null;
-    }
 
-    public String getDealId(Deal deal) {
-        return null;
-    }
+    public void getDealsBySearch(String search, ListInterface listInterface) {
+        Query query = rtdbDatabase.getDealsBySearch(search);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<Deal> deals = new ArrayList<>();
+                for (DataSnapshot child : snapshot.getChildren()) {
+                    deals.add(child.getValue(Deal.class));
+                }
+                listInterface.onCallback(deals);
+            }
 
-    public void addDeal(Deal deal) {
-
-    }
-
-
-    public void getDealsBySearch(String search) {
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
 
     }
 
@@ -77,11 +117,9 @@ public class PlatformHelpers {
                 List<Comment> comments = new ArrayList<>();
 
                 for (DataSnapshot child : snapshot.getChildren()) {
-                    String author = (String) child.child("author").child("username").getValue();
-                    String text = (String) child.child("text").getValue();
-                    Long timeStamp = (Long) child.child("timePosted").getValue();
-
-                    Comment comment = new Comment(new User(author), text, timeStamp);
+                    Comment comment = child.getValue(Comment.class);
+                    assert comment != null;
+                    comment.setCommentID(child.getKey());
                     comments.add(comment);
                 }
                 adapter.updateComments(comments);

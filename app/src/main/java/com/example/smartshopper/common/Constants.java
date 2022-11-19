@@ -8,4 +8,8 @@ public class Constants {
     public static final String DOWNVOTES = "numDownVotes";
     public static final String TIME_POSTED = "timePosted";
     public static final String DEAL_POSTED_BY = "dealPostedBy";
+    public static final String SAVED_DEALS = "savedDeals";
+    public static final String COMMENTS = "comments";
+    public static final String FRIENDS = "friends";
+    public static final String TITLE = "title";
 }

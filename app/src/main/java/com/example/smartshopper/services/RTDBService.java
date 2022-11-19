@@ -7,6 +7,7 @@ import com.example.smartshopper.models.Comment;
 import com.example.smartshopper.models.Deal;
 import com.example.smartshopper.models.User;
 import com.example.smartshopper.responseInterfaces.BoolInterface;
+import com.example.smartshopper.responseInterfaces.DealInterface;
 import com.example.smartshopper.responseInterfaces.ObjectInterface;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -21,65 +22,86 @@ public class RTDBService {
     }
 
     // Define Queries here
+
+    // Get all for particular
     public Query getAll(String child) {
         return database.getReference().child(child);
     }
 
-    public Query getUserByUUID(String userUUID) {
-        return database.getReference().child(Constants.USERS).child(userUUID);
+    //Get user by username
+    public Query getUser(String username) {
+        return database.getReference().child(Constants.USERS).orderByChild(Constants.USERNAME).equalTo(username);
     }
 
+    //Get user by userID (key)
+    public Query getUserByKey(String key) {
+        return database.getReference().child(Constants.USERS).child(key);
+    }
+
+    // Get deal by dealID (key)
+    public Query getDeal(String key) {
+        return database.getReference().child(Constants.DEALS).child(key);
+    }
+
+    // Get comment by commentID (key)
+    public Query getComment(String key) {
+        return database.getReference().child(Constants.COMMENTS).child(key);
+    }
+
+    // Get most upvoted deals
     public Query getBestDeals() {
         return database.getReference().child(Constants.DEALS).orderByChild(Constants.UPVOTES);
     }
 
-
-    public Query getDeal(String dealID) {
-        return null;
-    }
-
+    // Get deals saved by user
     public Query getSavedDeals(User user) {
-        return null;
+        // TODO: Implement list of saved deals in user class
+        return database.getReference().child(Constants.USERS).child(user.getUsername()).child(Constants.SAVED_DEALS);
     }
 
+    // Get deals posted by user
     public Query getPostedDeals(User user) {
-        return null;
+        return database.getReference().child(Constants.DEALS).orderByChild(Constants.DEAL_POSTED_BY).equalTo(user.getUsername());
     }
 
+    // Get comments posted by user
     public Query getComments(User user) {
-        return null;
+        return database.getReference().child(Constants.DEALS).orderByChild(Constants.COMMENTS).equalTo(user.getUsername());
     }
 
+    // Get comments for a deal
     public Query getComments(Deal deal) {
-        String dealId = deal.getDealID();
-        return database.getReference().child(Constants.DEALS)
-                .child(dealId).child("comments");
+        return database.getReference().child(Constants.DEALS).child(deal.getDealID()).child(Constants.COMMENTS);
     }
 
-
+    // Get friends for a user
     public Query getFriends(User user) {
-        return null;
+        return database.getReference().child(Constants.USERS).child(user.getUsername()).child(Constants.FRIENDS);
     }
 
-    public void writeUser(User user) {
-        database.getReference().child(Constants.USERS).child(user.getUsername()).setValue(user);
-    }
-
-    public void writeDeal(Deal deal) {
-
-    }
-
+    // Get deals by search query
     public Query getDealsBySearch(String search) {
-        return null;
+        return database.getReference().child(Constants.DEALS).orderByChild(Constants.TITLE).equalTo(search);
     }
 
-    public void submitComment(String dealId, Comment comment){
-        database.getReference()
-                .child(Constants.DEALS)
-                .child(dealId)
-                .child("comments")
-                .push().setValue(comment);
+    // WRITE METHODS
+
+    // Write a new user to the database
+    public void writeUser(User user) {
+        database.getReference().child(Constants.USERS).push().setValue(user);
     }
+
+    // Write a new deal to the database
+    public void writeDeal(Deal deal) {
+        database.getReference().child(Constants.DEALS).push().setValue(deal);
+    }
+
+    // Write comment to existing deal
+    public void writeComment(Comment comment, String dealID) {
+        database.getReference().child(Constants.DEALS).child(dealID).child(Constants.COMMENTS).push().setValue(comment);
+    }
+
+
     // Use this to determine whether item exists (bool) for particular query
     public void getStatusResponseFromQuery(Query query, BoolInterface boolInterface) {
         query.addListenerForSingleValueEvent(new ValueEventListener() {

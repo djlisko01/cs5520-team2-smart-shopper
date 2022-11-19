@@ -62,7 +62,7 @@ public class DealDetailsActivity extends AppCompatActivity {
                         new User("JaeAndDan"),
                         "TEST From the Bay", System.currentTimeMillis());
 
-                rtdbService.submitComment(deal.getDealID(), comment);
+                rtdbService.writeComment(comment, deal.getDealID());
 
                 List<Comment> comments = adapter.getComments();
                 comments.add(comment);
