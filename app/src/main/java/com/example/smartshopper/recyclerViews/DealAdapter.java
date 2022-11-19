@@ -61,14 +61,22 @@ public class DealAdapter extends RecyclerView.Adapter<DealViewHolder> {
         holder.tv_numDownVotes.setText(deals.get(position).getNumDownVotes().toString());
         holder.tv_numUpvotes.setText(deals.get(position).getNumUpVotes().toString());
 
-        holder.iv_downVote.setOnClickListener(v-> {
+        // Up vote down vote listeners
+        holder.iv_downVote.setOnClickListener(v -> {
+            platformHelpers.downVoteDeal(deals.get(position).getDealID());
+        });
+        holder.iv_upVote.setOnClickListener(v -> {
+            platformHelpers.upVoteDeal(deals.get(position).getDealID());
+        });
+        holder.tv_numDownVotes.setOnClickListener(v -> {
             platformHelpers.downVoteDeal(deals.get(position).getDealID());
         });
 
-        holder.iv_upVote.setOnClickListener(v-> {
+        holder.tv_numUpvotes.setOnClickListener(v -> {
             platformHelpers.upVoteDeal(deals.get(position).getDealID());
         });
 
+        // Entire deal card listener
         holder.itemView.setOnClickListener(v -> {
             if (context != null) {
                 Intent intent = new Intent(context, DealDetailsActivity.class);
