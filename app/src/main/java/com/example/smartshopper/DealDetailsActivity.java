@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.example.smartshopper.common.CommonMethods;
 import com.example.smartshopper.common.PlatformHelpers;
 import com.example.smartshopper.models.Comment;
 import com.example.smartshopper.models.Deal;
@@ -47,7 +46,7 @@ public class DealDetailsActivity extends AppCompatActivity {
             platformHelpers.getCommentsAndUpdateRv(deal, adapter);
 
             //  This works, but maybe a better way is to pass a picasso obj.
-            CommonMethods.loadPicassoImg(this,
+            PlatformHelpers.loadPicassoImg(this,
                     deal.getProductImg(),
                     iv_deal_img,
                     R.drawable.ic_baseline_shopping_basket_24);

@@ -20,7 +20,7 @@ public class Deal implements Serializable {
     String store;
     Double originalPrice;
     Double salePrice;
-    User dealPostedBy;
+    String userUUID;
     List<Comment> comments;
     Integer numUpVotes;
     Integer numDownVotes;
@@ -31,7 +31,7 @@ public class Deal implements Serializable {
     }
 
     // Initial Creation - For deals that have a UPC
-    public Deal(String upc, String title, Double originalPrice, Double salePrice, String description, String store, User dealPostedBy) {
+    public Deal(String upc, String title, Double originalPrice, Double salePrice, String description, String store, String userUUID) {
         this.upc = upc;
         this.title = title;
         this.originalPrice = originalPrice;
@@ -39,7 +39,7 @@ public class Deal implements Serializable {
         this.description = description;
         this.timePosted = System.currentTimeMillis();
         this.store = store;
-        this.dealPostedBy = dealPostedBy;
+        this.userUUID = userUUID;
         this.numUpVotes = 0;
         this.numDownVotes = 0;
         this.productImg = "";
@@ -47,7 +47,7 @@ public class Deal implements Serializable {
     }
 
     // Initial Creation - For inserting a deal that lacks a UPC (e.g. Tomatoes 0.99/lb)
-    public Deal(String title, Double originalPrice, Double salePrice, String description, String store, User dealPostedBy) {
+    public Deal(String title, Double originalPrice, Double salePrice, String description, String store, String userUUID) {
         this.upc = null;
         this.title = title;
         this.originalPrice = originalPrice;
@@ -55,7 +55,7 @@ public class Deal implements Serializable {
         this.description = description;
         this.timePosted = System.currentTimeMillis();
         this.store = store;
-        this.dealPostedBy = dealPostedBy;
+        this.userUUID = userUUID;
         this.numUpVotes = 0;
         this.numDownVotes = 0;
         this.productImg = "";
@@ -129,8 +129,8 @@ public class Deal implements Serializable {
         return comments.size();
     }
 
-    public User getDealPostedBy() {
-        return this.dealPostedBy;
+    public String getUserUUID() {
+        return this.userUUID;
     }
 
     public String getProductImg() {
