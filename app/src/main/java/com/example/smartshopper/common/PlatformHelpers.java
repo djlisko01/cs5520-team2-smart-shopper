@@ -1,7 +1,6 @@
 package com.example.smartshopper.common;
 
 import android.content.Context;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -57,14 +56,14 @@ public class PlatformHelpers {
 
     }
 
-    public void getCommentsAndUpdateRv(Deal deal, CommentsAdapter adapter){
+    public void getCommentsAndUpdateRv(Deal deal, CommentsAdapter adapter) {
         Query query = rtdbDatabase.getComments(deal);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 List<Comment> comments = new ArrayList<>();
 
-                for (DataSnapshot child : snapshot.getChildren()){
+                for (DataSnapshot child : snapshot.getChildren()) {
                     String author = (String) child.child("author").child("username").getValue();
                     String text = (String) child.child("text").getValue();
                     Long timeStamp = (Long) child.child("timePosted").getValue();

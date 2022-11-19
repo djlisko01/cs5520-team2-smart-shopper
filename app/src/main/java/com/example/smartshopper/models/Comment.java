@@ -1,7 +1,5 @@
 package com.example.smartshopper.models;
 
-import org.json.JSONObject;
-
 import java.io.Serializable;
 
 public class Comment implements Serializable {
@@ -9,8 +7,8 @@ public class Comment implements Serializable {
     String text;
     Long timePosted;
 
-    public Comment (){
-
+    // For use with firebase to make a deal object from a json object (what snapshot.getValue returns)
+    public Comment() {
     }
 
     // Constructor for use with initialization
@@ -20,7 +18,6 @@ public class Comment implements Serializable {
         this.timePosted = System.currentTimeMillis();
     }
 
-    // For use with firebase to make a comment object from a json object (what snapshot.getValue returns)
     public Comment(User author, String text, Long timePosted) {
         this.author = author;
         this.text = text;

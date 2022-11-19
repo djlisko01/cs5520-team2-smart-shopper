@@ -10,9 +10,9 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.smartshopper.DealDetails;
+import com.example.smartshopper.DealDetailsActivity;
 import com.example.smartshopper.R;
-import com.example.smartshopper.common.ImageLoader;
+import com.example.smartshopper.common.CommonMethods;
 import com.example.smartshopper.models.Deal;
 
 import java.text.DateFormat;
@@ -44,9 +44,7 @@ public class DealAdapter extends RecyclerView.Adapter<DealViewHolder> {
     @SuppressLint("UseCompatLoadingForDrawables")
     @Override
     public void onBindViewHolder(@NonNull DealViewHolder holder, int position) {
-
-        ImageLoader imageLoader = new ImageLoader();
-        imageLoader.loadPicassoImg(context,
+        CommonMethods.loadPicassoImg(context,
                 deals.get(position).getProductImg(),
                 holder.iv_itemPicture,
                 R.drawable.ic_baseline_shopping_basket_24);
@@ -61,7 +59,7 @@ public class DealAdapter extends RecyclerView.Adapter<DealViewHolder> {
 
         holder.itemView.setOnClickListener(v -> {
             if (context != null){
-                Intent intent = new Intent(context, DealDetails.class);
+                Intent intent = new Intent(context, DealDetailsActivity.class);
                 intent.putExtra("dealItem", deals.get(holder.getAbsoluteAdapterPosition()));
                 context.startActivity(intent);
             }

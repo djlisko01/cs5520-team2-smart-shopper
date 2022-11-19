@@ -1,7 +1,5 @@
 package com.example.smartshopper.models;
 
-import org.json.JSONObject;
-
 import java.io.Serializable;
 
 public class User implements Serializable {
