@@ -14,7 +14,7 @@ public class Comment implements Serializable {
     }
 
     // Constructor for use with initialization
-    public Comment(String author, String text) {
+    public Comment(User author, String text) {
         this.author = author;
         this.text = text;
         this.timePosted = System.currentTimeMillis();
@@ -35,7 +35,7 @@ public class Comment implements Serializable {
         return this.timePosted;
     }
 
-    public String getAuthor() {
+    public User getAuthor() {
         return this.author;
     }
 }

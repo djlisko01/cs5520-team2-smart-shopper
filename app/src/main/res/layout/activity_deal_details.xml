@@ -15,17 +15,16 @@
       android:queryHint="Search Here"
       app:layout_constraintBottom_toTopOf="@+id/constraintLayout2"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.5"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent" />
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintVertical_bias="0.44" />
 
   <androidx.constraintlayout.widget.ConstraintLayout
       android:id="@+id/constraintLayout2"
       android:layout_width="325dp"
       android:layout_height="143dp"
-      app:layout_constraintBottom_toTopOf="@+id/deal_details"
+      app:layout_constraintBottom_toTopOf="@+id/constraintLayout3"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.5"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/sv_searchBar">
 
@@ -33,73 +32,76 @@
         android:id="@+id/iv_deal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="99dp"
+        tools:layout_editor_absoluteY="7dp"
         tools:srcCompat="@tools:sample/avatars" />
   </androidx.constraintlayout.widget.ConstraintLayout>
 
   <androidx.constraintlayout.widget.ConstraintLayout
       android:id="@+id/deal_details"
-      android:layout_width="392dp"
-      android:layout_height="64dp"
-      android:layout_marginEnd="12dp"
+      android:layout_width="389dp"
+      android:layout_height="47dp"
       app:layout_constraintBottom_toTopOf="@+id/rv_comments"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.5"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/constraintLayout2">
-
-    <EditText
-        android:id="@+id/editTextTextPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPassword"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.5" />
-  </androidx.constraintlayout.widget.ConstraintLayout>
+      app:layout_constraintTop_toBottomOf="@+id/constraintLayout3" />
 
   <androidx.recyclerview.widget.RecyclerView
       android:id="@+id/rv_comments"
       android:layout_width="397dp"
-      android:layout_height="246dp"
+      android:layout_height="263dp"
       android:clipToPadding="false"
       android:padding="4dp"
-      app:layout_constraintBottom_toTopOf="@+id/txt_input_comment"
+      app:layout_constraintBottom_toTopOf="@+id/textInputEditText"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.5"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/deal_details" />
-
-  <TextView
-      android:id="@+id/txt_input_comment"
-      android:layout_width="270dp"
-      android:layout_height="55dp"
-      android:layout_marginStart="16dp"
-      android:text="TextView"
-      app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintEnd_toStartOf="@+id/btn_add_comment"
-      app:layout_constraintHorizontal_bias="0.5"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/rv_comments" />
 
   <com.google.android.material.floatingactionbutton.FloatingActionButton
       android:id="@+id/btn_add_comment"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:layout_marginEnd="16dp"
       android:clickable="true"
-      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintBottom_toBottomOf="@+id/textInputLayout"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintHorizontal_bias="0.5"
-      app:layout_constraintStart_toEndOf="@+id/txt_input_comment"
-      app:layout_constraintTop_toBottomOf="@+id/rv_comments"
+      app:layout_constraintStart_toEndOf="@+id/textInputEditText"
+      app:layout_constraintTop_toTopOf="@+id/textInputEditText"
       app:srcCompat="@android:drawable/ic_menu_send" />
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+      android:id="@+id/constraintLayout3"
+      android:layout_width="387dp"
+      android:layout_height="51dp"
+      app:layout_constraintBottom_toTopOf="@+id/deal_details"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/constraintLayout2">
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+
+  <com.google.android.material.textfield.TextInputLayout
+      android:id="@+id/textInputLayout"
+      android:layout_width="337dp"
+      android:layout_height="wrap_content"
+      tools:layout_editor_absoluteX="1dp"
+      tools:layout_editor_absoluteY="684dp">
+
+  </com.google.android.material.textfield.TextInputLayout>
+
+  <com.google.android.material.textfield.TextInputEditText
+      android:id="@+id/textInputEditText"
+      android:layout_width="308dp"
+      android:layout_height="50dp"
+      android:layout_marginStart="16dp"
+      android:layout_marginBottom="16dp"
+      android:hint="Comment.."
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toStartOf="@+id/btn_add_comment"
+      app:layout_constraintHorizontal_bias="0.5"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/rv_comments" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
