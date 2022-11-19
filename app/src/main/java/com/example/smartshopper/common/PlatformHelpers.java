@@ -1,7 +1,6 @@
 package com.example.smartshopper.common;
 
 import android.content.Context;
-import android.util.Log;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
@@ -19,6 +18,7 @@ import com.example.smartshopper.services.RTDBService;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
@@ -111,6 +111,14 @@ public class PlatformHelpers {
 
     }
 
+    public void upVoteDeal(String dealID) {
+        rtdbDatabase.upVoteDeal(dealID);
+    }
+
+    public void downVoteDeal(String dealID) {
+        rtdbDatabase.downVoteDeal(dealID);
+    }
+
     public void getCommentsAndUpdateRv(Deal deal, CommentsAdapter adapter) {
         Query query = rtdbDatabase.getComments(deal);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -137,7 +145,7 @@ public class PlatformHelpers {
     public void getDealsAndUpdateMainRV(DealAdapter adapter) {
         //TODO case switch queryEnum to get the correct query from FireBase
         Query query = rtdbDatabase.getBestDeals();
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+        query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 List<Deal> deals = new ArrayList<>();
@@ -159,17 +167,15 @@ public class PlatformHelpers {
 
     /**
      * Loads picture using Piccasso Library
-     *
-     * @param context    view you are loading into
+     *  @param context    view you are loading into
      * @param imgUri     string of the URI of the image
      * @param view       ImageView you are trying to load the picture into
      * @param defaultImg default image if there is an error (should be a local asset)
      */
-    public static Picasso loadPicassoImg(Context context, String imgUri, ImageView view, int defaultImg) {
+    public static void loadPicassoImg(Context context, String imgUri, ImageView view, int defaultImg) {
         Picasso picasso = new Picasso.Builder(context).build();
         picasso.load(imgUri)
                 .error(defaultImg) // removed .placeholder just left .error
                 .into(view);
-        return picasso;
     }
 }
