@@ -32,8 +32,10 @@
         android:id="@+id/iv_deal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:layout_editor_absoluteX="99dp"
-        tools:layout_editor_absoluteY="7dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/avatars" />
   </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -85,17 +87,20 @@
       android:id="@+id/textInputLayout"
       android:layout_width="337dp"
       android:layout_height="wrap_content"
-      tools:layout_editor_absoluteX="1dp"
-      tools:layout_editor_absoluteY="684dp">
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="@+id/textInputEditText">
 
   </com.google.android.material.textfield.TextInputLayout>
 
   <com.google.android.material.textfield.TextInputEditText
       android:id="@+id/textInputEditText"
       android:layout_width="308dp"
-      android:layout_height="50dp"
+      android:layout_height="wrap_content"
+      android:maxHeight="100dp"
       android:layout_marginStart="16dp"
       android:layout_marginBottom="16dp"
+      android:paddingBottom="8dp"
       android:hint="Comment.."
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toStartOf="@+id/btn_add_comment"
