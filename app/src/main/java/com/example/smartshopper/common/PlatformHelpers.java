@@ -1,12 +1,14 @@
 package com.example.smartshopper.common;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
 import com.example.smartshopper.models.Comment;
 import com.example.smartshopper.models.Deal;
 import com.example.smartshopper.models.User;
+import com.example.smartshopper.recyclerViews.CommentsAdapter;
 import com.example.smartshopper.recyclerViews.DealAdapter;
 import com.example.smartshopper.services.RTDBService;
 import com.google.firebase.database.DataSnapshot;
@@ -50,12 +52,34 @@ public class PlatformHelpers {
 
     }
 
-    public void addComment(Comment comment) {
-
-    }
 
     public void getDealsBySearch(String search) {
 
+    }
+
+    public void getCommentsAndUpdateRv(Deal deal, CommentsAdapter adapter){
+        Query query = rtdbDatabase.getComments(deal);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<Comment> comments = new ArrayList<>();
+
+                for (DataSnapshot child : snapshot.getChildren()){
+                    String author = (String) child.child("author").child("username").getValue();
+                    String text = (String) child.child("text").getValue();
+                    Long timeStamp = (Long) child.child("timePosted").getValue();
+
+                    Comment comment = new Comment(new User(author), text, timeStamp);
+                    comments.add(comment);
+                }
+                adapter.updateComments(comments);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     public void getDealsAndUpdateMainRV(DealAdapter adapter) {
@@ -66,7 +90,10 @@ public class PlatformHelpers {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 List<Deal> deals = new ArrayList<>();
                 for (DataSnapshot child : snapshot.getChildren()) {
-                    deals.add(child.getValue(Deal.class));
+                    Deal deal = child.getValue(Deal.class);  // I think this causes the issue
+                    assert deal != null;
+                    deal.setDealID(child.getKey());
+                    deals.add(deal);
                 }
                 adapter.updateData(deals);
             }

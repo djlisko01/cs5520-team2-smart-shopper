@@ -4,7 +4,6 @@ public class Constants {
     public static final String USERS = "users";
     public static final String USERNAME = "username";
     public static final String DEALS = "deals";
-    public static final String DEFAULT_ITEM_IMAGE = "@drawable/ic_baseline_shopping_basket_24";
     public static final String UPVOTES = "numUpVotes";
     public static final String DOWNVOTES = "numDownVotes";
     public static final String TIME_POSTED = "timePosted";

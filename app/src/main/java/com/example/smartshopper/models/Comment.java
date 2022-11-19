@@ -5,9 +5,13 @@ import org.json.JSONObject;
 import java.io.Serializable;
 
 public class Comment implements Serializable {
-    String author;
+    User author;
     String text;
     Long timePosted;
+
+    public Comment (){
+
+    }
 
     // Constructor for use with initialization
     public Comment(String author, String text) {
@@ -17,7 +21,10 @@ public class Comment implements Serializable {
     }
 
     // For use with firebase to make a comment object from a json object (what snapshot.getValue returns)
-    public Comment() {
+    public Comment(User author, String text, Long timePosted) {
+        this.author = author;
+        this.text = text;
+        this.timePosted = timePosted;
     }
 
     public String getText() {

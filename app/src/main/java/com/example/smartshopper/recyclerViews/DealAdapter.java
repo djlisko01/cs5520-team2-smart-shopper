@@ -4,19 +4,16 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.smartshopper.DealDetails;
 import com.example.smartshopper.R;
-import com.example.smartshopper.common.Constants;
+import com.example.smartshopper.common.ImageLoader;
 import com.example.smartshopper.models.Deal;
-import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
 import java.text.NumberFormat;
@@ -47,17 +44,12 @@ public class DealAdapter extends RecyclerView.Adapter<DealViewHolder> {
     @SuppressLint("UseCompatLoadingForDrawables")
     @Override
     public void onBindViewHolder(@NonNull DealViewHolder holder, int position) {
-        String imageURI = deals.get(position).getProductImg().isEmpty() ?
-                Constants.DEFAULT_ITEM_IMAGE : deals.get(position).getProductImg();
-        // no imageURI - set default picture from drawable
-        if (imageURI.equals(Constants.DEFAULT_ITEM_IMAGE)) {
-            Drawable drawable = ContextCompat.getDrawable(context, context.getResources()
-                    .getIdentifier(imageURI, "drawable", context.getPackageName()));
-            holder.iv_itemPicture.setImageDrawable(drawable);
-            // imageURI - set to image URI from Firebase
-        } else {
-            Picasso.get().load(imageURI).into(holder.iv_itemPicture);
-        }
+
+        ImageLoader imageLoader = new ImageLoader();
+        imageLoader.loadPicassoImg(context,
+                deals.get(position).getProductImg(),
+                holder.iv_itemPicture,
+                R.drawable.ic_baseline_shopping_basket_24);
 
         holder.tv_dealPostedTime.setText(formatDate(deals.get(position).getTimePosted()));
         holder.tv_dealPostedBy.setText(String.valueOf(deals.get(position).getDealPostedBy()));

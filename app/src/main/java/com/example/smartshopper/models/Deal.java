@@ -1,6 +1,7 @@
 package com.example.smartshopper.models;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Deal implements Serializable {
@@ -42,6 +43,7 @@ public class Deal implements Serializable {
         this.numUpVotes = 0;
         this.numDownVotes = 0;
         this.productImg = "";
+        this.comments = new ArrayList<>();
     }
 
     // Initial Creation - For inserting a deal that lacks a UPC (e.g. Tomatoes 0.99/lb)
@@ -57,6 +59,13 @@ public class Deal implements Serializable {
         this.numUpVotes = 0;
         this.numDownVotes = 0;
         this.productImg = "";
+    }
+
+    public void setDealID(String dealID){
+        this.dealID = dealID;
+    }
+    public String getDealID(){
+        return this.dealID;
     }
 
     public String getTitle() {
@@ -91,13 +100,14 @@ public class Deal implements Serializable {
         return this.originalPrice - this.salePrice;
     }
 
-    public void addComment(Comment comment) {
-        this.comments.add(comment);
-    }
-
-    public List<Comment> getComments() {
-        return this.comments;
-    }
+//    public void addComment(Comment comment) {
+//        this.comments.add(comment);
+//    }
+//
+//    public List<Comment> getComments() {
+//
+//        return new ArrayList<>();
+//    }
 
     public void upvote() {
         numUpVotes++;
