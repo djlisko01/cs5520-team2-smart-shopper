@@ -52,9 +52,6 @@ public class PlatformHelpers {
 
     }
 
-    public void addComment(Comment comment) {
-
-    }
 
     public void getDealsBySearch(String search) {
 
@@ -68,9 +65,10 @@ public class PlatformHelpers {
                 List<Comment> comments = new ArrayList<>();
 
                 for (DataSnapshot child : snapshot.getChildren()){
-                    String author = (String) child.child("author").getValue();
+                    String author = (String) child.child("author").child("username").getValue();
                     String text = (String) child.child("text").getValue();
                     Long timeStamp = (Long) child.child("timePosted").getValue();
+
                     Comment comment = new Comment(new User(author), text, timeStamp);
                     comments.add(comment);
                 }
@@ -92,7 +90,7 @@ public class PlatformHelpers {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 List<Deal> deals = new ArrayList<>();
                 for (DataSnapshot child : snapshot.getChildren()) {
-                    Deal deal = child.getValue(Deal.class);
+                    Deal deal = child.getValue(Deal.class);  // I think this causes the issue
                     assert deal != null;
                     deal.setDealID(child.getKey());
                     deals.add(deal);

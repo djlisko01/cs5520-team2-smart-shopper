@@ -3,6 +3,7 @@ package com.example.smartshopper.services;
 import androidx.annotation.NonNull;
 
 import com.example.smartshopper.common.Constants;
+import com.example.smartshopper.models.Comment;
 import com.example.smartshopper.models.Deal;
 import com.example.smartshopper.models.User;
 import com.example.smartshopper.responseInterfaces.BoolInterface;
@@ -54,6 +55,7 @@ public class RTDBService {
                 .child(dealId).child("comments");
     }
 
+
     public Query getFriends(User user) {
         return null;
     }
@@ -70,7 +72,13 @@ public class RTDBService {
         return null;
     }
 
-
+    public void submitComment(String dealId, Comment comment){
+        database.getReference()
+                .child(Constants.DEALS)
+                .child(dealId)
+                .child("comments")
+                .push().setValue(comment);
+    }
     // Use this to determine whether item exists (bool) for particular query
     public void getStatusResponseFromQuery(Query query, BoolInterface boolInterface) {
         query.addListenerForSingleValueEvent(new ValueEventListener() {
