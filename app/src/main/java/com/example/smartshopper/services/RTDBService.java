@@ -24,8 +24,9 @@ public class RTDBService {
     public Query getAll(String child) {
         return database.getReference().child(child);
     }
-    public Query getUser(String username) {
-        return database.getReference().child(Constants.USERS).orderByChild(Constants.USERNAME).equalTo(username);
+
+    public Query getUserByUUID(String userUUID) {
+        return database.getReference().child(Constants.USERS).child(userUUID);
     }
 
     public Query getBestDeals() {

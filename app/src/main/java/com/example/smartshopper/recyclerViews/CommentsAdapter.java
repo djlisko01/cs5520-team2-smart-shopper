@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.smartshopper.R;
-import com.example.smartshopper.common.CommonMethods;
+import com.example.smartshopper.common.PlatformHelpers;
 import com.example.smartshopper.models.Comment;
 import com.example.smartshopper.models.User;
 
@@ -41,7 +41,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsViewHolder> {
         holder.tv_comment.setText(comments.get(position).getText());
         holder.tv_userName.setText(user.getUsername());
 
-        CommonMethods.loadPicassoImg(context,
+        PlatformHelpers.loadPicassoImg(context,
                 "/hello/",
                 holder.img_profilePic,
                 R.drawable.missing_profile_pic);
