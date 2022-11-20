@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         rv_dealsRecyclerView.setAdapter(adapter);
 
         // Get deals from firebase:
-        platformHelpers.getDealsAndUpdateMainRV(adapter);
+        platformHelpers.getDealsAndUpdateMainRV(adapter, null);
 
         // Setup Search Listener
         setSearchListener();
@@ -77,13 +77,13 @@ public class MainActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                platformHelpers.searchDealsAndUpdateMainRV(adapter, query);
+                platformHelpers.getDealsAndUpdateMainRV(adapter, query);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newQuery) {
-                platformHelpers.searchDealsAndUpdateMainRV(adapter, newQuery);
+                platformHelpers.getDealsAndUpdateMainRV(adapter, newQuery);
                 return false;
             }
         });
