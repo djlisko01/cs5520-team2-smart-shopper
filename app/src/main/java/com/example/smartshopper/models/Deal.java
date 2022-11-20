@@ -114,7 +114,7 @@ public class Deal implements Serializable {
     }
 
     public void downvote() {
-        numDownVotes--;
+        numDownVotes++;
     }
 
     public Integer getNumUpVotes() {
