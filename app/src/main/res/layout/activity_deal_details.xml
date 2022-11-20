@@ -54,7 +54,7 @@
       android:layout_height="263dp"
       android:clipToPadding="false"
       android:padding="4dp"
-      app:layout_constraintBottom_toTopOf="@+id/textInputEditText"
+      app:layout_constraintBottom_toTopOf="@+id/commentInput"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/deal_details" />
@@ -68,7 +68,7 @@
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintHorizontal_bias="0.5"
-      app:layout_constraintStart_toEndOf="@+id/textInputEditText"
+      app:layout_constraintStart_toEndOf="@+id/commentInput"
       app:layout_constraintTop_toBottomOf="@+id/rv_comments"
       app:srcCompat="@android:drawable/ic_menu_send" />
 
@@ -89,12 +89,12 @@
       android:layout_height="wrap_content"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="@+id/textInputEditText">
+      app:layout_constraintTop_toTopOf="@+id/commentInput">
 
   </com.google.android.material.textfield.TextInputLayout>
 
   <com.google.android.material.textfield.TextInputEditText
-      android:id="@+id/textInputEditText"
+      android:id="@+id/commentInput"
       android:layout_width="308dp"
       android:layout_height="wrap_content"
       android:maxHeight="100dp"
