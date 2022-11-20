@@ -89,15 +89,6 @@ public class RTDBService {
         return database.getReference().child(Constants.USERS).child(user.getUsername()).child(Constants.FRIENDS);
     }
 
-    // Get deals by search query
-    public Query getDealsBySearch(String search) {
-        return database.getReference()
-                .child(Constants.DEALS)
-                .orderByChild(Constants.TITLE)
-                .startAt(search).
-                endAt(search+"\uf8ff");
-    }
-
     // WRITE METHODS
 
     // Write a new user to the database
