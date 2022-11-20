@@ -146,7 +146,6 @@ public class PlatformHelpers {
                                 deals.add(deal);
                             }
                         }
-                        // check if deal title starts with search query
 
                     // If no search term is provided, add all deals
                     } else {
