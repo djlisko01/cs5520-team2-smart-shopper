@@ -14,6 +14,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.example.smartshopper.responseInterfaces.UserInterface;
 import com.example.smartshopper.services.FirebaseService;
 import com.example.smartshopper.utilities.NavigationDrawer;
 import com.google.android.material.navigation.NavigationView;
@@ -56,19 +57,12 @@ public class LoginActivity extends AppCompatActivity {
     passwordET = findViewById(R.id.editTextPassword);
     String emailAddress = emailAddressET.getText().toString();
     String password = passwordET.getText().toString();
-    Toast.makeText(this, "in loginUser method", Toast.LENGTH_LONG).show();
 
-    firebaseService.checkUserInfo(emailAddress, isValid -> {
-      Toast.makeText(this, "checking user exists..", Toast.LENGTH_SHORT).show();
-      if (isValid) {
-        try {
-        firebaseService.setUser(emailAddress);
-        Toast.makeText(this, firebaseService.getCurrentUser(), Toast.LENGTH_LONG).show();
-        } catch (ActivityNotFoundException e) {
-          Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
-        }
+    firebaseService.checkEmail(emailAddress, password, userInterface -> {
+      if (userInterface != null) {
+        Toast.makeText(this, "Successful Login", Toast.LENGTH_LONG).show();
       } else {
-        Toast.makeText(this, "User does not exist", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Invalid Credentials", Toast.LENGTH_SHORT).show();
       }
     });
   }

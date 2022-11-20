@@ -5,6 +5,8 @@ import java.io.Serializable;
 public class User implements Serializable {
     String userID;
     String username;
+    String email;
+    String password;
 
     // For use with firebase to make a user object from a json object (what snapshot.getValue returns)
     public User() {
@@ -26,9 +28,12 @@ public class User implements Serializable {
         return this.username;
     }
 
+    public String getEmail() { return email; }
+
+    public String getPassword() { return password; }
+
     public String toString() {
         return this.username;
     }
-
 
 }

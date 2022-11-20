@@ -1,5 +1,6 @@
 package com.example.smartshopper.services;
 
+import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.example.smartshopper.common.Constants;
@@ -7,13 +8,15 @@ import com.example.smartshopper.models.Comment;
 import com.example.smartshopper.models.Deal;
 import com.example.smartshopper.models.User;
 import com.example.smartshopper.responseInterfaces.BoolInterface;
-import com.example.smartshopper.responseInterfaces.DealInterface;
 import com.example.smartshopper.responseInterfaces.ObjectInterface;
+import com.example.smartshopper.responseInterfaces.UserInterface;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.Objects;
 
 public class RTDBService {
     FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -132,6 +135,33 @@ public class RTDBService {
                 }
             }
 
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
+
+    public void validateCredentials(Query query, String passwordInput, UserInterface userInterface) {
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                // TODO: This needs to be locked down by one result
+                    User foundUser = new User();
+                    for (DataSnapshot userSnapshot: snapshot.getChildren()) {
+                        foundUser = userSnapshot.getValue(User.class);
+                    }
+                    if (foundUser.getPassword().equals(passwordInput)) {
+                        userInterface.onCallback(foundUser);
+                    }
+                    else {
+                        userInterface.onCallback(null);
+                    }
+                } else {
+                    userInterface.onCallback(null);
+                }
+            }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {

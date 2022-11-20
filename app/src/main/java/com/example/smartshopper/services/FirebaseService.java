@@ -4,9 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
-
-import com.example.smartshopper.responseInterfaces.BoolInterface;
 import com.example.smartshopper.responseInterfaces.SetStrInterface;
+import com.example.smartshopper.responseInterfaces.UserInterface;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -46,9 +45,9 @@ public class FirebaseService {
     editor.commit();
   }
 
-  public void checkUserInfo(String emailAddress, BoolInterface boolInterface) {
+  public void checkEmail(String emailAddress, String password, UserInterface userInterface) {
     Query singleUserQuery = database.getUserByEmailAddress(emailAddress);
-    database.getStatusResponseFromQuery(singleUserQuery, boolInterface);
+    database.validateCredentials(singleUserQuery, password, userInterface);
   }
 
   public void getAllUsers(SetStrInterface strInterface) {
