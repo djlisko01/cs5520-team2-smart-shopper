@@ -153,6 +153,7 @@ public class RTDBService {
                     for (DataSnapshot userSnapshot: snapshot.getChildren()) {
                         foundUser = userSnapshot.getValue(User.class);
                     }
+                    Log.v("foundUser", foundUser.getUsername());
                     if (foundUser.getPassword().equals(passwordInput)) {
                         userInterface.onCallback(foundUser);
                     }
