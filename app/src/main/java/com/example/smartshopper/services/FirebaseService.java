@@ -16,10 +16,6 @@ import java.util.HashSet;
 
 public class FirebaseService {
 
-  public String getCurrentUser() {
-    return currentUser;
-  }
-
   private String currentUser;
 
   public RTDBService getDatabase() {
@@ -31,18 +27,8 @@ public class FirebaseService {
   private ChildEventListener messageReceivedListener;
 
   public FirebaseService(Context context) {
-    SharedPreferences settings = context.getSharedPreferences("UserInfo", 0);
-    this.currentUser = settings.getString("username", "");
     this.database = new RTDBService();
     this.context = context;
-  }
-
-  public void setUser(String username) {
-    this.currentUser = username;
-    SharedPreferences settings = context.getSharedPreferences("UserInfo", 0);
-    SharedPreferences.Editor editor = settings.edit();
-    editor.putString("username", username);
-    editor.commit();
   }
 
   public void checkEmail(String emailAddress, String password, UserInterface userInterface) {

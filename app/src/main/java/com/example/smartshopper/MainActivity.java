@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.smartshopper.common.PlatformHelpers;
 import com.example.smartshopper.recyclerViews.DealAdapter;
@@ -24,11 +25,13 @@ public class MainActivity extends AppCompatActivity {
     PlatformHelpers platformHelpers;
     DealAdapter adapter;
     NavigationDrawer navigationDrawer;
+    LocalStorage localStorage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        localStorage = new LocalStorage(this);
 
         // Instantiate objects
         platformHelpers = new PlatformHelpers(this);
@@ -50,6 +53,9 @@ public class MainActivity extends AppCompatActivity {
 
         // Get deals from firebase:
         platformHelpers.getDealsAndUpdateMainRV(adapter);
+//        if (localStorage.getCurrentUser() != null) {
+            Toast.makeText(this, localStorage.getCurrentUser(), Toast.LENGTH_LONG).show();
+//        }
 
     }
 
@@ -67,7 +73,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void sendToLoginActivity(MenuItem item) {
-        Intent loginIntent = new Intent(this, LoginActivity.class);
-        startActivity(loginIntent);
+        if (localStorage.getCurrentUser() != null) {
+            Intent loginIntent = new Intent(this, LoginActivity.class);
+            startActivity(loginIntent);
+        }
+        else {
+            localStorage.signOut();
+        }
+
     }
 }

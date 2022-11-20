@@ -3,6 +3,7 @@ package com.example.smartshopper.services;
 import android.util.Log;
 import androidx.annotation.NonNull;
 
+import com.example.smartshopper.LocalStorage;
 import com.example.smartshopper.common.Constants;
 import com.example.smartshopper.models.Comment;
 import com.example.smartshopper.models.Deal;
@@ -16,6 +17,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.security.spec.ECField;
 import java.util.Objects;
 
 public class RTDBService {
@@ -135,7 +137,6 @@ public class RTDBService {
                 }
             }
 
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
             }
@@ -152,6 +153,7 @@ public class RTDBService {
                     for (DataSnapshot userSnapshot: snapshot.getChildren()) {
                         foundUser = userSnapshot.getValue(User.class);
                     }
+                    Log.v("foundUser", foundUser.getUsername());
                     if (foundUser.getPassword().equals(passwordInput)) {
                         userInterface.onCallback(foundUser);
                     }

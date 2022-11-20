@@ -1,8 +1,10 @@
 package com.example.smartshopper;
+import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -17,6 +19,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.example.smartshopper.responseInterfaces.UserInterface;
 import com.example.smartshopper.services.FirebaseService;
 import com.example.smartshopper.utilities.NavigationDrawer;
+import com.google.android.material.internal.NavigationMenuItemView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -32,6 +35,7 @@ public class LoginActivity extends AppCompatActivity {
   EditText emailAddressET;
   EditText passwordET;
   Context context;
+  LocalStorage localStorage;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -52,15 +56,26 @@ public class LoginActivity extends AppCompatActivity {
     });
   }
 
+  @SuppressLint("RestrictedApi")
   public void loginUser() {
     emailAddressET = findViewById(R.id.editTextEmailAddress);
     passwordET = findViewById(R.id.editTextPassword);
     String emailAddress = emailAddressET.getText().toString();
     String password = passwordET.getText().toString();
+    localStorage = new LocalStorage(this);
 
     firebaseService.checkEmail(emailAddress, password, userInterface -> {
       if (userInterface != null) {
-        Toast.makeText(this, "Successful Login", Toast.LENGTH_LONG).show();
+        try {
+          Log.v("userInterface", userInterface.toString());
+          localStorage.setUser(userInterface.toString());
+          NavigationMenuItemView signinButton = findViewById(R.id.nav_logout);
+          signinButton.setTitle("Sign Out");
+          Toast.makeText(getApplicationContext(), "Successful Login", Toast.LENGTH_LONG).show();
+        } catch (Exception error) {
+          Log.v("error", error.toString());
+        }
+
       } else {
         Toast.makeText(this, "Invalid Credentials", Toast.LENGTH_SHORT).show();
       }
@@ -80,8 +95,13 @@ public class LoginActivity extends AppCompatActivity {
   }
 
   public void sendToLoginActivity(MenuItem item) {
-    Intent loginIntent = new Intent(this, LoginActivity.class);
-    startActivity(loginIntent);
+    if (localStorage.getCurrentUser() != null) {
+      Intent loginIntent = new Intent(this, LoginActivity.class);
+      startActivity(loginIntent);
+    }
+    else {
+      localStorage.signOut();
+    }
   }
 
   public void sendToForgotPasswordActivity(View view) {
