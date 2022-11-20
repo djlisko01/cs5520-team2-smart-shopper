@@ -1,10 +1,13 @@
 package com.example.smartshopper.common;
 
 import android.content.Context;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 
+import com.example.smartshopper.R;
 import com.example.smartshopper.models.Comment;
 import com.example.smartshopper.models.Deal;
 import com.example.smartshopper.models.User;
@@ -150,7 +153,7 @@ public class PlatformHelpers {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 List<Deal> deals = new ArrayList<>();
                 for (DataSnapshot child : snapshot.getChildren()) {
-                    Deal deal = child.getValue(Deal.class);  // I think this causes the issue
+                    Deal deal = child.getValue(Deal.class);
                     assert deal != null;
                     deal.setDealID(child.getKey());
                     deals.add(deal);
@@ -164,6 +167,33 @@ public class PlatformHelpers {
             }
         });
     }
+
+    public void searchDealsAndUpdateMainRV(DealAdapter adapter, String search) {
+        Query query = rtdbDatabase.getDealsBySearch(search);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<Deal> deals = new ArrayList<>();
+                for (DataSnapshot child : snapshot.getChildren()) {
+                    Deal deal = child.getValue(Deal.class);
+                    assert deal != null;
+                    deal.setDealID(child.getKey());
+                    deals.add(deal);
+                }
+                adapter.updateData(deals);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+
+
+
+
 
     /**
      * Loads picture using Piccasso Library

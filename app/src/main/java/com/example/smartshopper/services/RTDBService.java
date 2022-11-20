@@ -91,7 +91,11 @@ public class RTDBService {
 
     // Get deals by search query
     public Query getDealsBySearch(String search) {
-        return database.getReference().child(Constants.DEALS).orderByChild(Constants.TITLE).equalTo(search);
+        return database.getReference()
+                .child(Constants.DEALS)
+                .orderByChild(Constants.TITLE)
+                .startAt(search).
+                endAt(search+"\uf8ff");
     }
 
     // WRITE METHODS
