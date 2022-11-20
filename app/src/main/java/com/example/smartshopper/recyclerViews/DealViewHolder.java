@@ -35,6 +35,7 @@ public class DealViewHolder extends RecyclerView.ViewHolder {
         this.tv_numDownVotes = itemView.findViewById(R.id.tv_numDownVotes);
         this.tv_numUpvotes = itemView.findViewById(R.id.tv_numUpvotes);
         this.iv_upVote = itemView.findViewById(R.id.iv_upVote);
+        this.iv_downVote = itemView.findViewById(R.id.iv_downVote);
     }
 }
 
