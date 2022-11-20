@@ -7,6 +7,7 @@ import com.example.smartshopper.LocalStorage;
 import com.example.smartshopper.common.Constants;
 import com.example.smartshopper.models.Comment;
 import com.example.smartshopper.models.Deal;
+import com.google.firebase.database.ServerValue;
 import com.example.smartshopper.models.User;
 import com.example.smartshopper.responseInterfaces.BoolInterface;
 import com.example.smartshopper.responseInterfaces.ObjectInterface;
@@ -170,5 +171,19 @@ public class RTDBService {
             }
         });
     }
+    public void upVoteDeal(String dealId) {
+        database.getReference()
+          .child(Constants.DEALS)
+          .child(dealId)
+          .child(Constants.UPVOTES)
+          .setValue(ServerValue.increment(1));
+    }
 
+    public void downVoteDeal(String dealId) {
+        database.getReference()
+          .child(Constants.DEALS)
+          .child(dealId)
+          .child(Constants.DOWNVOTES)
+          .setValue(ServerValue.increment(1));
+    }
 }

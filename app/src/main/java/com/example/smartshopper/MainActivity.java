@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.example.smartshopper.common.PlatformHelpers;
 import com.example.smartshopper.recyclerViews.DealAdapter;
@@ -53,9 +52,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Get deals from firebase:
         platformHelpers.getDealsAndUpdateMainRV(adapter);
-//        if (localStorage.getCurrentUser() != null) {
-            Toast.makeText(this, localStorage.getCurrentUser(), Toast.LENGTH_LONG).show();
-//        }
 
     }
 
