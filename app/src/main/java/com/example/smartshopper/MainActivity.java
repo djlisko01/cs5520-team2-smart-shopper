@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.SearchView;
 
 import com.example.smartshopper.common.PlatformHelpers;
 import com.example.smartshopper.recyclerViews.DealAdapter;
@@ -51,7 +52,10 @@ public class MainActivity extends AppCompatActivity {
         rv_dealsRecyclerView.setAdapter(adapter);
 
         // Get deals from firebase:
-        platformHelpers.getDealsAndUpdateMainRV(adapter);
+        platformHelpers.getDealsAndUpdateMainRV(adapter, null);
+
+        // Setup Search Listener
+        setSearchListener();
 
     }
 
@@ -68,6 +72,23 @@ public class MainActivity extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(navigationDrawer);
     }
 
+    private void setSearchListener() {
+        SearchView searchView = findViewById(R.id.sv_searchBar);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                platformHelpers.getDealsAndUpdateMainRV(adapter, query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newQuery) {
+                platformHelpers.getDealsAndUpdateMainRV(adapter, newQuery);
+                return false;
+            }
+        });
+    }
+
     public void sendToLoginActivity(MenuItem item) {
         if (localStorage.getCurrentUser() != null) {
             Intent loginIntent = new Intent(this, LoginActivity.class);
@@ -78,4 +99,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
+
+
 }

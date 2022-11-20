@@ -1,10 +1,13 @@
 package com.example.smartshopper.common;
 
 import android.content.Context;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 
+import com.example.smartshopper.R;
 import com.example.smartshopper.models.Comment;
 import com.example.smartshopper.models.Deal;
 import com.example.smartshopper.models.User;
@@ -92,25 +95,6 @@ public class PlatformHelpers {
     }
 
 
-    public void getDealsBySearch(String search, ListInterface listInterface) {
-        Query query = rtdbDatabase.getDealsBySearch(search);
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                List<Deal> deals = new ArrayList<>();
-                for (DataSnapshot child : snapshot.getChildren()) {
-                    deals.add(child.getValue(Deal.class));
-                }
-                listInterface.onCallback(deals);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
-
-    }
-
     public void upVoteDeal(String dealID) {
         rtdbDatabase.upVoteDeal(dealID);
     }
@@ -142,7 +126,8 @@ public class PlatformHelpers {
         });
     }
 
-    public void getDealsAndUpdateMainRV(DealAdapter adapter) {
+
+    public void getDealsAndUpdateMainRV(DealAdapter adapter, String search) {
         //TODO case switch queryEnum to get the correct query from FireBase
         Query query = rtdbDatabase.getBestDeals();
         query.addValueEventListener(new ValueEventListener() {
@@ -150,10 +135,18 @@ public class PlatformHelpers {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 List<Deal> deals = new ArrayList<>();
                 for (DataSnapshot child : snapshot.getChildren()) {
-                    Deal deal = child.getValue(Deal.class);  // I think this causes the issue
+                    Deal deal = child.getValue(Deal.class);
                     assert deal != null;
                     deal.setDealID(child.getKey());
-                    deals.add(deal);
+                    // Filter deals by search query
+                    if (search != null) {
+                        if (deal.getTitle().toLowerCase().contains(search.toLowerCase())) {
+                            deals.add(deal);
+                        }
+                    // If no search term is provided, add all deals
+                    } else {
+                        deals.add(deal);
+                    }
                 }
                 adapter.updateData(deals);
             }
@@ -163,7 +156,15 @@ public class PlatformHelpers {
 
             }
         });
+
+
+
     }
+
+
+
+
+
 
     /**
      * Loads picture using Piccasso Library
