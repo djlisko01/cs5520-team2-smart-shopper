@@ -3,6 +3,7 @@ package com.example.smartshopper.common;
 import android.content.Context;
 import android.widget.ImageView;
 
+
 import androidx.annotation.NonNull;
 
 import com.example.smartshopper.models.Comment;
@@ -18,20 +19,18 @@ import com.example.smartshopper.services.RTDBService;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
-import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class PlatformHelpers {
     private final RTDBService rtdbDatabase;
-    private final Context context;
 
     public PlatformHelpers(Context context) {
         this.rtdbDatabase = new RTDBService();
-        this.context = context;
     }
 
     // Get logged in user
@@ -121,7 +120,7 @@ public class PlatformHelpers {
 
     public void getCommentsAndUpdateRv(Deal deal, CommentsAdapter adapter) {
         Query query = rtdbDatabase.getComments(deal);
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+        query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 List<Comment> comments = new ArrayList<>();
@@ -132,6 +131,7 @@ public class PlatformHelpers {
                     comment.setCommentID(child.getKey());
                     comments.add(comment);
                 }
+                Collections.reverse(comments);
                 adapter.updateComments(comments);
             }
 
@@ -155,6 +155,7 @@ public class PlatformHelpers {
                     deal.setDealID(child.getKey());
                     deals.add(deal);
                 }
+
                 adapter.updateData(deals);
             }
 
