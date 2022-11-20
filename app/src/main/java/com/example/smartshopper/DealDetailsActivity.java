@@ -4,7 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ImageView;
@@ -28,12 +31,15 @@ public class DealDetailsActivity extends AppCompatActivity {
     RecyclerView rv_comments;
     CommentsAdapter adapter;
     Deal deal;
+    LocalStorage localStorage;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_deal_details);
+        localStorage = new LocalStorage(this);
+        String currUser = localStorage.getCurrentUser();
 
         platformHelpers = new PlatformHelpers(this);
         iv_deal_img = findViewById(R.id.iv_deal);
@@ -56,14 +62,13 @@ public class DealDetailsActivity extends AppCompatActivity {
                     R.drawable.ic_baseline_shopping_basket_24);
         }
 
-
         btn_AddComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 RTDBService rtdbService = new RTDBService();
 
                 Comment comment = new Comment(
-                        new User("JaeAndDan"),
+                        new User(currUser),
                         commentInput.getText().toString(),
                         System.currentTimeMillis());
                 commentInput.setText("");
