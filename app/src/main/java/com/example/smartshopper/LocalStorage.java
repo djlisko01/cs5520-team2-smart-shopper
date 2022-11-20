@@ -23,15 +23,11 @@ public class LocalStorage {
   }
 
   public void setUser(String username) {
-    try {
-      this.currentUser = username;
-      SharedPreferences settings = context.getSharedPreferences("UserInfo", 0);
-      SharedPreferences.Editor editor = settings.edit();
-      editor.putString("username", username);
-      editor.commit();
-    } catch (Exception error) {
-      Log.v("error", error.toString());
-    }
+    this.currentUser = username;
+    SharedPreferences settings = context.getSharedPreferences("UserInfo", 0);
+    SharedPreferences.Editor editor = settings.edit();
+    editor.putString("username", username);
+    editor.commit();
   }
   public void signOut() {
     SharedPreferences settings = context.getSharedPreferences("UserInfo", 0);

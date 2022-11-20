@@ -66,16 +66,10 @@ public class LoginActivity extends AppCompatActivity {
 
     firebaseService.checkEmail(emailAddress, password, userInterface -> {
       if (userInterface != null) {
-        try {
-          Log.v("userInterface", userInterface.toString());
-          localStorage.setUser(userInterface.toString());
-          NavigationMenuItemView signinButton = findViewById(R.id.nav_logout);
-          signinButton.setTitle("Sign Out");
-          Toast.makeText(getApplicationContext(), "Successful Login", Toast.LENGTH_LONG).show();
-        } catch (Exception error) {
-          Log.v("error", error.toString());
-        }
-
+        localStorage.setUser(userInterface.toString());
+        NavigationMenuItemView signinButton = findViewById(R.id.nav_logout);
+        signinButton.setTitle("Sign Out");
+        Toast.makeText(getApplicationContext(), "Successful Login", Toast.LENGTH_LONG).show();
       } else {
         Toast.makeText(this, "Invalid Credentials", Toast.LENGTH_SHORT).show();
       }
