@@ -178,4 +178,10 @@ public class PlatformHelpers {
           .error(defaultImg) // removed .placeholder just left .error
           .into(view);
     }
+
+    public void checkEmail(String emailAddress, String password, UserInterface userInterface) {
+        Query singleUserQuery = rtdbDatabase.getUserByEmailAddress(emailAddress);
+        rtdbDatabase.validateCredentials(singleUserQuery, password, userInterface);
+    }
+
 }

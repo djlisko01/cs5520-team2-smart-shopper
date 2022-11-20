@@ -1,6 +1,5 @@
 package com.example.smartshopper;
 import android.annotation.SuppressLint;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,13 +15,10 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import com.example.smartshopper.responseInterfaces.UserInterface;
-import com.example.smartshopper.services.FirebaseService;
+import com.example.smartshopper.common.PlatformHelpers;
 import com.example.smartshopper.utilities.NavigationDrawer;
 import com.google.android.material.internal.NavigationMenuItemView;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Objects;
 
@@ -31,7 +27,8 @@ public class LoginActivity extends AppCompatActivity {
   ActionBarDrawerToggle actionBarDrawerToggle;
   NavigationDrawer navigationDrawer;
   Button loginButton;
-  FirebaseService firebaseService;
+  PlatformHelpers platformHelpers;
+//  FirebaseService firebaseService;
   EditText emailAddressET;
   EditText passwordET;
   Context context;
@@ -49,7 +46,7 @@ public class LoginActivity extends AppCompatActivity {
     // to make the Navigation drawer icon always appear on the action bar
     Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
     setNavigationViewListener();
-    firebaseService = new FirebaseService(getApplicationContext());
+    platformHelpers = new PlatformHelpers(getApplicationContext());
     loginButton = findViewById(R.id.loginButton);
     loginButton.setOnClickListener(view -> {
       loginUser();
@@ -64,7 +61,7 @@ public class LoginActivity extends AppCompatActivity {
     String password = passwordET.getText().toString();
     localStorage = new LocalStorage(this);
 
-    firebaseService.checkEmail(emailAddress, password, userInterface -> {
+    platformHelpers.checkEmail(emailAddress, password, userInterface -> {
       if (userInterface != null) {
         try {
           Log.v("userInterface", userInterface.toString());
