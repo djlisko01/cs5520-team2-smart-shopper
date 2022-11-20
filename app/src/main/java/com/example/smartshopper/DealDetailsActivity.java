@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ImageView;
 
 import com.example.smartshopper.common.PlatformHelpers;
@@ -15,6 +16,7 @@ import com.example.smartshopper.models.User;
 import com.example.smartshopper.recyclerViews.CommentsAdapter;
 import com.example.smartshopper.services.RTDBService;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.List;
 
@@ -22,6 +24,7 @@ public class DealDetailsActivity extends AppCompatActivity {
     PlatformHelpers platformHelpers;
     ImageView iv_deal_img;
     FloatingActionButton btn_AddComment;
+    TextInputEditText commentInput;
     RecyclerView rv_comments;
     CommentsAdapter adapter;
     Deal deal;
@@ -35,6 +38,7 @@ public class DealDetailsActivity extends AppCompatActivity {
         platformHelpers = new PlatformHelpers(this);
         iv_deal_img = findViewById(R.id.iv_deal);
         btn_AddComment = findViewById(R.id.btn_add_comment);
+        commentInput = findViewById(R.id.commentInput);
 
         if (getIntent().getExtras() != null) {
             deal = (Deal) getIntent().getSerializableExtra("dealItem");
@@ -60,13 +64,17 @@ public class DealDetailsActivity extends AppCompatActivity {
 
                 Comment comment = new Comment(
                         new User("JaeAndDan"),
-                        "TEST From the Bay", System.currentTimeMillis());
+                        commentInput.getText().toString(),
+                        System.currentTimeMillis());
+                commentInput.setText("");
+                commentInput.onEditorAction(EditorInfo.IME_ACTION_DONE);
 
                 rtdbService.writeComment(comment, deal.getDealID());
 
                 List<Comment> comments = adapter.getComments();
-                comments.add(comment);
+                comments.add(0, comment);
                 adapter.updateComments(comments);
+                rv_comments.scrollToPosition(0);
             }
 
 
