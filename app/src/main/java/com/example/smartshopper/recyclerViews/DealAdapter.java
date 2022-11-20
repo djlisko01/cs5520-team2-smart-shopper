@@ -35,7 +35,7 @@ public class DealAdapter extends RecyclerView.Adapter<DealViewHolder> {
     @Override
     public DealViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new DealViewHolder(LayoutInflater.from(context).inflate(R.layout.deal, null),
-                context);
+          context);
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -43,14 +43,14 @@ public class DealAdapter extends RecyclerView.Adapter<DealViewHolder> {
     public void onBindViewHolder(@NonNull DealViewHolder holder, int position) {
         // Image
         PlatformHelpers.loadPicassoImg(context,
-                deals.get(position).getProductImg(),
-                holder.iv_itemPicture,
-                R.drawable.ic_baseline_shopping_basket_24);
+          deals.get(position).getProductImg(),
+          holder.iv_itemPicture,
+          R.drawable.ic_baseline_shopping_basket_24);
 
         // Username
         String userUUID = deals.get(position).getUserUUID();
         platformHelpers.getUserByUUID(userUUID,
-                user -> holder.tv_dealPostedBy.setText(user.getUsername()));
+          user -> holder.tv_dealPostedBy.setText(user.getUsername()));
 
         holder.tv_dealPostedTime.setText(formatDate(deals.get(position).getTimePosted()));
         holder.tv_dealTitle.setText(deals.get(position).getTitle());

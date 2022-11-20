@@ -175,7 +175,13 @@ public class PlatformHelpers {
     public static void loadPicassoImg(Context context, String imgUri, ImageView view, int defaultImg) {
         Picasso picasso = new Picasso.Builder(context).build();
         picasso.load(imgUri)
-                .error(defaultImg) // removed .placeholder just left .error
-                .into(view);
+          .error(defaultImg) // removed .placeholder just left .error
+          .into(view);
     }
+
+    public void checkEmail(String emailAddress, String password, UserInterface userInterface) {
+        Query singleUserQuery = rtdbDatabase.getUserByEmailAddress(emailAddress);
+        rtdbDatabase.validateCredentials(singleUserQuery, password, userInterface);
+    }
+
 }

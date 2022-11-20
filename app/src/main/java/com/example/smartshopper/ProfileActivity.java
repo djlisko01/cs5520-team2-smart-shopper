@@ -19,9 +19,12 @@ public class ProfileActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle actionBarDrawerToggle;
     NavigationDrawer navigationDrawer;
+    LocalStorage localStorage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        localStorage = new LocalStorage(this);
         setContentView(R.layout.activity_profile);
         // https://www.geeksforgeeks.org/navigation-drawer-in-android/
         // drawer layout instance to toggle the menu icon to open drawer and back button to close drawer
@@ -46,8 +49,13 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     public void sendToLoginActivity(MenuItem item) {
-        Intent loginIntent = new Intent(this, LoginActivity.class);
-        startActivity(loginIntent);
+        if (localStorage.getCurrentUser() != null) {
+            Intent loginIntent = new Intent(this, LoginActivity.class);
+            startActivity(loginIntent);
+        }
+        else {
+            localStorage.signOut();
+        }
     }
 
     public void sendToForgotPasswordActivity(View view) {

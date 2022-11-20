@@ -24,11 +24,13 @@ public class MainActivity extends AppCompatActivity {
     PlatformHelpers platformHelpers;
     DealAdapter adapter;
     NavigationDrawer navigationDrawer;
+    LocalStorage localStorage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        localStorage = new LocalStorage(this);
 
         // Instantiate objects
         platformHelpers = new PlatformHelpers(this);
@@ -67,7 +69,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void sendToLoginActivity(MenuItem item) {
-        Intent loginIntent = new Intent(this, LoginActivity.class);
-        startActivity(loginIntent);
+        if (localStorage.getCurrentUser() != null) {
+            Intent loginIntent = new Intent(this, LoginActivity.class);
+            startActivity(loginIntent);
+        }
+        else {
+            localStorage.signOut();
+        }
+
     }
 }
