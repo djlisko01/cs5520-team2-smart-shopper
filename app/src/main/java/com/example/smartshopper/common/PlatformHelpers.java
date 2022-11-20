@@ -140,9 +140,13 @@ public class PlatformHelpers {
                     deal.setDealID(child.getKey());
                     // Filter deals by search query
                     if (search != null) {
-                        if (deal.getTitle().toLowerCase().contains(search.toLowerCase())) {
-                            deals.add(deal);
+                       // convert deal title to list of strings
+                        for (String s : deal.getTitle().split(" ")) {
+                            if (s.toLowerCase().startsWith(search.toLowerCase()) && !deals.contains(deal)) {
+                                deals.add(deal);
+                            }
                         }
+
                     // If no search term is provided, add all deals
                     } else {
                         deals.add(deal);
