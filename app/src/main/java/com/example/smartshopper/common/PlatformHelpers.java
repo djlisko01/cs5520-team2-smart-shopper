@@ -5,8 +5,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.SearchView;
 
-
-
 import androidx.annotation.NonNull;
 
 import com.example.smartshopper.LocalStorage;
@@ -19,8 +17,8 @@ import com.example.smartshopper.recyclerViews.DealAdapter;
 import com.example.smartshopper.responseInterfaces.BoolInterface;
 import com.example.smartshopper.responseInterfaces.CommentInterface;
 import com.example.smartshopper.responseInterfaces.DealInterface;
-import com.example.smartshopper.responseInterfaces.ListInterface;
 import com.example.smartshopper.responseInterfaces.StringInterface;
+
 import com.example.smartshopper.responseInterfaces.UserInterface;
 import com.example.smartshopper.services.RTDBService;
 import com.google.firebase.database.DataSnapshot;
@@ -29,7 +27,6 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
