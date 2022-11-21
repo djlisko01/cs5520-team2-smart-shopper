@@ -14,9 +14,9 @@ import com.example.smartshopper.models.Deal;
 import com.example.smartshopper.models.User;
 import com.example.smartshopper.recyclerViews.CommentsAdapter;
 import com.example.smartshopper.recyclerViews.DealAdapter;
+import com.example.smartshopper.responseInterfaces.BoolInterface;
 import com.example.smartshopper.responseInterfaces.CommentInterface;
 import com.example.smartshopper.responseInterfaces.DealInterface;
-import com.example.smartshopper.responseInterfaces.ListInterface;
 import com.example.smartshopper.responseInterfaces.UserInterface;
 import com.example.smartshopper.services.RTDBService;
 import com.google.firebase.database.DataSnapshot;
@@ -28,6 +28,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 public class PlatformHelpers {
     private final RTDBService rtdbDatabase;
@@ -161,15 +162,7 @@ public class PlatformHelpers {
 
             }
         });
-
-
-
     }
-
-
-
-
-
 
     /**
      * Loads picture using Piccasso Library
@@ -186,8 +179,13 @@ public class PlatformHelpers {
     }
 
     public void checkEmail(String emailAddress, String password, UserInterface userInterface) {
-        Query singleUserQuery = rtdbDatabase.getUserByEmailAddress(emailAddress);
+        String finalEmailAddress = emailAddress.toLowerCase(Locale.ROOT);
+        Query singleUserQuery = rtdbDatabase.getUserByEmailAddress(finalEmailAddress);
         rtdbDatabase.validateCredentials(singleUserQuery, password, userInterface);
+    }
+
+    public void createAccount(String username, String emailAddress, String password, UserInterface userInterface) {
+        rtdbDatabase.createAccount(username, emailAddress, password, userInterface);
     }
 
 }
