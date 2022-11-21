@@ -9,6 +9,7 @@ import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 
+import com.example.smartshopper.LocalStorage;
 import com.example.smartshopper.R;
 import com.example.smartshopper.models.Comment;
 import com.example.smartshopper.models.Deal;
@@ -34,9 +35,13 @@ import java.util.Locale;
 
 public class PlatformHelpers {
     private final RTDBService rtdbDatabase;
+    private Context context;
+    private LocalStorage localStorage;
 
     public PlatformHelpers(Context context) {
         this.rtdbDatabase = new RTDBService();
+        this.context = context;
+        this.localStorage = new LocalStorage(this.context);
     }
 
     // Get logged in user
@@ -96,20 +101,20 @@ public class PlatformHelpers {
         });
     }
 
-    public void saveDeal(String userID, String dealID) {
-        rtdbDatabase.writeSavedDeal(userID, dealID);
+    public void saveDeal(String dealID) {
+        rtdbDatabase.writeSavedDeal(localStorage.getCurrentUserID(), dealID);
     }
 
-    public void removeDeal(String userID, String dealID) {
-        rtdbDatabase.deleteSavedDeal(userID, dealID);
+    public void removeDeal(String dealID) {
+        rtdbDatabase.deleteSavedDeal(localStorage.getCurrentUserID(), dealID);
     }
 
-    public void isSaved(String userID, String dealID, BoolInterface boolInterface) {
-        rtdbDatabase.isSaved(userID, dealID, boolInterface);
+    public void isSaved(String dealID, BoolInterface boolInterface) {
+        rtdbDatabase.isSaved(localStorage.getCurrentUserID(), dealID, boolInterface);
     }
 
-    public void getSavedDealKey(String userID, String dealID, StringInterface stringInterface) {
-        Query query = rtdbDatabase.getSpecificSavedDeal(userID, dealID);
+    public void getSavedDealKey(String dealID, StringInterface stringInterface) {
+        Query query = rtdbDatabase.getSpecificSavedDeal(localStorage.getCurrentUserID(), dealID);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

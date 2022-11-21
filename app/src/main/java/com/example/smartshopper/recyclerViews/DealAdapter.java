@@ -64,16 +64,16 @@ public class DealAdapter extends RecyclerView.Adapter<DealViewHolder> {
         holder.tv_numUpvotes.setText(deals.get(position).getNumUpVotes().toString());
 
         // Save deals
-        platformHelpers.isSaved("userKey4", deals.get(position).getDealID(), response -> {
+        platformHelpers.isSaved(deals.get(position).getDealID(), response -> {
             holder.tb_saveDeal.setChecked(response);
         });
 
         holder.tb_saveDeal.setOnClickListener(v -> {
             if (holder.tb_saveDeal.isChecked()) {
-                platformHelpers.saveDeal("userKey4", deals.get(position).getDealID());
+                platformHelpers.saveDeal(deals.get(position).getDealID());
             } else {
-                platformHelpers.getSavedDealKey("userKey4", deals.get(position).getDealID(), key -> {
-                    platformHelpers.removeDeal("userKey4", key);
+                platformHelpers.getSavedDealKey(deals.get(position).getDealID(), key -> {
+                    platformHelpers.removeDeal(key);
                 });
             }
         });
