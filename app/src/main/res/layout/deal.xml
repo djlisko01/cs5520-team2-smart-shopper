@@ -149,6 +149,16 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 
+            <ToggleButton
+                android:id="@+id/tb_saveDeal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textOff="@string/save_deal_button"
+                android:textOn="@string/remove_deal_button"
+                app:layout_constraintBottom_toTopOf="@+id/tv_salePrice"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

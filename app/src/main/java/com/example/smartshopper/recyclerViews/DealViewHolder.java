@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,6 +23,7 @@ public class DealViewHolder extends RecyclerView.ViewHolder {
     public TextView tv_numUpvotes;
     public ImageView iv_upVote;
     public ImageView iv_downVote;
+    public ToggleButton tb_saveDeal;
 
     public DealViewHolder(@NonNull View itemView, Context context) {
         super(itemView);
@@ -36,6 +38,7 @@ public class DealViewHolder extends RecyclerView.ViewHolder {
         this.tv_numUpvotes = itemView.findViewById(R.id.tv_numUpvotes);
         this.iv_upVote = itemView.findViewById(R.id.iv_upVote);
         this.iv_downVote = itemView.findViewById(R.id.iv_downVote);
+        this.tb_saveDeal = itemView.findViewById(R.id.tb_saveDeal);
     }
 }
 
