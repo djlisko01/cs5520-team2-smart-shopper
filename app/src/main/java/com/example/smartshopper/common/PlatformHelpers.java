@@ -19,6 +19,7 @@ import com.example.smartshopper.recyclerViews.DealAdapter;
 import com.example.smartshopper.responseInterfaces.BoolInterface;
 import com.example.smartshopper.responseInterfaces.CommentInterface;
 import com.example.smartshopper.responseInterfaces.DealInterface;
+import com.example.smartshopper.responseInterfaces.ListInterface;
 import com.example.smartshopper.responseInterfaces.StringInterface;
 import com.example.smartshopper.responseInterfaces.UserInterface;
 import com.example.smartshopper.services.RTDBService;
@@ -28,6 +29,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -118,8 +120,8 @@ public class PlatformHelpers {
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot ss : snapshot.getChildren()) {
-                    stringInterface.onCallback(ss.getKey());
+                for (DataSnapshot child : snapshot.getChildren()) {
+                    stringInterface.onCallback(child.getKey());
                 }
             }
 
@@ -188,6 +190,32 @@ public class PlatformHelpers {
                 }
 
                 adapter.updateData(deals);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    // Returns list of saved deals
+    public void getSavedDeals(DealAdapter adapter) {
+        Query query = rtdbDatabase.getSavedDeals(localStorage.getCurrentUserID());
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<Deal> savedDeals = new ArrayList<>();
+                for (DataSnapshot child : snapshot.getChildren()) {
+                    getDealByKey(child.getValue(String.class), deal -> {
+                        assert deal != null;
+                        deal.setDealID(child.getValue(String.class));
+                        savedDeals.add(deal);
+                        if (savedDeals.size() == snapshot.getChildrenCount()) {
+                            adapter.updateData(savedDeals);
+                        }
+                    });
+                }
             }
 
             @Override

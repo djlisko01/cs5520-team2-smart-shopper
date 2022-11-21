@@ -62,9 +62,8 @@ public class RTDBService {
     }
 
     // Get deals saved by user
-    public Query getSavedDeals(User user) {
-        // TODO: Implement list of saved deals in user class
-        return database.getReference().child(Constants.USERS).child(user.getUsername()).child(Constants.SAVED_DEALS);
+    public Query getSavedDeals(String userID) {
+        return database.getReference().child(Constants.USERS).child(userID).child(Constants.SAVED_DEALS);
     }
 
     // Get a specific saved deal
