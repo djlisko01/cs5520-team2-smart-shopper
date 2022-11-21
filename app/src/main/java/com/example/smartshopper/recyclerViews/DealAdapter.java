@@ -65,6 +65,7 @@ public class DealAdapter extends RecyclerView.Adapter<DealViewHolder> {
 
         // Save deals
         platformHelpers.isSaved(deals.get(position).getDealID(), response -> {
+            Log.d("SAVED", response + "");
             holder.tb_saveDeal.setChecked(response);
         });
 
