@@ -54,7 +54,7 @@
       android:layout_height="263dp"
       android:clipToPadding="false"
       android:padding="4dp"
-      app:layout_constraintBottom_toTopOf="@+id/textInputEditText"
+      app:layout_constraintBottom_toTopOf="@+id/commentInput"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/deal_details" />
@@ -68,18 +68,84 @@
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintHorizontal_bias="0.5"
-      app:layout_constraintStart_toEndOf="@+id/textInputEditText"
+      app:layout_constraintStart_toEndOf="@+id/commentInput"
       app:layout_constraintTop_toBottomOf="@+id/rv_comments"
       app:srcCompat="@android:drawable/ic_menu_send" />
 
   <androidx.constraintlayout.widget.ConstraintLayout
       android:id="@+id/constraintLayout3"
       android:layout_width="387dp"
-      android:layout_height="51dp"
+      android:layout_height="64dp"
       app:layout_constraintBottom_toTopOf="@+id/deal_details"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/constraintLayout2">
+
+    <ImageView
+        android:id="@+id/iv_upVote"
+        android:layout_width="44dp"
+        android:layout_height="29dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="16dp"
+        android:contentDescription="@string/thumbs_up_icon"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_up_vote" />
+
+    <ImageView
+        android:id="@+id/iv_downVote"
+        android:layout_width="44dp"
+        android:layout_height="29dp"
+        android:contentDescription="@string/thumbs_down_icon"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_upVote"
+        app:layout_constraintStart_toEndOf="@+id/tv_numUpvotes"
+        app:layout_constraintTop_toTopOf="@+id/iv_upVote"
+        app:srcCompat="@drawable/ic_down_vote" />
+
+    <TextView
+        android:id="@+id/tv_numUpvotes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/_0"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_upVote"
+        app:layout_constraintStart_toEndOf="@+id/iv_upVote"
+        app:layout_constraintTop_toTopOf="@+id/iv_upVote" />
+
+    <TextView
+        android:id="@+id/tv_numDownVotes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="@string/_0"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_downVote"
+        app:layout_constraintStart_toEndOf="@+id/iv_downVote"
+        app:layout_constraintTop_toTopOf="@+id/iv_downVote" />
+
+    <TextView
+        android:id="@+id/tv_dealTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/deal_title"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/tv_salePrice"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.864"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_salePrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sale_price"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.848"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_dealTitle" />
 
   </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -89,12 +155,12 @@
       android:layout_height="wrap_content"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="@+id/textInputEditText">
+      app:layout_constraintTop_toTopOf="@+id/commentInput">
 
   </com.google.android.material.textfield.TextInputLayout>
 
   <com.google.android.material.textfield.TextInputEditText
-      android:id="@+id/textInputEditText"
+      android:id="@+id/commentInput"
       android:layout_width="308dp"
       android:layout_height="wrap_content"
       android:maxHeight="100dp"

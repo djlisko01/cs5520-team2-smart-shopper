@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.SearchView;
 
+
 import androidx.annotation.NonNull;
 
 import com.example.smartshopper.R;
@@ -25,16 +26,15 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
 public class PlatformHelpers {
     private final RTDBService rtdbDatabase;
-    private final Context context;
 
     public PlatformHelpers(Context context) {
         this.rtdbDatabase = new RTDBService();
-        this.context = context;
     }
 
     // Get logged in user
@@ -105,7 +105,7 @@ public class PlatformHelpers {
 
     public void getCommentsAndUpdateRv(Deal deal, CommentsAdapter adapter) {
         Query query = rtdbDatabase.getComments(deal);
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+        query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 List<Comment> comments = new ArrayList<>();
@@ -116,6 +116,7 @@ public class PlatformHelpers {
                     comment.setCommentID(child.getKey());
                     comments.add(comment);
                 }
+                Collections.reverse(comments);
                 adapter.updateComments(comments);
             }
 
@@ -152,6 +153,7 @@ public class PlatformHelpers {
                         deals.add(deal);
                     }
                 }
+
                 adapter.updateData(deals);
             }
 
