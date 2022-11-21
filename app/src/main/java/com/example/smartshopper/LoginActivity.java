@@ -58,11 +58,12 @@ public class LoginActivity extends AppCompatActivity {
     platformHelpers.checkEmail(emailAddress, password, userInterface -> {
       if (userInterface != null) {
         try {
-          Log.v("userInterface", userInterface.toString());
-          localStorage.setUser(userInterface.toString());
+          localStorage.setUser(userInterface);
           NavigationMenuItemView signinButton = findViewById(R.id.nav_logout);
           signinButton.setTitle("Sign Out");
-          Toast.makeText(getApplicationContext(), "Successful Login", Toast.LENGTH_LONG).show();
+          Toast.makeText(getApplicationContext(), "Welcome back "+ userInterface.getUsername() + "!", Toast.LENGTH_LONG).show();
+          Intent mainActivityIntent = new Intent(this, MainActivity.class);
+          this.startActivity(mainActivityIntent);
         } catch (Exception error) {
           Log.v("error", error.toString());
         }

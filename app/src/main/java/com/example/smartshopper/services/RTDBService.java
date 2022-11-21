@@ -180,21 +180,21 @@ public class RTDBService {
       .setValue(ServerValue.increment(1));
   }
 
-  public void createAccount(String username, String emailAddress, String password, BoolInterface boolInterface ) {
+  public void createAccount(String username, String emailAddress, String password, UserInterface userInterface ) {
     String finalEmailAddress = emailAddress.toLowerCase(Locale.ROOT);
     Query emailQuery = getUserByEmailAddress(finalEmailAddress);
     emailQuery.addListenerForSingleValueEvent(new ValueEventListener() {
       @Override
       public void onDataChange(@NonNull DataSnapshot emailExistsSnapshot) {
         if (emailExistsSnapshot.exists()) {
-          boolInterface.onCallback(false);
+          userInterface.onCallback(null);
         } else {
           Query usernameQuery = getUser(username);
           usernameQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot usernameExistsSnapshot) {
               if (usernameExistsSnapshot.exists()) {
-                boolInterface.onCallback(false);
+                userInterface.onCallback(null);
               }
               else {
                 User newUser = new User(username, finalEmailAddress, password);
@@ -202,11 +202,12 @@ public class RTDBService {
                   .child(Constants.USERS)
                   .push()
                   .getKey();
+                newUser.setUserID(newUserKey);
                 database.getReference()
                   .child(Constants.USERS)
                   .child(newUserKey)
                   .setValue(newUser);
-                boolInterface.onCallback(true);
+                userInterface.onCallback(newUser);
 
               }
             }

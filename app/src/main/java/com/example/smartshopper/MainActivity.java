@@ -10,12 +10,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.SearchView;
-
 import com.example.smartshopper.common.PlatformHelpers;
 import com.example.smartshopper.recyclerViews.DealAdapter;
 import com.example.smartshopper.utilities.NavigationDrawer;
 import com.google.android.material.navigation.NavigationView;
-
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
@@ -56,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Setup Search Listener
         setSearchListener();
-
     }
 
     @Override
