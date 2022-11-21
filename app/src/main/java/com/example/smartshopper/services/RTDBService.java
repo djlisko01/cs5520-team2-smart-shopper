@@ -92,7 +92,10 @@ public class RTDBService {
 
     // Write a new user to the database
     public void writeUser(User user) {
-        database.getReference().child(Constants.USERS).push().setValue(user);
+        String newUserKey = database.getReference().child(Constants.USERS).push().getKey();
+        user.setUserID(newUserKey);
+        assert newUserKey != null;
+        database.getReference().child(Constants.USERS).child(newUserKey).setValue(user);
     }
 
     // Write a new deal to the database
