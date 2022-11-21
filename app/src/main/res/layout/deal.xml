@@ -151,13 +151,17 @@
 
             <ToggleButton
                 android:id="@+id/tb_saveDeal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textOff="@string/save_deal_button"
-                android:textOn="@string/remove_deal_button"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_margin="5dp"
+                android:textOff=""
+                android:textOn=""
+                android:background="@drawable/ic_save_toggle_bg"
                 app:layout_constraintBottom_toTopOf="@+id/tv_salePrice"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintHorizontal_bias="1"
+                app:layout_constraintVertical_bias="0" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
