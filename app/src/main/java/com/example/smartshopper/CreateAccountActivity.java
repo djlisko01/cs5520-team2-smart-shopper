@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.smartshopper.common.PlatformHelpers;
+import com.example.smartshopper.models.User;
 import com.google.android.material.internal.NavigationMenuItemView;
 
 public class CreateAccountActivity extends AppCompatActivity {
@@ -62,11 +63,11 @@ public class CreateAccountActivity extends AppCompatActivity {
 
   public void createAccount(String username, String email, String password) {
     try {
-      platformHelpers.createAccount(username, email, password, boolInterface -> {
-        if (boolInterface) {
+      platformHelpers.createAccount(username, email, password, userInterface -> {
+        if (userInterface != null) {
 //          TODO: this should lead to a follow tags activity that hasn't been created yet
-          Toast.makeText(context, "Welcome to Smart Shopper!", Toast.LENGTH_LONG).show();
-          signIn(username);
+          Toast.makeText(context, "Welcome to Smart Shopper "+ username + "!", Toast.LENGTH_LONG).show();
+          signIn(userInterface);
           Intent mainActivityIntent = new Intent(context, MainActivity.class);
           context.startActivity(mainActivityIntent);
         }
@@ -79,9 +80,9 @@ public class CreateAccountActivity extends AppCompatActivity {
     }
   }
   @SuppressLint({"RestrictedApi"})
-  public void signIn(String username) {
+  public void signIn(User user) {
     try {
-      localStorage.setUser(username);
+      localStorage.setUser(user);
       signinButton.setTitle("Sign Out");
       Toast.makeText(getApplicationContext(), "Successful Login", Toast.LENGTH_LONG).show();
     } catch (Exception error) {

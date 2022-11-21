@@ -185,8 +185,8 @@ public class PlatformHelpers {
         rtdbDatabase.validateCredentials(singleUserQuery, password, userInterface);
     }
 
-    public void createAccount(String username, String emailAddress, String password, BoolInterface boolInterface) {
-        rtdbDatabase.createAccount(username, emailAddress, password, boolInterface);
+    public void createAccount(String username, String emailAddress, String password, UserInterface userInterface) {
+        rtdbDatabase.createAccount(username, emailAddress, password, userInterface);
     }
 
 }

@@ -3,35 +3,35 @@ package com.example.smartshopper;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
-
-import com.example.smartshopper.services.RTDBService;
+import com.example.smartshopper.models.User;
 
 public class LocalStorage {
-  private String currentUser;
-  private RTDBService database;
   private Context context;
 
   public String getCurrentUser() {
     return context.getSharedPreferences("UserInfo", 0).getString("username", "");
   }
 
+  public String getCurrentUserID() {
+    return context.getSharedPreferences("UserInfo", 0).getString("userID", "");
+  }
+
+  public String getCurrentUserEmail() {
+    return context.getSharedPreferences("UserInfo", 0).getString("userEmail", "");
+  }
+
   public LocalStorage(Context context) {
     SharedPreferences settings = context.getSharedPreferences("UserInfo", 0);
-    this.currentUser = settings.getString("username", "");
-    this.database = new RTDBService();
     this.context = context;
   }
 
-  public void setUser(String username) {
-    try {
-      this.currentUser = username;
-      SharedPreferences settings = context.getSharedPreferences("UserInfo", 0);
-      SharedPreferences.Editor editor = settings.edit();
-      editor.putString("username", username);
-      editor.commit();
-    } catch (Exception error) {
-      Log.v("error", error.toString());
-    }
+  public void setUser(User user) {
+    SharedPreferences settings = context.getSharedPreferences("UserInfo", 0);
+    SharedPreferences.Editor editor = settings.edit();
+    editor.putString("username", user.getUsername());
+    editor.putString("userEmail", user.getEmail());
+    editor.putString("userID", user.getUserID());
+    editor.commit();
   }
   public void signOut() {
     SharedPreferences settings = context.getSharedPreferences("UserInfo", 0);
