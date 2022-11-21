@@ -17,6 +17,7 @@ import com.example.smartshopper.recyclerViews.DealAdapter;
 import com.example.smartshopper.responseInterfaces.BoolInterface;
 import com.example.smartshopper.responseInterfaces.CommentInterface;
 import com.example.smartshopper.responseInterfaces.DealInterface;
+import com.example.smartshopper.responseInterfaces.StringInterface;
 import com.example.smartshopper.responseInterfaces.UserInterface;
 import com.example.smartshopper.services.RTDBService;
 import com.google.firebase.database.DataSnapshot;
@@ -94,6 +95,33 @@ public class PlatformHelpers {
         });
     }
 
+    public void saveDeal(String userID, String dealID) {
+        rtdbDatabase.writeSavedDeal(userID, dealID);
+    }
+
+    public void removeDeal(String userID, String dealID) {
+        rtdbDatabase.deleteSavedDeal(userID, dealID);
+    }
+
+    public void isSaved(String userID, String dealID, BoolInterface boolInterface) {
+        rtdbDatabase.isSaved(userID, dealID, boolInterface);
+    }
+
+    public void getSavedDealKey(String userID, String dealID, StringInterface stringInterface) {
+        Query query = rtdbDatabase.getSpecificSavedDeal(userID, dealID);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot ss : snapshot.getChildren()) {
+                    stringInterface.onCallback(ss.getKey());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
 
     public void upVoteDeal(String dealID) {
         rtdbDatabase.upVoteDeal(dealID);
@@ -126,7 +154,6 @@ public class PlatformHelpers {
             }
         });
     }
-
 
     public void getDealsAndUpdateMainRV(DealAdapter adapter, String search) {
         //TODO case switch queryEnum to get the correct query from FireBase
