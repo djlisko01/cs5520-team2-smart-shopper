@@ -5,13 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.smartshopper.common.PlatformHelpers;
 import com.google.android.material.internal.NavigationMenuItemView;
 
@@ -25,6 +23,7 @@ public class CreateAccountActivity extends AppCompatActivity {
   Context context;
   LocalStorage localStorage;
   NavigationMenuItemView signinButton;
+  CheckBox agreeToTerms;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -39,25 +38,24 @@ public class CreateAccountActivity extends AppCompatActivity {
     context = this;
     platformHelpers = new PlatformHelpers(context);
     localStorage = new LocalStorage(context);
+    agreeToTerms = findViewById(R.id.agreeToTermsCheckbox);
 
-    createAccountButton.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        String username = usernameET.getText().toString();
-        String email = emailET.getText().toString();
-        String password = passwordET.getText().toString();
-        String confirmPassword = confirmPasswordET.getText().toString();
+    createAccountButton.setOnClickListener(view -> {
+      String username = usernameET.getText().toString();
+      String email = emailET.getText().toString();
+      String password = passwordET.getText().toString();
+      String confirmPassword = confirmPasswordET.getText().toString();
+      Log.v("Checkbox value", String.valueOf(agreeToTerms.isChecked()));
 
 //        todo: would be nice if we checked for valid email with regex here
-        if (username.equals("") || email.equals("") || password.equals("") || confirmPassword.equals("")) {
-          Toast.makeText(getApplicationContext(), "All fields are required. Please verify you have filled out all fields and resubmit.", Toast.LENGTH_LONG).show();
-        }
-        else if (!password.equals(confirmPassword)) {
-          Toast.makeText(getApplicationContext(), "Password fields must match", Toast.LENGTH_LONG).show();
-        }
-        else {
-          createAccount(username, email, password);
-        }
+      if (username.equals("") || email.equals("") || password.equals("") || confirmPassword.equals("") || !agreeToTerms.isChecked()) {
+        Toast.makeText(getApplicationContext(), "All fields are required. Please verify you have filled out all fields and resubmit.", Toast.LENGTH_LONG).show();
+      }
+      else if (!password.equals(confirmPassword)) {
+        Toast.makeText(getApplicationContext(), "Password fields must match", Toast.LENGTH_LONG).show();
+      }
+      else {
+        createAccount(username, email, password);
       }
     });
   }
@@ -65,7 +63,7 @@ public class CreateAccountActivity extends AppCompatActivity {
   public void createAccount(String username, String email, String password) {
     try {
       platformHelpers.createAccount(username, email, password, boolInterface -> {
-        if (boolInterface != false) {
+        if (boolInterface) {
 //          TODO: this should lead to a follow tags activity that hasn't been created yet
           Toast.makeText(context, "Welcome to Smart Shopper!", Toast.LENGTH_LONG).show();
           signIn(username);
