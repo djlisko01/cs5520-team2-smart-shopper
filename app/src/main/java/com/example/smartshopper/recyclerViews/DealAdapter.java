@@ -4,9 +4,10 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,6 +15,7 @@ import com.example.smartshopper.DealDetailsActivity;
 import com.example.smartshopper.R;
 import com.example.smartshopper.common.PlatformHelpers;
 import com.example.smartshopper.models.Deal;
+import com.example.smartshopper.responseInterfaces.StringInterface;
 
 import java.text.DateFormat;
 import java.text.NumberFormat;
@@ -60,6 +62,21 @@ public class DealAdapter extends RecyclerView.Adapter<DealViewHolder> {
         holder.tv_salePrice.setText(NumberFormat.getCurrencyInstance().format(deals.get(position).getSalePrice()));
         holder.tv_numDownVotes.setText(deals.get(position).getNumDownVotes().toString());
         holder.tv_numUpvotes.setText(deals.get(position).getNumUpVotes().toString());
+
+        // Save deals
+        platformHelpers.isSaved("userKey4", deals.get(position).getDealID(), response -> {
+            holder.tb_saveDeal.setChecked(response);
+        });
+
+        holder.tb_saveDeal.setOnClickListener(v -> {
+            if (holder.tb_saveDeal.isChecked()) {
+                platformHelpers.saveDeal("userKey4", deals.get(position).getDealID());
+            } else {
+                platformHelpers.getSavedDealKey("userKey4", deals.get(position).getDealID(), key -> {
+                    platformHelpers.removeDeal("userKey4", key);
+                });
+            }
+        });
 
         // Up vote down vote listeners
         holder.iv_downVote.setOnClickListener(v -> {
