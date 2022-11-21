@@ -13,6 +13,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import com.example.smartshopper.common.PlatformHelpers;
+import com.example.smartshopper.utilities.LocalStorage;
 import com.example.smartshopper.utilities.NavigationDrawer;
 import com.google.android.material.internal.NavigationMenuItemView;
 import com.google.android.material.navigation.NavigationView;
