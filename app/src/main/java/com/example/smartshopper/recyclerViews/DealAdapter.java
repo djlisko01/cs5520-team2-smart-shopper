@@ -21,6 +21,7 @@ import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class DealAdapter extends RecyclerView.Adapter<DealViewHolder> {
     private List<Deal> deals;
@@ -116,5 +117,17 @@ public class DealAdapter extends RecyclerView.Adapter<DealViewHolder> {
 
     public String formatDate(long timestamp) {
         return DateFormat.getDateInstance(DateFormat.LONG).format(timestamp);
+    }
+
+    public void searchByTitle(String query) {
+        List<Deal> filteredDeals = new ArrayList<>();
+
+        for (Deal d : deals) {
+            if (d.getTitle().toLowerCase().contains(query.toLowerCase())) {
+                filteredDeals.add(d);
+            }
+        }
+
+        updateData(filteredDeals);
     }
 }
