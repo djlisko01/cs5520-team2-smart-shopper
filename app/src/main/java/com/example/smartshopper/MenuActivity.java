@@ -28,7 +28,6 @@ public class MenuActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         localStorage = new LocalStorage(this);
         loginMenuItem = findViewById(R.id.nav_logout);
-        Log.v("MenuActivity", this.getSharedPreferences("UserInfo", 0).getString("username", ""));
         if (localStorage != null && localStorage.userIsLoggedIn()) {
             loginMenuItem.setTitle("Sign Out");
         }
