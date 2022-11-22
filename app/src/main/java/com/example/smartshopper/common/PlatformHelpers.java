@@ -1,14 +1,12 @@
 package com.example.smartshopper.common;
 
 import android.content.Context;
-import android.view.View;
+import android.util.Log;
 import android.widget.ImageView;
-import android.widget.SearchView;
 
 
 import androidx.annotation.NonNull;
 
-import com.example.smartshopper.R;
 import com.example.smartshopper.models.Comment;
 import com.example.smartshopper.models.Deal;
 import com.example.smartshopper.models.User;
@@ -17,8 +15,10 @@ import com.example.smartshopper.recyclerViews.DealAdapter;
 import com.example.smartshopper.responseInterfaces.BoolInterface;
 import com.example.smartshopper.responseInterfaces.CommentInterface;
 import com.example.smartshopper.responseInterfaces.DealInterface;
+import com.example.smartshopper.responseInterfaces.StringInterface;
 import com.example.smartshopper.responseInterfaces.UserInterface;
 import com.example.smartshopper.services.RTDBService;
+import com.example.smartshopper.utilities.LocalStorage;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
@@ -32,9 +32,11 @@ import java.util.Locale;
 
 public class PlatformHelpers {
     private final RTDBService rtdbDatabase;
+    private LocalStorage localStorage;
 
     public PlatformHelpers(Context context) {
         this.rtdbDatabase = new RTDBService();
+        this.localStorage = new LocalStorage(context);
     }
 
     // Get logged in user
@@ -94,6 +96,71 @@ public class PlatformHelpers {
         });
     }
 
+    // Saved Deals methods
+    public void saveDeal(Deal deal) {
+        rtdbDatabase.writeSavedDeal(localStorage.getCurrentUserID(), deal);
+    }
+
+    public void deleteSavedDeal(String savedDealKey) {
+        rtdbDatabase.deleteSavedDeal(localStorage.getCurrentUserID(), savedDealKey);
+    }
+
+    public void checkSavedDealExists(Deal deal, BoolInterface boolInterface) {
+        Query query = rtdbDatabase.getSavedDeals(localStorage.getCurrentUserID()).orderByValue().equalTo(deal.getDealID());
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                boolInterface.onCallback(snapshot.exists());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
+
+    public void getSavedDealKey(String dealID, StringInterface stringInterface) {
+        Query query = rtdbDatabase.getSavedDeals(localStorage.getCurrentUserID());
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot child : snapshot.getChildren()) {
+                    if (child.getValue(String.class).equals(dealID)) {
+                        stringInterface.onCallback(child.getKey());
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
+
+    public void getSavedDealsAndUpdateRV(DealAdapter adapter) {
+        Query query = rtdbDatabase.getSavedDeals(localStorage.getCurrentUserID());
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<Deal> savedDeals = new ArrayList<>();
+                for (DataSnapshot child : snapshot.getChildren()) {
+                    getDealByKey(child.getValue(String.class), deal -> {
+                        assert deal != null;
+                        deal.setDealID(child.getValue(String.class));
+                        savedDeals.add(deal);
+                        if (savedDeals.size() == snapshot.getChildrenCount()) {
+                            adapter.updateData(savedDeals);
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("DB_ERROR", error.getMessage());
+            }
+        });
+    }
 
     public void upVoteDeal(String dealID) {
         rtdbDatabase.upVoteDeal(dealID);

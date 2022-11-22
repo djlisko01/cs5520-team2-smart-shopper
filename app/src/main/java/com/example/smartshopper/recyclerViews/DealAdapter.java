@@ -4,9 +4,10 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,11 +15,13 @@ import com.example.smartshopper.DealDetailsActivity;
 import com.example.smartshopper.R;
 import com.example.smartshopper.common.PlatformHelpers;
 import com.example.smartshopper.models.Deal;
+import com.example.smartshopper.responseInterfaces.StringInterface;
 
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class DealAdapter extends RecyclerView.Adapter<DealViewHolder> {
     private List<Deal> deals;
@@ -61,6 +64,21 @@ public class DealAdapter extends RecyclerView.Adapter<DealViewHolder> {
         holder.tv_numDownVotes.setText(deals.get(position).getNumDownVotes().toString());
         holder.tv_numUpvotes.setText(deals.get(position).getNumUpVotes().toString());
 
+        // Save deals
+        platformHelpers.checkSavedDealExists(deals.get(position), response -> {
+            holder.tb_saveDeal.setChecked(response);
+        });
+
+        holder.tb_saveDeal.setOnClickListener(v -> {
+            if (holder.tb_saveDeal.isChecked()) {
+                platformHelpers.saveDeal(deals.get(position));
+            } else {
+                platformHelpers.getSavedDealKey(deals.get(position).getDealID(), key -> {
+                    platformHelpers.deleteSavedDeal(key);
+                });
+            }
+        });
+
         // Up vote down vote listeners
         holder.iv_downVote.setOnClickListener(v -> {
             platformHelpers.downVoteDeal(deals.get(position).getDealID());
@@ -98,5 +116,17 @@ public class DealAdapter extends RecyclerView.Adapter<DealViewHolder> {
 
     public String formatDate(long timestamp) {
         return DateFormat.getDateInstance(DateFormat.LONG).format(timestamp);
+    }
+
+    public void searchByTitle(String query) {
+        List<Deal> filteredDeals = new ArrayList<>();
+
+        for (Deal d : deals) {
+            if (d.getTitle().toLowerCase().contains(query.toLowerCase())) {
+                filteredDeals.add(d);
+            }
+        }
+
+        updateData(filteredDeals);
     }
 }

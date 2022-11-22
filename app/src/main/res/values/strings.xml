@@ -30,4 +30,7 @@
     <string name="confirm_password_hint">Confirm Password</string>
     <string name="create_account_hint">Create Account</string>
     <string name="agree_to_terms_checkbox">Agree To Terms</string>
+    <string name="saved_deals_button">Saved Deals</string>
+    <string name="save_deal_button">Save</string>
+    <string name="remove_deal_button">Remove</string>
 </resources>

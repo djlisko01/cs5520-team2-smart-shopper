@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/saveToggleBG"
+        android:drawable="@android:color/transparent" />
+
+    <item
+        android:id="@+id/saveToggle"
+        android:drawable="@drawable/ic_save_toggle" />
+</layer-list>
