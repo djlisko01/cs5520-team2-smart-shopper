@@ -39,15 +39,16 @@ public class SavedDealsActivity extends AppCompatActivity implements SearchView.
 
     @Override
     public boolean onQueryTextSubmit(String query) {
+        if (!query.trim().isEmpty()) {
+            adapter.searchByTitle(query);
+        }
         return false;
     }
 
     @Override
     public boolean onQueryTextChange(String query) {
-        if (query.isEmpty()) {
+        if (query.trim().isEmpty()) {
             platformHelpers.getSavedDeals(adapter);
-        } else {
-            adapter.searchByTitle(query);
         }
         return false;
     }
