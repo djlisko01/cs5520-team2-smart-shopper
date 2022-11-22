@@ -1,35 +1,17 @@
 package com.example.smartshopper;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.SearchView;
 
 import com.example.smartshopper.common.PlatformHelpers;
-import com.example.smartshopper.models.Deal;
 import com.example.smartshopper.recyclerViews.DealAdapter;
-import com.example.smartshopper.responseInterfaces.DealInterface;
-import com.example.smartshopper.responseInterfaces.ListInterface;
-import com.example.smartshopper.utilities.NavigationDrawer;
-import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 
 public class SavedDealsActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
     SearchView sv_searchSavedDeals;
-    List<Deal> filteredDeals;
     RecyclerView rv_savedDeals;
     DealAdapter adapter;
     LocalStorage localStorage;
