@@ -199,7 +199,7 @@ public class PlatformHelpers {
     }
 
     // Returns list of saved deals
-    public void getSavedDeals(DealAdapter adapter) {
+    public void getSavedDealsAndUpdateRV(DealAdapter adapter) {
         Query query = rtdbDatabase.getSavedDeals(localStorage.getCurrentUserID());
         query.addValueEventListener(new ValueEventListener() {
             @Override
@@ -211,6 +211,7 @@ public class PlatformHelpers {
                         deal.setDealID(child.getValue(String.class));
                         savedDeals.add(deal);
                         if (savedDeals.size() == snapshot.getChildrenCount()) {
+                            // once each child has been looked at, update the RecyclerView
                             adapter.updateData(savedDeals);
                         }
                     });

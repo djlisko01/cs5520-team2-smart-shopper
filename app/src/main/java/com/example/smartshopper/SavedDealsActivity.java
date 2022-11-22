@@ -33,7 +33,7 @@ public class SavedDealsActivity extends AppCompatActivity implements SearchView.
         rv_savedDeals = findViewById(R.id.rv_savedDeals);
         rv_savedDeals.setLayoutManager(new LinearLayoutManager(this));
         rv_savedDeals.setAdapter(adapter);
-        platformHelpers.getSavedDeals(adapter);
+        platformHelpers.getSavedDealsAndUpdateRV(adapter);
     }
 
 
@@ -48,7 +48,7 @@ public class SavedDealsActivity extends AppCompatActivity implements SearchView.
     @Override
     public boolean onQueryTextChange(String query) {
         if (query.trim().isEmpty()) {
-            platformHelpers.getSavedDeals(adapter);
+            platformHelpers.getSavedDealsAndUpdateRV(adapter);
         }
         return false;
     }
