@@ -2,11 +2,14 @@ package com.example.smartshopper.utilities;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 import com.example.smartshopper.models.User;
 
 public class LocalStorage {
   private Context context;
+
+  public Boolean userIsLoggedIn() {
+    return !context.getSharedPreferences("UserInfo", 0).getString("username", "").equals("");
+  }
 
   public String getCurrentUser() {
     return context.getSharedPreferences("UserInfo", 0).getString("username", "");
