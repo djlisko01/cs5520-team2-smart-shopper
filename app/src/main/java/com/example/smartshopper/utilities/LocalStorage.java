@@ -1,0 +1,45 @@
+package com.example.smartshopper.utilities;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+import com.example.smartshopper.models.User;
+
+public class LocalStorage {
+  private Context context;
+
+  public Boolean userIsLoggedIn() {
+    return !context.getSharedPreferences("UserInfo", 0).getString("username", "").equals("");
+  }
+
+  public String getCurrentUser() {
+    return context.getSharedPreferences("UserInfo", 0).getString("username", "");
+  }
+
+  public String getCurrentUserID() {
+    return context.getSharedPreferences("UserInfo", 0).getString("userID", "");
+  }
+
+  public String getCurrentUserEmail() {
+    return context.getSharedPreferences("UserInfo", 0).getString("userEmail", "");
+  }
+
+  public LocalStorage(Context context) {
+    SharedPreferences settings = context.getSharedPreferences("UserInfo", 0);
+    this.context = context;
+  }
+
+  public void setUser(User user) {
+    SharedPreferences settings = context.getSharedPreferences("UserInfo", 0);
+    SharedPreferences.Editor editor = settings.edit();
+    editor.putString("username", user.getUsername());
+    editor.putString("userEmail", user.getEmail());
+    editor.putString("userID", user.getUserID());
+    editor.commit();
+  }
+  public void signOut() {
+    SharedPreferences settings = context.getSharedPreferences("UserInfo", 0);
+    SharedPreferences.Editor editor = settings.edit();
+    editor.clear();
+    editor.commit();
+  }
+}

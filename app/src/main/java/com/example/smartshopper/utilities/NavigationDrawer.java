@@ -11,6 +11,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.smartshopper.ProfileActivity;
 import com.example.smartshopper.R;
+import com.example.smartshopper.SavedDealsActivity;
 import com.google.android.material.navigation.NavigationView;
 
 public class NavigationDrawer implements NavigationView.OnNavigationItemSelectedListener  {
@@ -32,6 +33,9 @@ public class NavigationDrawer implements NavigationView.OnNavigationItemSelected
         //TODO add the other naviagtion clicks here
         if (item.getItemId() == R.id.nav_account) {
             Intent intent = new Intent(context, ProfileActivity.class);
+            context.startActivity(intent);
+        } else if (item.getItemId() == R.id.nav_savedDeals) {
+            Intent intent = new Intent(context, SavedDealsActivity.class);
             context.startActivity(intent);
         }
         //close navigation drawer
