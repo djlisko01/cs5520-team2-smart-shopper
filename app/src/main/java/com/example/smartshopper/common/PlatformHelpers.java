@@ -113,7 +113,6 @@ public class PlatformHelpers {
                 for (DataSnapshot child : snapshot.getChildren()) {
                     Comment comment = child.getValue(Comment.class);
                     assert comment != null;
-                    comment.setCommentID(child.getKey());
                     comments.add(comment);
                 }
                 Collections.reverse(comments);
@@ -138,13 +137,15 @@ public class PlatformHelpers {
                 for (DataSnapshot child : snapshot.getChildren()) {
                     Deal deal = child.getValue(Deal.class);
                     assert deal != null;
-                    deal.setDealID(child.getKey());
                     // Filter deals by search query
                     if (search != null) {
                         // convert deal title to list of strings
-                        for (String s : deal.getTitle().split(" ")) {
-                            if (s.toLowerCase().startsWith(search.toLowerCase()) && !deals.contains(deal)) {
-                                deals.add(deal);
+                        for (String deal_term : deal.getTitle().split(" ")) {
+                            for (String search_term : search.split(" ")) {
+                                if (deal_term.toLowerCase(Locale.ROOT).startsWith(search_term.toLowerCase(Locale.ROOT)) && !deals.contains(deal)) {
+                                    deals.add(deal);
+                                    break;
+                                }
                             }
                         }
 
@@ -174,8 +175,7 @@ public class PlatformHelpers {
      */
     public static void loadPicassoImg(Context context, String imgUri, ImageView view, int defaultImg) {
         Picasso picasso = new Picasso.Builder(context).build();
-        picasso.load(imgUri)
-                .error(defaultImg) // removed .placeholder just left .error
+        picasso.load(imgUri).error(defaultImg) // removed .placeholder just left .error
                 .into(view);
     }
 
