@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.example.smartshopper.utilities.LocalStorage;
 import com.example.smartshopper.utilities.NavigationDrawer;
 import com.google.android.material.navigation.NavigationView;
 

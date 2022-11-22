@@ -1,4 +1,4 @@
-package com.example.smartshopper;
+package com.example.smartshopper.utilities;
 
 import android.content.Context;
 import android.content.SharedPreferences;
