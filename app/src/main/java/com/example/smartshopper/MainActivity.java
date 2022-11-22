@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.widget.SearchView;
 import com.example.smartshopper.common.PlatformHelpers;
 import com.example.smartshopper.recyclerViews.DealAdapter;
+import com.example.smartshopper.utilities.LocalStorage;
 import com.example.smartshopper.utilities.NavigationDrawer;
 import com.google.android.material.navigation.NavigationView;
 import java.util.Objects;

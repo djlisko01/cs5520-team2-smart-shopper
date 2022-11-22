@@ -5,8 +5,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -17,6 +15,7 @@ import com.example.smartshopper.models.Deal;
 import com.example.smartshopper.models.User;
 import com.example.smartshopper.recyclerViews.CommentsAdapter;
 import com.example.smartshopper.services.RTDBService;
+import com.example.smartshopper.utilities.LocalStorage;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 

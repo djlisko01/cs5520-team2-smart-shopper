@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.smartshopper.common.PlatformHelpers;
 import com.example.smartshopper.models.User;
+import com.example.smartshopper.utilities.LocalStorage;
 import com.google.android.material.internal.NavigationMenuItemView;
 
 public class CreateAccountActivity extends AppCompatActivity {
