@@ -1,15 +1,12 @@
 package com.example.smartshopper.common;
 
 import android.content.Context;
-import android.view.View;
+import android.util.Log;
 import android.widget.ImageView;
-import android.widget.SearchView;
 
 
 import androidx.annotation.NonNull;
 
-import com.example.smartshopper.LocalStorage;
-import com.example.smartshopper.R;
 import com.example.smartshopper.models.Comment;
 import com.example.smartshopper.models.Deal;
 import com.example.smartshopper.models.User;
@@ -18,17 +15,16 @@ import com.example.smartshopper.recyclerViews.DealAdapter;
 import com.example.smartshopper.responseInterfaces.BoolInterface;
 import com.example.smartshopper.responseInterfaces.CommentInterface;
 import com.example.smartshopper.responseInterfaces.DealInterface;
-import com.example.smartshopper.responseInterfaces.ListInterface;
 import com.example.smartshopper.responseInterfaces.StringInterface;
 import com.example.smartshopper.responseInterfaces.UserInterface;
 import com.example.smartshopper.services.RTDBService;
+import com.example.smartshopper.utilities.LocalStorage;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -36,13 +32,11 @@ import java.util.Locale;
 
 public class PlatformHelpers {
     private final RTDBService rtdbDatabase;
-    private Context context;
     private LocalStorage localStorage;
 
     public PlatformHelpers(Context context) {
         this.rtdbDatabase = new RTDBService();
-        this.context = context;
-        this.localStorage = new LocalStorage(this.context);
+        this.localStorage = new LocalStorage(context);
     }
 
     // Get logged in user
@@ -102,25 +96,38 @@ public class PlatformHelpers {
         });
     }
 
-    public void saveDeal(String dealID) {
-        rtdbDatabase.writeSavedDeal(localStorage.getCurrentUserID(), dealID);
+    // Saved Deals methods
+    public void saveDeal(Deal deal) {
+        rtdbDatabase.writeSavedDeal(localStorage.getCurrentUserID(), deal);
     }
 
-    public void removeDeal(String dealID) {
-        rtdbDatabase.deleteSavedDeal(localStorage.getCurrentUserID(), dealID);
+    public void deleteSavedDeal(String savedDealKey) {
+        rtdbDatabase.deleteSavedDeal(localStorage.getCurrentUserID(), savedDealKey);
     }
 
-    public void isSaved(String dealID, BoolInterface boolInterface) {
-        rtdbDatabase.isSaved(localStorage.getCurrentUserID(), dealID, boolInterface);
+    public void checkSavedDealExists(Deal deal, BoolInterface boolInterface) {
+        Query query = rtdbDatabase.getSavedDeals(localStorage.getCurrentUserID()).orderByValue().equalTo(deal.getDealID());
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                boolInterface.onCallback(snapshot.exists());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
     }
 
     public void getSavedDealKey(String dealID, StringInterface stringInterface) {
-        Query query = rtdbDatabase.getSpecificSavedDeal(localStorage.getCurrentUserID(), dealID);
+        Query query = rtdbDatabase.getSavedDeals(localStorage.getCurrentUserID());
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot child : snapshot.getChildren()) {
-                    stringInterface.onCallback(child.getKey());
+                    if (child.getValue(String.class).equals(dealID)) {
+                        stringInterface.onCallback(child.getKey());
+                    }
                 }
             }
 
@@ -161,6 +168,7 @@ public class PlatformHelpers {
         });
     }
 
+
     public void getDealsAndUpdateMainRV(DealAdapter adapter, String search) {
         //TODO case switch queryEnum to get the correct query from FireBase
         Query query = rtdbDatabase.getBestDeals();
@@ -190,33 +198,6 @@ public class PlatformHelpers {
                 }
 
                 adapter.updateData(deals);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
-
-    // Returns list of saved deals
-    public void getSavedDealsAndUpdateRV(DealAdapter adapter) {
-        Query query = rtdbDatabase.getSavedDeals(localStorage.getCurrentUserID());
-        query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                List<Deal> savedDeals = new ArrayList<>();
-                for (DataSnapshot child : snapshot.getChildren()) {
-                    getDealByKey(child.getValue(String.class), deal -> {
-                        assert deal != null;
-                        deal.setDealID(child.getValue(String.class));
-                        savedDeals.add(deal);
-                        if (savedDeals.size() == snapshot.getChildrenCount()) {
-                            // once each child has been looked at, update the RecyclerView
-                            adapter.updateData(savedDeals);
-                        }
-                    });
-                }
             }
 
             @Override
