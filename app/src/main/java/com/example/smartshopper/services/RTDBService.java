@@ -1,24 +1,12 @@
 package com.example.smartshopper.services;
 
-import android.util.Log;
-
-import androidx.annotation.NonNull;
-
 import com.example.smartshopper.common.Constants;
 import com.example.smartshopper.models.Comment;
 import com.example.smartshopper.models.Deal;
 import com.google.firebase.database.ServerValue;
 import com.example.smartshopper.models.User;
-import com.example.smartshopper.responseInterfaces.BoolInterface;
-import com.example.smartshopper.responseInterfaces.ObjectInterface;
-import com.example.smartshopper.responseInterfaces.UserInterface;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.Locale;
 
 public class RTDBService {
     FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -63,8 +51,9 @@ public class RTDBService {
     }
 
     // Get deals saved by user
-    public Query getSavedDeals(User user) {
-        return database.getReference().child(Constants.USERS).child(user.getUsername()).child(Constants.SAVED_DEALS);
+    // TODO: Change argument from String to User once we are able to getCurrentUser
+    public Query getSavedDeals(String userID) {
+        return database.getReference().child(Constants.USERS).child(userID).child(Constants.SAVED_DEALS);
     }
 
     // Get deals posted by user
@@ -86,6 +75,9 @@ public class RTDBService {
     public Query getFriends(User user) {
         return database.getReference().child(Constants.USERS).child(user.getUsername()).child(Constants.FRIENDS);
     }
+
+    // Get
+
 
     // WRITE METHODS
 
@@ -126,6 +118,21 @@ public class RTDBService {
         assert key != null;
         database.getReference().child(dealID).child(Constants.COMMENTS).child(key).setValue(comment);
         return key;
+    }
+
+    /**
+     * Write a saved deal to the database
+     * @param userID ID of the user saving the deal
+     * @param deal the deal being saved
+     */
+    public void writeSavedDeal(String userID, Deal deal) {
+        database.getReference().child(Constants.USERS).child(userID).child(Constants.SAVED_DEALS).push().setValue(deal.getDealID());
+    }
+
+    // DELETE METHODS
+
+    public void deleteSavedDeal(String userID, String savedDealKey) {
+        database.getReference().child(Constants.USERS).child(userID).child(Constants.SAVED_DEALS).child(savedDealKey).removeValue();
     }
 
     public void upVoteDeal(String dealId) {
