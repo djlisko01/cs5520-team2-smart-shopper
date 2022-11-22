@@ -1,5 +1,10 @@
 package com.example.smartshopper.services;
 
+<<<<<<< HEAD
+=======
+import android.util.Log;
+
+>>>>>>> cc4750725221f3e2b6840eea6bc3b5fa26f257d0
 import com.example.smartshopper.common.Constants;
 import com.example.smartshopper.models.Comment;
 import com.example.smartshopper.models.Deal;
