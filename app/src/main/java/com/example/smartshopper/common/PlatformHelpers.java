@@ -235,28 +235,9 @@ public class PlatformHelpers {
         });
     }
 
-//    public void getDealAddedAndUpdateRv(Deal deal, CommentsAdapter adapter) {
-//        Query query = rtdbDatabase.getComments(deal);
-//        query.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                List<Comment> comments = new ArrayList<>();
-//
-//                for (DataSnapshot child : snapshot.getChildren()) {
-//                    Comment comment = child.getValue(Comment.class);
-//                    assert comment != null;
-//                    comments.add(comment);
-//                }
-//                Collections.reverse(comments);
-//                adapter.updateComments(comments);
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
-//    }
+    public void getDealAddedAndUpdateRv(Deal deal, CommentsAdapter adapter) {
+
+    }
 
     /**
      * Loads picture using Piccasso Library
