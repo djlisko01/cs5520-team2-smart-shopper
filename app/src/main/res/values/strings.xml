@@ -33,4 +33,5 @@
     <string name="saved_deals_button">Saved Deals</string>
     <string name="save_deal_button">Save</string>
     <string name="remove_deal_button">Remove</string>
+    <string name="reply_to_post">Reply to post...</string>
 </resources>

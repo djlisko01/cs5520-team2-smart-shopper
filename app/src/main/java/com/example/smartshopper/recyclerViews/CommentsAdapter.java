@@ -22,15 +22,22 @@ import java.util.List;
 
 public class CommentsAdapter extends RecyclerView.Adapter<CommentsViewHolder> {
     List<Comment> comments;
+    List<Comment> responses = new ArrayList<>();
     Context context;
     boolean isShowingResponses = false;
     CommentsAdapter response_adapter;
-    int depth;
+    int depth = 0;
 
-    public CommentsAdapter(Context context, int depth){
-        this.depth=depth;
+    public CommentsAdapter(Context context){
         comments = new ArrayList<>();
         this.context = context;
+    }
+
+    // For response to comments
+    public CommentsAdapter(Context context, int depth){
+        comments = new ArrayList<>();
+        this.context = context;
+        this.depth = depth;
     }
 
     @NonNull
@@ -48,26 +55,44 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsViewHolder> {
         holder.tv_comment.setText(comments.get(position).getText());
         holder.tv_userName.setText(user.getUsername());
         holder.rv_responses.setLayoutManager(new LinearLayoutManager(context));
-        this.hideReply(holder, depth);
+
+        if (holder.getAbsoluteAdapterPosition() == 0 && Constants.MAX_DEPTH >= depth){
+            responses = getComments();
+        }
+
+        // Load user profile picture.
         PlatformHelpers.loadPicassoImg(context,
                 "/hello/",
                 holder.img_profilePic,
                 R.drawable.missing_profile_pic);
 
-        // Toggle Responses to comment:
-        holder.iv_toggleResponses.setOnClickListener(v -> {
-            List<Comment> comments = getComments();
-            response_adapter = new CommentsAdapter(v.getContext(), this.depth + 1);
-            holder.rv_responses.setAdapter(response_adapter);
 
-            isShowingResponses = !isShowingResponses;
-            if (isShowingResponses) {
-                holder.iv_toggleResponses.setRotation(0);
-                response_adapter.updateComments(comments);
-            } else{
-                holder.iv_toggleResponses.setRotation(90);
+        // Reply to a response
+        holder.tv_reply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.v("POS", ""+ holder.getAbsoluteAdapterPosition());
             }
         });
+
+        // Hides Reply and Comments if Max Depth reach
+        this.hideReply(holder, depth);
+
+        // Toggle Responses to comment:
+        if (responses.size() > 0) {
+            holder.iv_toggleResponses.setOnClickListener(v -> {
+                response_adapter = new CommentsAdapter(v.getContext(), depth + 1);
+                holder.rv_responses.setAdapter(response_adapter);
+
+                isShowingResponses = !isShowingResponses;
+                if (isShowingResponses) {
+                    holder.iv_toggleResponses.setRotation(0);
+                    response_adapter.updateComments(responses);
+                } else {
+                    holder.iv_toggleResponses.setRotation(90);
+                }
+            });
+        }
     }
 
     @Override
@@ -85,7 +110,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsViewHolder> {
     }
 
     public void hideReply(CommentsViewHolder holder, int depth){
-        if (depth > Constants.MAX_DEPTH){
+        if (depth >= Constants.MAX_DEPTH){
             holder.iv_toggleResponses.setVisibility(View.INVISIBLE);
             holder.tv_reply.setVisibility(View.INVISIBLE);
         }
