@@ -64,7 +64,7 @@ public class DealDetailsActivity extends AppCompatActivity {
         // Set view for current deal
         if (getIntent().getExtras() != null) {
             deal = (Deal) getIntent().getSerializableExtra("dealItem");
-            adapter = new CommentsAdapter(this);
+            adapter = new CommentsAdapter(this, 0);
 
             rv_comments = findViewById(R.id.rv_comments);
             rv_comments.setLayoutManager(new LinearLayoutManager(this));
