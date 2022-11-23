@@ -3,6 +3,7 @@ package com.example.smartshopper.services;
 import com.example.smartshopper.common.Constants;
 import com.example.smartshopper.models.Comment;
 import com.example.smartshopper.models.Deal;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ServerValue;
 import com.example.smartshopper.models.User;
 import com.google.firebase.database.FirebaseDatabase;
@@ -131,6 +132,14 @@ public class RTDBService {
      */
     public void writeSavedDeal(String userID, Deal deal) {
         database.getReference().child(Constants.USERS).child(userID).child(Constants.SAVED_DEALS).push().setValue(deal.getDealID());
+    }
+
+    public void writeFCMTokenToUser(String userID, String fcmToken) {
+        database.getReference().child(Constants.USERS).child(userID).child(Constants.FCM_TOKEN).setValue(fcmToken);
+    }
+
+    public void writeFCMToken(String token) {
+        database.getReference().child(Constants.FCM_TOKENS).push().setValue(token);
     }
 
     // DELETE METHODS
