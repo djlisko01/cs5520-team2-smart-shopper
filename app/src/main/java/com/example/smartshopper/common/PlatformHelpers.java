@@ -2,7 +2,9 @@ package com.example.smartshopper.common;
 
 import android.content.Context;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 
 import androidx.annotation.NonNull;
@@ -137,7 +139,7 @@ public class PlatformHelpers {
         });
     }
 
-    public void getSavedDealsAndUpdateRV(DealAdapter adapter) {
+    public void getSavedDealsAndUpdateRV(DealAdapter adapter, TextView noSavedDeals) {
         Query query = rtdbDatabase.getSavedDeals(localStorage.getCurrentUserID());
         query.addValueEventListener(new ValueEventListener() {
             @Override
@@ -149,6 +151,7 @@ public class PlatformHelpers {
                         deal.setDealID(child.getValue(String.class));
                         savedDeals.add(deal);
                         if (savedDeals.size() == snapshot.getChildrenCount()) {
+                            noSavedDeals.setVisibility(View.GONE); // remove the noDeals text
                             adapter.updateData(savedDeals);
                         }
                     });
