@@ -14,4 +14,5 @@ public class Constants {
     public static final String COMMENTS = "comments";
     public static final String FRIENDS = "friends";
     public static final String TITLE = "title";
+    public static final String USERID = "userUUID";
 }

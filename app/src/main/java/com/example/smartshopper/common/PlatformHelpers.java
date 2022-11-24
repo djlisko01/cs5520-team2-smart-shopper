@@ -14,6 +14,7 @@ import com.example.smartshopper.models.Deal;
 import com.example.smartshopper.models.User;
 import com.example.smartshopper.recyclerViews.CommentsAdapter;
 import com.example.smartshopper.recyclerViews.DealAdapter;
+import com.example.smartshopper.recyclerViews.ProfileAdapter;
 import com.example.smartshopper.responseInterfaces.BoolInterface;
 import com.example.smartshopper.responseInterfaces.CommentInterface;
 import com.example.smartshopper.responseInterfaces.DealInterface;
@@ -235,7 +236,27 @@ public class PlatformHelpers {
         });
     }
 
-    public void getDealAddedAndUpdateRv(Deal deal, CommentsAdapter adapter) {
+    public void getDealAddedAndUpdateRv(String userID, ProfileAdapter adapter) {
+        Query query = rtdbDatabase.getTitle(userID);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<Deal> deals = new ArrayList<>();
+
+                for (DataSnapshot child : snapshot.getChildren()) {
+                    Deal deal = child.getValue(Deal.class);
+                    assert deal != null;
+                    deals.add(deal);
+                }
+                adapter.updateTitle(deals);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
     }
 

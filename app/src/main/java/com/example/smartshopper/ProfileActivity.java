@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.smartshopper.common.PlatformHelpers;
 import com.example.smartshopper.recyclerViews.DealAdapter;
 import com.example.smartshopper.recyclerViews.ProfileAdapter;
+import com.example.smartshopper.utilities.LocalStorage;
 
 public class ProfileActivity extends MenuActivity {
     RecyclerView rv_activity;
@@ -28,7 +29,8 @@ public class ProfileActivity extends MenuActivity {
         rv_activity.setLayoutManager(new LinearLayoutManager(this));
         rv_activity.setAdapter(adapter);
 
-//        platformHelpers.getDealAddedAndUpdateRv(adapter, null);
+        LocalStorage localStorage = new LocalStorage(this);
+        platformHelpers.getDealAddedAndUpdateRv(localStorage.getCurrentUser(), adapter);
 
 
     }

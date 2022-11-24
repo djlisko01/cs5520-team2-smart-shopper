@@ -19,12 +19,10 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileViewHolder>{
 
     private List<Deal> deals;
     private final Context context;
-    private final PlatformHelpers platformHelpers;
 
     public ProfileAdapter(Context context) {
         this.deals = new ArrayList<>();
         this.context = context;
-        this.platformHelpers = new PlatformHelpers(this.context);
     }
 
 
@@ -36,11 +34,22 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileViewHolder>{
 
     @Override
     public void onBindViewHolder(@NonNull ProfileViewHolder holder, int position) {
-
+        holder.tv_activities.setText(deals.get(position).getTitle());
     }
 
     @Override
     public int getItemCount() {
         return 0;
     }
+
+    public List<Deal> getDeals(){
+        return this.deals;
+    }
+
+    public void updateTitle(List<Deal> deals){
+        this.deals = deals;
+        notifyDataSetChanged();
+    }
+
+
 }

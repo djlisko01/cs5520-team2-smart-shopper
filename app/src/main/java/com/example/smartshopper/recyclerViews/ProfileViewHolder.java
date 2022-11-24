@@ -9,10 +9,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.smartshopper.R;
 
 public class ProfileViewHolder extends RecyclerView.ViewHolder {
-    public TextView activities;
+    public TextView tv_activities;
 
     public ProfileViewHolder(@NonNull View itemView) {
         super(itemView);
-        this.activities = itemView.findViewById(R.id.activities);
+        this.tv_activities = itemView.findViewById(R.id.activities);
     }
 }

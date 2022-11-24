@@ -50,11 +50,6 @@ public class RTDBService {
         return database.getReference().child(Constants.DEALS).orderByChild(Constants.UPVOTES);
     }
 
-    // Get title of a deal
-    public Query getTitle() {
-        return database.getReference().child(Constants.DEALS).orderByChild(Constants.TITLE);
-    }
-
     // Get deals saved by user
     // TODO: Change argument from String to User once we are able to getCurrentUser
     public Query getSavedDeals(String userID) {
@@ -82,8 +77,8 @@ public class RTDBService {
     }
 
     // Get title of a deal by user
-    public Query getTitle(User user) {
-        return database.getReference().child(Constants.DEALS).orderByChild(Constants.TITLE).equalTo(user.getUsername());
+    public Query getTitle(String userID) {
+        return database.getReference().child(Constants.DEALS).orderByChild(Constants.USERID).equalTo(userID);
     }
 
     // Get
