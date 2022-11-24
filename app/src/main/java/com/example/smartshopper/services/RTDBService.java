@@ -78,7 +78,7 @@ public class RTDBService {
 
     // Get title of a deal by user
     public Query getTitle(String userID) {
-        return database.getReference().child(Constants.DEALS).orderByChild(Constants.USERID).equalTo(userID);
+        return database.getReference().child(Constants.DEALS).child(Constants.USERID).equalTo(userID);
     }
 
     // Get
