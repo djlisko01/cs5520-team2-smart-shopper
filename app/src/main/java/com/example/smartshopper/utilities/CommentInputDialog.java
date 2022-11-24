@@ -2,7 +2,6 @@ package com.example.smartshopper.utilities;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,22 +21,32 @@ import com.example.smartshopper.recyclerViews.CommentsAdapter;
 import com.example.smartshopper.services.RTDBService;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class CommentInputDialog extends DialogFragment {
-    Comment comment;
+    List<Comment> comments;
     TextInputEditText commentInput;
     LocalStorage localStorage;
+    int position;
     PlatformHelpers platformHelpers;
     Deal deal;
     CommentsAdapter adapter;
+    CommentsAdapter parent;
 
     public CommentInputDialog(Deal deal, CommentsAdapter adapter){
         this.deal = deal;
         this.adapter = adapter;
     }
 
+    public CommentInputDialog(Deal deal, List<Comment> comments, int position, CommentsAdapter adapter, CommentsAdapter parent){
+        this.comments = comments;
+        this.deal = deal;
+        this.adapter = adapter;
+        this.position = position;
+        this.parent = parent;
+    }
 
     @NonNull
     @Override
@@ -62,26 +71,29 @@ public class CommentInputDialog extends DialogFragment {
         commentInput = view.findViewById(R.id.commentInput);
 
         builder.setPositiveButton("Submit", (dialog, which) -> {
-            comment = new Comment(
+            Comment newComment = new Comment(
                 new User(currUser),
                 Objects.requireNonNull(commentInput.getText()).toString(),
                 System.currentTimeMillis()
             );
 
-            rtdbService.writeComment(comment, deal.getDealID());
-            List<Comment> comments = adapter.getComments();
-            comments.add(0, comment);
-            adapter.updateComments(comments);
-            Objects.requireNonNull(CommentInputDialog.this.getDialog()).cancel();
+            if (this.comments == null) {
+                rtdbService.writeComment(newComment, deal.getDealID());
+                comments = adapter.getComments();
+                comments.add(0, newComment);
+            } else {
+                Comment selectedComment = comments.get(position);
+                selectedComment.addResponse(0, newComment);
+                comments.set(position, selectedComment);
+                parent.notifyItemChanged(position);
 
-        });
-
-        builder.setNegativeButton("Close", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Objects.requireNonNull(CommentInputDialog.this.getDialog()).cancel();
             }
+            adapter.updateComments(comments);
         });
+
+        builder.setNegativeButton("Close", (dialog, which) -> Objects.requireNonNull(
+                CommentInputDialog.this.getDialog()).cancel()
+        );
 
         // Create the AlertDialog object and return it
         return builder.create();

@@ -49,7 +49,6 @@ public class DealDetailsActivity extends AppCompatActivity {
         // Find views
         iv_deal_img = findViewById(R.id.iv_deal);
         btn_AddComment = findViewById(R.id.btn_add_comment);
-//        commentInput = findViewById(R.id.commentInput);
         tv_dealTitle = findViewById(R.id.tv_dealTitle);
         tv_salePrice = findViewById(R.id.tv_salePrice);
         tv_numUpvotes = findViewById(R.id.tv_numUpvotes);
@@ -62,7 +61,7 @@ public class DealDetailsActivity extends AppCompatActivity {
         // Set view for current deal
         if (getIntent().getExtras() != null) {
             deal = (Deal) getIntent().getSerializableExtra("dealItem");
-            adapter = new CommentsAdapter(this);
+            adapter = new CommentsAdapter(this, deal);
 
             rv_comments = findViewById(R.id.rv_comments);
             rv_comments.setLayoutManager(new LinearLayoutManager(this));
@@ -82,22 +81,6 @@ public class DealDetailsActivity extends AppCompatActivity {
         btn_AddComment.setOnClickListener(v -> {
             CommentInputDialog commentFrag = new CommentInputDialog(deal, adapter);
             commentFrag.show(getSupportFragmentManager(), "comment_dialog");
-//
-//            Comment comment = new Comment(
-//                    new User(currUser),
-//                    commentInput.getText().toString(),
-//                    System.currentTimeMillis()
-//                    );
-//
-//            commentInput.setText(""); // Reset to input text
-//            commentInput.onEditorAction(EditorInfo.IME_ACTION_DONE);
-//
-//            rtdbService.writeComment(comment, deal.getDealID());
-//
-//            List<Comment> comments = adapter.getComments();
-//            comments.add(0, comment);
-//            adapter.updateComments(comments);
-//            rv_comments.scrollToPosition(0);
         });
 
         iv_upVote.setOnClickListener(v -> {

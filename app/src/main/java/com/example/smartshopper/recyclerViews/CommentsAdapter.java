@@ -1,5 +1,6 @@
 package com.example.smartshopper.recyclerViews;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -7,14 +8,18 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.smartshopper.DealDetailsActivity;
 import com.example.smartshopper.R;
 import com.example.smartshopper.common.Constants;
 import com.example.smartshopper.common.PlatformHelpers;
 import com.example.smartshopper.models.Comment;
+import com.example.smartshopper.models.Deal;
 import com.example.smartshopper.models.User;
+import com.example.smartshopper.utilities.CommentInputDialog;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -26,18 +31,22 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsViewHolder> {
     Context context;
     boolean isShowingResponses = false;
     CommentsAdapter response_adapter;
+    Deal deal;
     int depth = 0;
 
-    public CommentsAdapter(Context context){
-        comments = new ArrayList<>();
+    // For new comments
+    public CommentsAdapter(Context context, Deal deal){
+        this.comments = new ArrayList<>();
         this.context = context;
+        this.deal = deal;
     }
 
     // For response to comments
-    public CommentsAdapter(Context context, int depth){
-        comments = new ArrayList<>();
+    public CommentsAdapter(Context context, Deal deal, int depth){
+        this.comments = new ArrayList<>();
         this.context = context;
         this.depth = depth;
+        this.deal = deal;
     }
 
     @NonNull
@@ -55,10 +64,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsViewHolder> {
         holder.tv_comment.setText(comments.get(position).getText());
         holder.tv_userName.setText(user.getUsername());
         holder.rv_responses.setLayoutManager(new LinearLayoutManager(context));
-
-        if (holder.getAbsoluteAdapterPosition() == 0 && Constants.MAX_DEPTH >= depth){
-            responses = getComments();
-        }
+        responses = comments.get(holder.getAbsoluteAdapterPosition()).getResponses();
 
         // Load user profile picture.
         PlatformHelpers.loadPicassoImg(context,
@@ -66,22 +72,14 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsViewHolder> {
                 holder.img_profilePic,
                 R.drawable.missing_profile_pic);
 
-
-        // Reply to a response
-        holder.tv_reply.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.v("POS", ""+ holder.getAbsoluteAdapterPosition());
-            }
-        });
-
         // Hides Reply and Comments if Max Depth reach
         this.hideReply(holder, depth);
+
 
         // Toggle Responses to comment:
         if (responses.size() > 0) {
             holder.iv_toggleResponses.setOnClickListener(v -> {
-                response_adapter = new CommentsAdapter(v.getContext(), depth + 1);
+                response_adapter = new CommentsAdapter(v.getContext(), deal,depth + 1);
                 holder.rv_responses.setAdapter(response_adapter);
 
                 isShowingResponses = !isShowingResponses;
@@ -93,6 +91,18 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsViewHolder> {
                 }
             });
         }
+
+        holder.tv_reply.setOnClickListener(v -> {
+            response_adapter = new CommentsAdapter(v.getContext(), deal,depth + 1);
+            CommentInputDialog commentInputDialog = new CommentInputDialog(
+                    deal,
+                    comments,
+                    holder.getAbsoluteAdapterPosition(),
+                    response_adapter,
+                    this);
+            this.notifyItemChanged(holder.getAbsoluteAdapterPosition());
+            commentInputDialog.show(((AppCompatActivity)context).getSupportFragmentManager(), "Title");
+        });
     }
 
     @Override
@@ -115,5 +125,6 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsViewHolder> {
             holder.tv_reply.setVisibility(View.INVISIBLE);
         }
     }
+
 
 }

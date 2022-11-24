@@ -1,6 +1,7 @@
 package com.example.smartshopper.models;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Comment implements Serializable {
@@ -8,7 +9,7 @@ public class Comment implements Serializable {
     User author;
     String text;
     Long timePosted;
-    List<Comment> response;
+    List<Comment> responses = new ArrayList<>();
 
     // For use with firebase to make a deal object from a json object (what snapshot.getValue returns)
     public Comment() {
@@ -28,14 +29,19 @@ public class Comment implements Serializable {
     }
 
     // Constructor for responses to main comment in a thread.
-    public Comment(User author, String text, Long timePosted, List<Comment> response) {
+    public Comment(User author, String text, Long timePosted, List<Comment> responses) {
         this.author = author;
         this.text = text;
         this.timePosted = timePosted;
+        this.responses = responses;
     }
 
     public String getCommentID() {
         return commentID;
+    }
+
+    public List<Comment> getResponses() {
+        return responses;
     }
 
     public void setCommentID(String commentID) {
@@ -45,6 +51,15 @@ public class Comment implements Serializable {
     public String getText() {
         return this.text;
     }
+
+    public void addResponse(Comment response){
+        this.responses.add(response);
+    }
+
+    public void addResponse(int index, Comment response){
+        this.responses.add(index, response);
+    }
+
 
     public Long getTimePosted() {
         return this.timePosted;

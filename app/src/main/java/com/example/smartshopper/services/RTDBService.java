@@ -45,6 +45,16 @@ public class RTDBService {
         return database.getReference().child(Constants.COMMENTS).child(key);
     }
 
+    public Query getRepsonses(String dealKey, String commentKey){
+        return database
+                .getReference()
+                .child(Constants.DEALS)
+                .child(dealKey)
+                .child(Constants.COMMENTS)
+                .child(commentKey)
+                .child(Constants.Responses);
+    }
+
     // Get most upvoted deals
     public Query getBestDeals() {
         return database.getReference().child(Constants.DEALS).orderByChild(Constants.UPVOTES);
@@ -121,6 +131,28 @@ public class RTDBService {
         assert key != null;
         database.getReference().child(Constants.DEALS).child(dealID).child(Constants.COMMENTS).child(key).setValue(comment);
         return key;
+    }
+
+    public void writeResponse(String commentKey, String dealID, Comment response){
+        String key = database
+                .getReference()
+                .child(Constants.DEALS)
+                .child(dealID)
+                .child(Constants.COMMENTS)
+                .child(commentKey)
+                .push()
+                .getKey();
+        response.setCommentID(key);
+
+        assert key != null;
+        database
+                .getReference()
+                .child(Constants.DEALS)
+                .child(dealID)
+                .child(Constants.COMMENTS)
+                .child(commentKey)
+                .child(key)
+                .setValue(response);
     }
 
     /**
