@@ -2,8 +2,9 @@ package com.example.smartshopper.common;
 
 import android.content.Context;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
-import android.widget.Toast;
+import android.widget.TextView;
 
 
 import androidx.annotation.NonNull;
@@ -24,12 +25,14 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 public class PlatformHelpers {
     private final RTDBService rtdbDatabase;
@@ -138,7 +141,7 @@ public class PlatformHelpers {
         });
     }
 
-    public void getSavedDealsAndUpdateRV(DealAdapter adapter) {
+    public void getSavedDealsAndUpdateRV(DealAdapter adapter, TextView noSavedDeals) {
         Query query = rtdbDatabase.getSavedDeals(localStorage.getCurrentUserID());
         query.addValueEventListener(new ValueEventListener() {
             @Override
@@ -150,6 +153,7 @@ public class PlatformHelpers {
                         deal.setDealID(child.getValue(String.class));
                         savedDeals.add(deal);
                         if (savedDeals.size() == snapshot.getChildrenCount()) {
+                            noSavedDeals.setVisibility(View.GONE); // remove the noDeals text
                             adapter.updateData(savedDeals);
                         }
                     });
@@ -247,6 +251,16 @@ public class PlatformHelpers {
                 .into(view);
     }
 
+    public void getFcmToken(StringInterface stringInterface) {
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        String fcmToken = task.getResult();
+                        stringInterface.onCallback(fcmToken);
+                    }
+                });
+    }
+
     public void validateCredentials(String finalEmailAddress, String passwordInput, UserInterface userInterface) {
         Query query = rtdbDatabase.getUserByEmailAddress(finalEmailAddress);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -258,7 +272,16 @@ public class PlatformHelpers {
                     for (DataSnapshot userSnapshot : snapshot.getChildren()) {
                         foundUser = userSnapshot.getValue(User.class);
                     }
+                    assert foundUser != null;
                     if (foundUser.getPassword().equals(passwordInput)) {
+                        // If FCM Token is new after logging in -- update in DB
+                        User finalFoundUser = foundUser;
+                        getFcmToken(response -> {
+                            if (!Objects.equals(response, finalFoundUser.getFcmToken())) {
+                                rtdbDatabase.writeFCMTokenToUser(finalFoundUser.getUserID(), response);
+                            }
+                        });
+
                         userInterface.onCallback(foundUser);
                     } else {
                         userInterface.onCallback(null);
@@ -304,9 +327,12 @@ public class PlatformHelpers {
                     if (response) {
                         userInterface.onCallback(null);
                     } else {
-                        User newUser = new User(username, finalEmailAddress, password);
-                        rtdbDatabase.writeUser(newUser);
-                        userInterface.onCallback(newUser);
+                        // Store user with FCM Token upon account creation in DB
+                        getFcmToken(response1 -> {
+                            User newUser = new User(username, finalEmailAddress, password, response1);
+                            rtdbDatabase.writeUser(newUser);
+                            userInterface.onCallback(newUser);
+                        });
                     }
                 });
             }

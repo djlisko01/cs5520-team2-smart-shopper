@@ -16,4 +16,7 @@ public class Constants {
     public static final String FRIENDS = "friends";
     public static final String TITLE = "title";
     public static final int MAX_DEPTH = 2;
+    public static final String FCM_TOKEN = "fcmToken";
+    public static final String FCM_TOKENS = "fcmTokens";
+
 }
