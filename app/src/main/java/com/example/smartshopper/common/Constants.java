@@ -15,4 +15,6 @@ public class Constants {
     public static final String FRIENDS = "friends";
     public static final String TITLE = "title";
     public static final String USERID = "userUUID";
+    public static final String FCM_TOKEN = "fcmToken";
+    public static final String FCM_TOKENS = "fcmTokens";
 }
