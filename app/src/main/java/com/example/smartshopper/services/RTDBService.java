@@ -79,6 +79,11 @@ public class RTDBService {
         return ref.child(Constants.USERS).child(user.getUsername()).child(Constants.FRIENDS);
     }
 
+    // Get title of a deal by user
+    public Query getTitle(String userID) {
+        return database.getReference().child(Constants.DEALS).child(Constants.USERID).equalTo(userID);
+    }
+
     // WRITE METHODS
 
     /**
