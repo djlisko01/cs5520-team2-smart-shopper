@@ -54,7 +54,7 @@
       android:layout_height="263dp"
       android:clipToPadding="false"
       android:padding="4dp"
-      app:layout_constraintBottom_toTopOf="@+id/commentInput"
+      app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/deal_details" />
@@ -63,14 +63,14 @@
       android:id="@+id/btn_add_comment"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginBottom="16dp"
       android:clickable="true"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.5"
-      app:layout_constraintStart_toEndOf="@+id/commentInput"
-      app:layout_constraintTop_toBottomOf="@+id/rv_comments"
-      app:srcCompat="@android:drawable/ic_menu_send" />
+      app:layout_constraintHorizontal_bias="0.95"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintVertical_bias="0.98"
+      app:srcCompat="@drawable/ic_speech_bubble_comments_thin" />
 
   <androidx.constraintlayout.widget.ConstraintLayout
       android:id="@+id/constraintLayout3"
@@ -154,25 +154,9 @@
       android:layout_width="337dp"
       android:layout_height="wrap_content"
       app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="@+id/commentInput">
+      app:layout_constraintStart_toStartOf="parent">
 
   </com.google.android.material.textfield.TextInputLayout>
-
-  <com.google.android.material.textfield.TextInputEditText
-      android:id="@+id/commentInput"
-      android:layout_width="308dp"
-      android:layout_height="wrap_content"
-      android:maxHeight="100dp"
-      android:layout_marginStart="16dp"
-      android:layout_marginBottom="16dp"
-      android:paddingBottom="8dp"
-      android:hint="Comment.."
-      app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintEnd_toStartOf="@+id/btn_add_comment"
-      app:layout_constraintHorizontal_bias="0.5"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/rv_comments" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
