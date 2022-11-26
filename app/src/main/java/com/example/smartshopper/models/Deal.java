@@ -96,9 +96,9 @@ public class Deal implements Serializable {
         return this.salePrice;
     }
 
-    public Double getSavings() {
-        return this.originalPrice - this.salePrice;
-    }
+//    public Double getSavings() {
+//        return this.originalPrice - this.salePrice;
+//    }
 
 //    public void addComment(Comment comment) {
 //        this.comments.add(comment);
