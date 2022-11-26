@@ -19,7 +19,13 @@
     <string name="smart_shopper_label">Smart Shopper</string>
     <string name="app_icon">app icon</string>
     <string name="email_hint">Email</string>
+    <string name="title_hint">Title</string>
+    <string name="upc_hint">UPC</string>
+    <string name="description_hint">Description</string>
+    <string name="create_deal_hint">Create Deal</string>
     <string name="password_hint">Password</string>
+    <string name="store_hint">Store</string>
+    <string name="sale_price_hint">Sale Price</string>
     <string name="login_button_text">Login</string>
     <string name="forgot_password_button">Forgot Password</string>
     <string name="create_account_button">Create Account</string>
