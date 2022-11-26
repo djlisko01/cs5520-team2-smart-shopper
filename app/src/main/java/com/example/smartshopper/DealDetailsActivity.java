@@ -1,6 +1,7 @@
 package com.example.smartshopper;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,6 +16,7 @@ import com.example.smartshopper.models.Deal;
 import com.example.smartshopper.models.User;
 import com.example.smartshopper.recyclerViews.CommentsAdapter;
 import com.example.smartshopper.services.RTDBService;
+import com.example.smartshopper.utilities.CommentInputDialog;
 import com.example.smartshopper.utilities.LocalStorage;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
@@ -36,7 +38,7 @@ public class DealDetailsActivity extends AppCompatActivity {
     RecyclerView rv_comments;
     CommentsAdapter adapter;
     Deal deal;
-    LocalStorage localStorage;
+
 
 
     @Override
@@ -44,15 +46,9 @@ public class DealDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_deal_details);
 
-        // Get current logged in user;
-        localStorage = new LocalStorage(this);
-        String currUser = localStorage.getCurrentUser();
-        platformHelpers = new PlatformHelpers(this);
-
         // Find views
         iv_deal_img = findViewById(R.id.iv_deal);
         btn_AddComment = findViewById(R.id.btn_add_comment);
-        commentInput = findViewById(R.id.commentInput);
         tv_dealTitle = findViewById(R.id.tv_dealTitle);
         tv_salePrice = findViewById(R.id.tv_salePrice);
         tv_numUpvotes = findViewById(R.id.tv_numUpvotes);
@@ -60,11 +56,12 @@ public class DealDetailsActivity extends AppCompatActivity {
         iv_upVote = findViewById(R.id.iv_upVote);
         iv_downVote = findViewById(R.id.iv_downVote);
 
+        platformHelpers = new PlatformHelpers(this);
 
         // Set view for current deal
         if (getIntent().getExtras() != null) {
             deal = (Deal) getIntent().getSerializableExtra("dealItem");
-            adapter = new CommentsAdapter(this);
+            adapter = new CommentsAdapter(this, deal);
 
             rv_comments = findViewById(R.id.rv_comments);
             rv_comments.setLayoutManager(new LinearLayoutManager(this));
@@ -82,21 +79,8 @@ public class DealDetailsActivity extends AppCompatActivity {
 
         // BUTTONS For Activity
         btn_AddComment.setOnClickListener(v -> {
-            RTDBService rtdbService = new RTDBService();
-
-            Comment comment = new Comment(
-                    new User(currUser),
-                    commentInput.getText().toString(),
-                    System.currentTimeMillis());
-            commentInput.setText(""); // Reset to input text
-            commentInput.onEditorAction(EditorInfo.IME_ACTION_DONE);
-
-            rtdbService.writeComment(comment, deal.getDealID());
-
-            List<Comment> comments = adapter.getComments();
-            comments.add(0, comment);
-            adapter.updateComments(comments);
-            rv_comments.scrollToPosition(0);
+            CommentInputDialog commentFrag = new CommentInputDialog(deal, adapter);
+            commentFrag.show(getSupportFragmentManager(), "comment_dialog");
         });
 
         iv_upVote.setOnClickListener(v -> {
