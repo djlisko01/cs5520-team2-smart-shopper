@@ -3,8 +3,11 @@ package com.example.smartshopper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.SearchView;
@@ -43,6 +46,18 @@ public class MainActivity extends MenuActivity {
 
         // Setup button listener on add deal (+) button
         setCreateDealButtonListener();
+
+
+        AccountManager am = AccountManager.get(this); // "this" references the current Context
+
+        Account[] accounts = am.getAccountsByType(null);
+        Log.v("Account", "hit here ");
+        // Log length of accounts list
+        Log.v("Account", "Length of accounts list: " + accounts.length);
+        for (Account account : accounts) {
+            Log.v("Account", account.name);
+        }
+
     }
 
     private void setSearchListener() {

@@ -35,14 +35,14 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsViewHolder> {
     int depth = 0;
 
     // For new comments
-    public CommentsAdapter(Context context, Deal deal){
+    public CommentsAdapter(Context context, Deal deal) {
         this.comments = new ArrayList<>();
         this.context = context;
         this.deal = deal;
     }
 
     // For response to comments
-    public CommentsAdapter(Context context, Deal deal, int depth){
+    public CommentsAdapter(Context context, Deal deal, int depth) {
         this.comments = new ArrayList<>();
         this.context = context;
         this.depth = depth;
@@ -62,7 +62,15 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsViewHolder> {
     public void onBindViewHolder(@NonNull CommentsViewHolder holder, int position) {
         User user = comments.get(position).getAuthor();
         holder.tv_comment.setText(comments.get(position).getText());
-        holder.tv_userName.setText(user.getUsername());
+        String username;
+        if (user != null) {
+            username = user.getUsername();
+        }
+        else {
+            username="";
+        }
+
+        holder.tv_userName.setText(username);
         holder.rv_responses.setLayoutManager(new LinearLayoutManager(context));
         responses = comments.get(holder.getAbsoluteAdapterPosition()).getResponses();
 
@@ -79,7 +87,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsViewHolder> {
         // Toggle Responses to comment:
         if (responses.size() > 0) {
             holder.iv_toggleResponses.setOnClickListener(v -> {
-                response_adapter = new CommentsAdapter(v.getContext(), deal,depth + 1);
+                response_adapter = new CommentsAdapter(v.getContext(), deal, depth + 1);
                 holder.rv_responses.setAdapter(response_adapter);
 
                 isShowingResponses = !isShowingResponses;
@@ -93,7 +101,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsViewHolder> {
         }
 
         holder.tv_reply.setOnClickListener(v -> {
-            response_adapter = new CommentsAdapter(v.getContext(), deal,depth + 1);
+            response_adapter = new CommentsAdapter(v.getContext(), deal, depth + 1);
             CommentInputDialog commentInputDialog = new CommentInputDialog(
                     deal,
                     comments,
@@ -101,7 +109,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsViewHolder> {
                     response_adapter,
                     this);
             this.notifyItemChanged(holder.getAbsoluteAdapterPosition());
-            commentInputDialog.show(((AppCompatActivity)context).getSupportFragmentManager(), "Title");
+            commentInputDialog.show(((AppCompatActivity) context).getSupportFragmentManager(), "Title");
         });
     }
 
@@ -110,17 +118,17 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsViewHolder> {
         return this.comments.size();
     }
 
-    public List<Comment> getComments(){
+    public List<Comment> getComments() {
         return this.comments;
     }
 
-    public void updateComments(List<Comment> comments){
+    public void updateComments(List<Comment> comments) {
         this.comments = comments;
         notifyDataSetChanged();
     }
 
-    public void hideReply(CommentsViewHolder holder, int depth){
-        if (depth >= Constants.MAX_DEPTH){
+    public void hideReply(CommentsViewHolder holder, int depth) {
+        if (depth >= Constants.MAX_DEPTH) {
             holder.iv_toggleResponses.setVisibility(View.INVISIBLE);
             holder.tv_reply.setVisibility(View.INVISIBLE);
         }

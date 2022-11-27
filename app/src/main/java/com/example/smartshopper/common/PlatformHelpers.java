@@ -227,7 +227,7 @@ public class PlatformHelpers {
                         deals.add(deal);
                     }
                 }
-
+                Collections.reverse(deals);
                 adapter.updateData(deals);
             }
 
