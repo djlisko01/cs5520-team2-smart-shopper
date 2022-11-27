@@ -45,16 +45,16 @@ public class PlatformHelpers {
     }
 
     // Get logged in user
-    public User getCurrentUser() {
-        return null;
+    public String getCurrentUser() {
+        return localStorage.getCurrentUser();
     }
 
-    // Set logged in user
-    public void setCurrentUser(String username) {
-        // TODO: Implement
-//        this.currentUser = username;
-
-    }
+//    // Set logged in user
+//    public void setCurrentUser(String username) {
+//        // TODO: Implement
+////        this.currentUser = username;
+//
+//    }
 
     // Get user by id
     public void getUserByUUID(String userUUID, UserInterface userInterface) {
@@ -227,7 +227,7 @@ public class PlatformHelpers {
                         deals.add(deal);
                     }
                 }
-
+                Collections.reverse(deals);
                 adapter.updateData(deals);
             }
 
@@ -272,8 +272,17 @@ public class PlatformHelpers {
      */
     public static void loadPicassoImg(Context context, String imgUri, ImageView view, int defaultImg) {
         Picasso picasso = new Picasso.Builder(context).build();
-        picasso.load(imgUri).error(defaultImg) // removed .placeholder just left .error
-                .into(view);
+        if (imgUri != null && !imgUri.isEmpty()) {
+            picasso.load(imgUri)
+                    .placeholder(defaultImg)
+                    .error(defaultImg)
+                    .into(view);
+        } else {
+            picasso.load(defaultImg)
+                    .placeholder(defaultImg)
+                    .error(defaultImg)
+                    .into(view);
+        }
     }
 
     public void getFcmToken(StringInterface stringInterface) {
