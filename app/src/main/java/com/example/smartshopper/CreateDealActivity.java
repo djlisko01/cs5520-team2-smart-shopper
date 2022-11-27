@@ -1,8 +1,5 @@
 package com.example.smartshopper;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,15 +10,16 @@ import android.widget.EditText;
 import com.example.smartshopper.models.Deal;
 import com.example.smartshopper.services.RTDBService;
 import com.example.smartshopper.utilities.LocalStorage;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-public class CreateDealActivity extends AppCompatActivity {
+public class CreateDealActivity extends MenuActivity {
+    RTDBService rtdbService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_deal);
         setCreateDealButtonListener();
+        rtdbService = new RTDBService();
 
 
     }
@@ -46,13 +44,14 @@ public class CreateDealActivity extends AppCompatActivity {
                 // Create a new deal object
                 Deal deal = new Deal(upc, title, salePriceDouble, salePriceDouble, description, store, userID);
 
-
                 RTDBService rtdbService = new RTDBService();
                 String dealID = rtdbService.writeDeal(deal);
+                deal.setDealID(dealID);
 
-                // Go back to the main activity
-                startActivity(new Intent(CreateDealActivity.this, MainActivity.class));
-
+                // Go to detailed view of the deal
+                Intent intent = new Intent(CreateDealActivity.this, DealDetailsActivity.class);
+                intent.putExtra("dealItem", deal);
+                startActivity(intent);
             }
         });
 
