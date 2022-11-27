@@ -69,8 +69,8 @@ public class CreateAccountActivity extends AppCompatActivity {
 //          TODO: this should lead to a follow tags activity that hasn't been created yet
           Toast.makeText(context, "Welcome to Smart Shopper "+ username + "!", Toast.LENGTH_LONG).show();
           signIn(userInterface);
-          Intent mainActivityIntent = new Intent(context, MainActivity.class);
-          context.startActivity(mainActivityIntent);
+          Intent followTagsActivityIntent = new Intent(context, FollowTagsActivity.class);
+          context.startActivity(followTagsActivityIntent);
         }
         else {
           Toast.makeText(context, "Username or email taken. Please try again.", Toast.LENGTH_LONG).show();

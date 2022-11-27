@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_tagsRecyclerView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/followTagsButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHeight_percent="0.65"
+        android:layout_marginBottom="70dp"
+        />
+
+    <Button
+        android:id="@+id/followTagsButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="70dp"
+        android:layout_marginEnd="70dp"
+        android:text="Follow and Continue"
+        tools:layout_editor_absoluteX="147dp"
+        tools:layout_editor_absoluteY="538dp"
+        app:layout_constraintBottom_toTopOf="@id/skipTagActivityButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/followTagsButton"/>
+
+    <Button
+        android:id="@+id/skipTagActivityButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Skip"
+        android:layout_marginStart="70dp"
+        android:layout_marginEnd="70dp"
+        tools:layout_editor_absoluteX="144dp"
+        tools:layout_editor_absoluteY="601dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/followTagsButton" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
