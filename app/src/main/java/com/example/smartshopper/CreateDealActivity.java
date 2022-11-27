@@ -2,7 +2,6 @@ package com.example.smartshopper;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,16 +11,12 @@ import com.example.smartshopper.services.RTDBService;
 import com.example.smartshopper.utilities.LocalStorage;
 
 public class CreateDealActivity extends MenuActivity {
-    RTDBService rtdbService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_deal);
         setCreateDealButtonListener();
-        rtdbService = new RTDBService();
-
-
     }
 
     private void setCreateDealButtonListener() {
