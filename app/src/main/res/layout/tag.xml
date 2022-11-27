@@ -26,23 +26,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Apparel"
+                app:layout_constraintWidth_percent=".75"
                 app:layout_constraintBottom_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@id/iv_tagImage"
-                app:layout_constraintEnd_toStartOf="@id/tagRadio"
-                tools:layout_editor_absoluteX="153dp" />
+                app:layout_constraintEnd_toStartOf="@id/tagRadio" />
 
             <RadioButton
                 android:id="@+id/tagRadio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                app:layout_constraintWidth_percent=".25"
                 android:text="RadioButton"
                 app:layout_constraintBottom_toTopOf="@id/iv_tagImage"
                 app:layout_constraintStart_toEndOf="@id/tagText"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                tools:layout_editor_absoluteX="11dp"
-                tools:layout_editor_absoluteY="4dp" />
+                app:layout_constraintEnd_toEndOf="parent" />
             <ImageView
                 android:id="@+id/iv_tagImage"
                 android:layout_width="match_parent"

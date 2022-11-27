@@ -54,8 +54,11 @@ public class LoginActivity extends MenuActivity {
   }
 
   public void sendToCreateAccountActivity(View view) {
-    Intent createAccountIntent = new Intent(this, CreateAccountActivity.class);
-    startActivity(createAccountIntent);
+//    TODO: put this back when done debugging/implementing tags
+//    Intent createAccountIntent = new Intent(this, CreateAccountActivity.class);
+//    startActivity(createAccountIntent);
+      Intent followTagsIntent = new Intent(this, FollowTagsActivity.class);
+      startActivity(followTagsIntent);
   }
 
 }

@@ -53,6 +53,10 @@
             android:configChanges="orientation|screenSize"
             android:parentActivityName=".LoginActivity" />
         <activity
+            android:name=".FollowTagsActivity"
+            android:configChanges="orientation|screenSize"
+            android:parentActivityName=".LoginActivity" />
+        <activity
             android:name=".LoginActivity"
             android:configChanges="orientation|screenSize"
             android:parentActivityName=".MainActivity" />

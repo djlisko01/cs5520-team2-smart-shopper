@@ -8,4 +8,9 @@
         <item name="android:textAlignment">center</item>
         <item name="android:textColor">#898c91</item>
     </style>
+    <style name="iconColor">
+        <item name="android:textColor">
+            #2c5435
+        </item>
+    </style>
 </resources>
