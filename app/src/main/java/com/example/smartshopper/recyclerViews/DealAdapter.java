@@ -108,7 +108,7 @@ public class DealAdapter extends RecyclerView.Adapter<DealViewHolder> {
     }
 
     public String formatDate(long timestamp) {
-        return DateFormat.getDateInstance(DateFormat.LONG).format(timestamp);
+        return DateFormat.getDateInstance(DateFormat.MEDIUM).format(timestamp);
     }
 
     public void searchByTitle(String query) {
