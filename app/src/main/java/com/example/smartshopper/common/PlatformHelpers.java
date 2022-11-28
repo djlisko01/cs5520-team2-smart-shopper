@@ -239,7 +239,7 @@ public class PlatformHelpers {
     }
 
     public void getDealAddedAndUpdateRv(String userID, ProfileAdapter adapter) {
-        Query query = rtdbDatabase.getTitle(userID);
+        Query query = rtdbDatabase.getPostedDeals(userID);
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
