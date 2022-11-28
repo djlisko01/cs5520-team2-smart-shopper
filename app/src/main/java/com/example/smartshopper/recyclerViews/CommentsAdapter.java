@@ -67,17 +67,10 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsViewHolder> {
     public void onBindViewHolder(@NonNull CommentsViewHolder holder, int position) {
         localStorage = new LocalStorage(context);
         holder.tv_comment.setText(comments.get(position).getText());
-        String username;
-
-        if (localStorage.userIsLoggedIn()) {
-            username = localStorage.getCurrentUser();
-        } else{
-            username = "";
-        }
+        String username = comments.get(position).getAuthor().getUsername();
 
         holder.tv_userName.setText(username);
         holder.rv_responses.setLayoutManager(new LinearLayoutManager(context));
-
 
         // Load user profile picture.
         PlatformHelpers.loadPicassoImg(context,
@@ -100,6 +93,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsViewHolder> {
 
         int numResponse = comments.get(position).getListReplies().size();
         holder.tv_replyCount.setText("" + numResponse);
+
         if (numResponse < 1){
             holder.iv_toggleResponses.setVisibility(View.INVISIBLE);
         }
