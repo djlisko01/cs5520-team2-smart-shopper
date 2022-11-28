@@ -1,197 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   tools:context=".FollowTagsActivity"
   >
-  <ScrollView
-    android:layout_width="match_parent"
-    android:layout_height="550dp"
-    android:layout_marginTop="70dp"
-    android:layout_marginBottom="20dp"
-    app:layout_constraintBottom_toTopOf="@id/followTagsButton"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    android:id="@+id/tagScrollContainer"
-    >
-    <androidx.constraintlayout.widget.ConstraintLayout
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      >
-      <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/electronicsTagContainer"
+<!--  <ScrollView-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="550dp"-->
+<!--    android:layout_marginTop="70dp"-->
+<!--    android:layout_marginBottom="20dp"-->
+<!--    app:layout_constraintBottom_toTopOf="@id/followTagsButton"-->
+<!--    app:layout_constraintEnd_toEndOf="parent"-->
+<!--    app:layout_constraintStart_toStartOf="parent"-->
+<!--    app:layout_constraintTop_toTopOf="parent"-->
+<!--    android:id="@+id/tagScrollContainer"-->
+<!--    >-->
+<!--    <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--      android:layout_width="match_parent"-->
+<!--      android:layout_height="match_parent"-->
+<!--      >-->
+      <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toTopOf="@id/followTagsButton"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:id="@+id/apparelTagContainer"
-        >
-        <androidx.cardview.widget.CardView
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_centerHorizontal="true"
-          app:cardElevation="6dp"
-          app:cardCornerRadius="10dp"
-          android:layout_margin="8dp"
-          app:layout_constraintBottom_toBottomOf="parent"
-          app:layout_constraintEnd_toEndOf="parent"
-          app:layout_constraintStart_toStartOf="parent"
-          app:layout_constraintTop_toTopOf="parent">
-            <androidx.constraintlayout.widget.ConstraintLayout
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              >
-              <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/tagInfoContainer"
-                android:background="@color/primary"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toTopOf="@id/iv_tagImageContainer"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHeight_percent=".35"
-                app:layout_constraintTop_toTopOf="parent">
-                  <TextView
-                    android:id="@+id/tagText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:layout_margin="4dp"
-                    android:text="Apparel"
-                    android:textSize="30dp"
-                    android:textAlignment="center"
-                    android:minEms="5"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-                <androidx.constraintlayout.widget.ConstraintLayout
-                  android:id="@+id/iv_tagImageContainer"
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:layout_margin="10dp"
-                  app:layout_constraintTop_toBottomOf="@id/tagInfoContainer"
-                  app:layout_constraintBottom_toBottomOf="parent"
-                  app:layout_constraintHeight_percent=".65">
-                  <RadioButton
-                    android:id="@+id/tagRadio"
-                    android:buttonTint="@color/primary"
-                    android:layout_width="35dp"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintBottom_toBottomOf="@id/iv_tagImage"
-                    app:layout_constraintStart_toEndOf="@id/iv_tagImage"
-                    app:layout_constraintTop_toTopOf="@id/iv_tagImage"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintWidth_percent=".35"
-                    />
-
-                    <ImageView
-                      android:id="@+id/iv_tagImage"
-                      android:layout_width="85dp"
-                      android:layout_height="85dp"
-                      android:src="@drawable/ic_baseline_dry_cleaning_24"
-                      app:layout_constraintBottom_toBottomOf="parent"
-                      app:layout_constraintStart_toStartOf="parent"
-                      app:layout_constraintWidth_percent=".65"
-                      app:layout_constraintEnd_toStartOf="@id/tagRadio"
-                      app:tint="@color/primary" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.cardview.widget.CardView>
-      </RelativeLayout>
-      <RelativeLayout
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          app:layout_constraintBottom_toBottomOf="parent"
-          app:layout_constraintEnd_toEndOf="parent"
-          app:layout_constraintStart_toEndOf="@id/apparelTagContainer"
-          app:layout_constraintTop_toTopOf="parent"
-          android:id="@+id/electronicsTagContainer"
-          >
-          <androidx.cardview.widget.CardView
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_centerHorizontal="true"
-              android:layout_margin="8dp"
-              app:cardElevation="6dp"
-              app:cardCornerRadius="10dp"
-              app:layout_constraintBottom_toBottomOf="parent"
-              app:layout_constraintEnd_toEndOf="parent"
-              app:layout_constraintStart_toStartOf="parent"
-              app:layout_constraintTop_toTopOf="parent">
-
-              <androidx.constraintlayout.widget.ConstraintLayout
-                  android:layout_width="match_parent"
-                  android:layout_height="match_parent"
-                  >
-
-                  <androidx.constraintlayout.widget.ConstraintLayout
-                      android:id="@+id/electronicsTagInfoContainer"
-                      android:background="@color/primary"
-                      android:layout_width="match_parent"
-                      android:layout_height="wrap_content"
-                      app:layout_constraintBottom_toTopOf="@id/electronicsTagImageContainer"
-                      app:layout_constraintEnd_toEndOf="parent"
-                      app:layout_constraintHeight_percent=".35"
-                      app:layout_constraintTop_toTopOf="parent">
-                      <TextView
-                          android:id="@+id/electronicsTagText"
-                          android:layout_width="wrap_content"
-                          android:layout_height="wrap_content"
-                          android:textColor="@color/white"
-                          android:layout_margin="4dp"
-                          android:text="Electronics"
-                          android:textSize="30dp"
-                          android:textAlignment="center"
-                          android:minEms="5"
-                          app:layout_constraintBottom_toBottomOf="parent"
-                          app:layout_constraintTop_toTopOf="parent"
-                          app:layout_constraintStart_toStartOf="parent"
-                          app:layout_constraintEnd_toEndOf="parent"
-                          />
-                  </androidx.constraintlayout.widget.ConstraintLayout>
-                  <androidx.constraintlayout.widget.ConstraintLayout
-                      android:id="@+id/electronicsTagImageContainer"
-                      android:layout_width="match_parent"
-                      android:layout_height="wrap_content"
-                      android:layout_margin="10dp"
-                      app:layout_constraintTop_toBottomOf="@id/electronicsTagInfoContainer"
-                      app:layout_constraintBottom_toBottomOf="parent"
-                      app:layout_constraintHeight_percent=".65">
-                      <RadioButton
-                          android:id="@+id/electronicsTagRadio"
-                          android:buttonTint="@color/primary"
-                          android:layout_width="35dp"
-                          android:layout_height="wrap_content"
-                          app:layout_constraintBottom_toBottomOf="@id/iv_electronicsTagImage"
-                          app:layout_constraintStart_toEndOf="@id/iv_electronicsTagImage"
-                          app:layout_constraintTop_toTopOf="@id/iv_electronicsTagImage"
-                          app:layout_constraintEnd_toEndOf="parent"
-                          app:layout_constraintWidth_percent=".35"
-                          />
-
-                      <ImageView
-                          android:id="@+id/iv_electronicsTagImage"
-                          android:layout_width="85dp"
-                          android:layout_height="85dp"
-                          android:src="@drawable/ic_baseline_radio_24"
-                          app:layout_constraintBottom_toBottomOf="parent"
-                          app:layout_constraintStart_toStartOf="parent"
-                          app:layout_constraintWidth_percent=".65"
-                          app:layout_constraintEnd_toStartOf="@id/electronicsTagRadio"
-                          app:tint="@color/primary" />
-                  </androidx.constraintlayout.widget.ConstraintLayout>
-
-              </androidx.constraintlayout.widget.ConstraintLayout>
-          </androidx.cardview.widget.CardView>
-      </RelativeLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
-  </ScrollView>
+        android:id="@+id/rv_tagsRecyclerView"
+        />
+<!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
+<!--  </ScrollView>-->
   <Button
     android:id="@+id/followTagsButton"
     android:layout_width="match_parent"
@@ -204,7 +47,7 @@
     app:layout_constraintBottom_toTopOf="@id/skipTagActivityButton"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/tagScrollContainer"/>
+    app:layout_constraintTop_toBottomOf="@id/rv_tagsRecyclerView"/>
 
   <Button
     android:id="@+id/skipTagActivityButton"
@@ -213,6 +56,7 @@
     android:text="Skip"
     android:layout_marginStart="70dp"
     android:layout_marginEnd="70dp"
+    android:layout_marginBottom="30dp"
     tools:layout_editor_absoluteX="144dp"
     tools:layout_editor_absoluteY="601dp"
     app:layout_constraintBottom_toBottomOf="parent"

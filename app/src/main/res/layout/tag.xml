@@ -1,59 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center">
-
     <androidx.cardview.widget.CardView
-
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_centerHorizontal="true"
-        android:layout_margin="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_centerHorizontal="true"
+      app:cardElevation="6dp"
+      app:cardCornerRadius="10dp"
+      android:layout_margin="8dp"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent">
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          >
+            <androidx.constraintlayout.widget.ConstraintLayout
+              android:id="@+id/tagInfoContainer"
+              android:background="@color/primary"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              app:layout_constraintBottom_toTopOf="@id/iv_tagImageContainer"
+              app:layout_constraintEnd_toEndOf="parent"
+              app:layout_constraintHeight_percent=".35"
+              app:layout_constraintTop_toTopOf="parent">
+                <TextView
+                  android:id="@+id/tv_tagText"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="@color/white"
+                  android:layout_margin="4dp"
+                  android:text="Apparel"
+                  android:textSize="30dp"
+                  android:textAlignment="center"
+                  android:minEms="5"
+                  app:layout_constraintBottom_toBottomOf="parent"
+                  app:layout_constraintTop_toTopOf="parent"
+                  app:layout_constraintStart_toStartOf="parent"
+                  app:layout_constraintEnd_toEndOf="parent"
+                  />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.constraintlayout.widget.ConstraintLayout
+              android:id="@+id/iv_tagImageContainer"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_margin="10dp"
+              app:layout_constraintTop_toBottomOf="@id/tagInfoContainer"
+              app:layout_constraintBottom_toBottomOf="parent"
+              app:layout_constraintHeight_percent=".65">
+                <RadioButton
+                  android:id="@+id/tagRadio"
+                  android:buttonTint="@color/primary"
+                  android:layout_width="35dp"
+                  android:layout_height="wrap_content"
+                  app:layout_constraintBottom_toBottomOf="@id/iv_tagImage"
+                  app:layout_constraintStart_toEndOf="@id/iv_tagImage"
+                  app:layout_constraintTop_toTopOf="@id/iv_tagImage"
+                  app:layout_constraintEnd_toEndOf="parent"
+                  app:layout_constraintWidth_percent=".35"
+                  />
 
-            <TextView
-                android:id="@+id/tagText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Apparel"
-                app:layout_constraintWidth_percent=".75"
-                app:layout_constraintBottom_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/iv_tagImage"
-                app:layout_constraintEnd_toStartOf="@id/tagRadio" />
-
-            <RadioButton
-                android:id="@+id/tagRadio"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintWidth_percent=".25"
-                android:text="RadioButton"
-                app:layout_constraintBottom_toTopOf="@id/iv_tagImage"
-                app:layout_constraintStart_toEndOf="@id/tagText"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
-            <ImageView
-                android:id="@+id/iv_tagImage"
-                android:layout_width="match_parent"
-                android:layout_height="75dp"
-                android:layout_centerVertical="true"
-                android:contentDescription="@string/picture_of_the_on_sale_item"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tagText"
-                app:layout_constraintWidth_percent="1"
-                tools:srcCompat="@tools:sample/avatars" />
-
+                <ImageView
+                  android:id="@+id/iv_tagImage"
+                  android:layout_width="85dp"
+                  android:layout_height="85dp"
+                  app:layout_constraintBottom_toBottomOf="parent"
+                  app:layout_constraintStart_toStartOf="parent"
+                  app:layout_constraintWidth_percent=".65"
+                  app:layout_constraintEnd_toStartOf="@id/tagRadio"
+                  app:tint="@color/primary" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 </RelativeLayout>
