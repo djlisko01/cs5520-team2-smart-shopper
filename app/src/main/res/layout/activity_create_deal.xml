@@ -138,13 +138,40 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            app:layout_constraintBottom_toTopOf="@id/createDealButton"
+            app:layout_constraintBottom_toTopOf="@id/create_original_price_text_input_layout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/create_store_text_input_layout">
 
             <EditText
                 android:id="@+id/editTextPrice"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:autofillHints="AUTOFILL_HINT_PRICE"
+                android:backgroundTint="#00FFFFFF"
+                android:ems="10"
+                android:hint="@string/original_price"
+                android:inputType="textAutoComplete"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/create_original_price_text_input_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            app:layout_constraintBottom_toTopOf="@id/createDealButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/create_price_text_input_layout">
+
+            <EditText
+                android:id="@+id/editTextSalePrice"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:autofillHints="AUTOFILL_HINT_PRICE"
@@ -160,7 +187,6 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-
         <Button
             android:id="@+id/createDealButton"
             android:layout_width="match_parent"
@@ -171,7 +197,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/create_store_text_input_layout" />
+            app:layout_constraintTop_toBottomOf="@id/create_original_price_text_input_layout" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

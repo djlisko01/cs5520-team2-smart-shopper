@@ -28,8 +28,10 @@ public class CreateDealActivity extends MenuActivity {
                 String upc = ((EditText) findViewById(R.id.editTextCreateUPC)).getText().toString();
                 String description = ((EditText) findViewById(R.id.editTextCreateDescription)).getText().toString();
                 String store = ((EditText) findViewById(R.id.editTextStore)).getText().toString();
-                String salePrice = ((EditText) findViewById(R.id.editTextPrice)).getText().toString();
+                String salePrice = ((EditText) findViewById(R.id.editTextSalePrice)).getText().toString();
+                String originalPrice = ((EditText) findViewById(R.id.editTextPrice)).getText().toString();
                 Double salePriceDouble = Double.parseDouble(salePrice);
+                Double originalPriceDouble = Double.parseDouble(originalPrice);
 
 
                 // Get currently logged in userUUID
@@ -37,7 +39,7 @@ public class CreateDealActivity extends MenuActivity {
                 String userID = localStorage.getCurrentUserID();
 
                 // Create a new deal object
-                Deal deal = new Deal(upc, title, salePriceDouble, salePriceDouble, description, store, userID);
+                Deal deal = new Deal(upc, title, originalPriceDouble, salePriceDouble, description, store, userID);
 
                 RTDBService rtdbService = new RTDBService();
                 String dealID = rtdbService.writeDeal(deal);
