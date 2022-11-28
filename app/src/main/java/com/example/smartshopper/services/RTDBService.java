@@ -70,8 +70,8 @@ public class RTDBService {
     }
 
     // Get deals posted by user
-    public Query getPostedDeals(User user) {
-        return ref.child(Constants.DEALS).orderByChild(Constants.DEAL_POSTED_BY).equalTo(user.getUsername());
+    public Query getPostedDeals(String userID) {
+        return ref.child(Constants.DEALS).orderByChild(Constants.USERID).equalTo(userID);
     }
 
     // Get comments posted by user
