@@ -81,51 +81,80 @@
                 app:layout_constraintStart_toEndOf="@+id/iv_itemPicture"
                 app:layout_constraintTop_toBottomOf="@id/tv_dealTitle" />
 
-            <ImageView
-                android:id="@+id/iv_upVote"
+
+            <FrameLayout
+                android:id="@+id/frame_upVote"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_marginStart="10dp"
-                android:contentDescription="@string/thumbs_up_icon"
+                android:layout_gravity="center"
+                android:clickable="true"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0"
                 app:layout_constraintStart_toEndOf="@+id/iv_itemPicture"
-                app:layout_constraintTop_toBottomOf="@+id/tv_store"
-                app:srcCompat="@drawable/ic_up_vote" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_store">
 
-            <ImageView
-                android:id="@+id/iv_downVote"
+                <ImageView
+                    android:id="@+id/iv_upVote"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:contentDescription="@string/thumbs_up_icon"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="parent"
+                    app:srcCompat="@drawable/ic_up_vote" />
+
+                <TextView
+                    android:id="@+id/tv_numUpvotes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="45dp"
+                    android:text="@string/_0"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/iv_upVote"
+                    app:layout_constraintStart_toEndOf="@+id/iv_upVote"
+                    app:layout_constraintTop_toTopOf="@+id/iv_upVote" />
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/frame_downVote"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginStart="15dp"
-                android:contentDescription="@string/thumbs_down_icon"
-                app:layout_constraintBottom_toBottomOf="@+id/iv_upVote"
-                app:layout_constraintStart_toEndOf="@id/tv_numUpvotes"
-                app:layout_constraintTop_toTopOf="@+id/iv_upVote"
-                app:srcCompat="@drawable/ic_down_vote" />
+                android:clickable="true"
+                app:layout_constraintBottom_toBottomOf="@+id/frame_upVote"
+                app:layout_constraintStart_toEndOf="@id/frame_upVote"
+                app:layout_constraintTop_toTopOf="@+id/frame_upVote">
 
-            <TextView
-                android:id="@+id/tv_numUpvotes"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:text="@string/_0"
-                app:layout_constraintBottom_toBottomOf="@+id/iv_upVote"
-                app:layout_constraintStart_toEndOf="@+id/iv_upVote"
-                app:layout_constraintTop_toTopOf="@+id/iv_upVote" />
+                <ImageView
+                    android:id="@+id/iv_downVote"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:contentDescription="@string/thumbs_down_icon"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="parent"
+                    app:srcCompat="@drawable/ic_down_vote" />
 
-            <TextView
-                android:id="@+id/tv_numDownVotes"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginStart="15dp"
-                android:text="@string/_0"
-                app:layout_constraintBottom_toBottomOf="@+id/iv_upVote"
-                app:layout_constraintStart_toEndOf="@id/iv_downVote"
-                app:layout_constraintTop_toTopOf="@+id/iv_upVote" />
+                <TextView
+                    android:id="@+id/tv_numDownVotes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="45dp"
+                    android:text="@string/_0"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/iv_upVote"
+                    app:layout_constraintStart_toEndOf="@id/iv_downVote"
+                    app:layout_constraintTop_toTopOf="@+id/iv_upVote" />
+
+            </FrameLayout>
+
 
             <TextView
                 android:id="@+id/tv_salePrice"
@@ -154,13 +183,13 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_margin="5dp"
+                android:background="@drawable/ic_save_toggle_bg"
                 android:textOff=""
                 android:textOn=""
-                android:background="@drawable/ic_save_toggle_bg"
                 app:layout_constraintBottom_toTopOf="@+id/tv_salePrice"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintHorizontal_bias="1"
+                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0" />
 
 
