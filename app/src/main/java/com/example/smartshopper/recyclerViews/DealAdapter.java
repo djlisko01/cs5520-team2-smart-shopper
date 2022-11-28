@@ -72,9 +72,11 @@ public class DealAdapter extends RecyclerView.Adapter<DealViewHolder> {
         holder.tb_saveDeal.setOnClickListener(v -> {
             if (holder.tb_saveDeal.isChecked()) {
                 platformHelpers.saveDeal(deals.get(position));
+                platformHelpers.subscribeToDeal(deals.get(position));
             } else {
                 platformHelpers.getSavedDealKey(deals.get(position).getDealID(), key -> {
                     platformHelpers.deleteSavedDeal(key);
+                    platformHelpers.unsubscribeFromDeal(deals.get(position));
                 });
             }
         });

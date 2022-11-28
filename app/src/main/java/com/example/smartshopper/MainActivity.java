@@ -34,6 +34,11 @@ public class MainActivity extends MenuActivity {
 
         // Setup Search Listener
         setSearchListener();
+
+        // Notification channel
+        if (localStorage.userIsLoggedIn()) {
+            platformHelpers.createNotifChannel();
+        }
     }
 
     private void setSearchListener() {

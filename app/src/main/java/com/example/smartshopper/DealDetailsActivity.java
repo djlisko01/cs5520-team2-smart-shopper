@@ -92,6 +92,7 @@ public class DealDetailsActivity extends AppCompatActivity {
             commentInput.onEditorAction(EditorInfo.IME_ACTION_DONE);
 
             rtdbService.writeComment(comment, deal.getDealID());
+            platformHelpers.sendNewCommentNotification(deal, comment);
 
             List<Comment> comments = adapter.getComments();
             comments.add(0, comment);
