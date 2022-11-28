@@ -143,29 +143,32 @@ public class PlatformHelpers {
     }
 
     public void getSavedDealsAndUpdateRV(DealAdapter adapter, TextView noSavedDeals) {
-        Query query = rtdbDatabase.getSavedDeals(localStorage.getCurrentUserID());
-        query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                List<Deal> savedDeals = new ArrayList<>();
-                for (DataSnapshot child : snapshot.getChildren()) {
-                    getDealByKey(child.getValue(String.class), deal -> {
-                        assert deal != null;
-                        deal.setDealID(child.getValue(String.class));
-                        savedDeals.add(deal);
-                        if (savedDeals.size() == snapshot.getChildrenCount()) {
-                            noSavedDeals.setVisibility(View.GONE); // remove the noDeals text
-                            adapter.updateData(savedDeals);
-                        }
-                    });
+        if (localStorage.getCurrentUserID() == "") {
+            noSavedDeals.setVisibility(View.VISIBLE);
+        } else {
+            Query query = rtdbDatabase.getSavedDeals(localStorage.getCurrentUserID());
+            query.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    List<Deal> savedDeals = new ArrayList<>();
+                    for (DataSnapshot child : snapshot.getChildren()) {
+                        getDealByKey(child.getValue(String.class), deal -> {
+                            assert deal != null;
+                            deal.setDealID(child.getValue(String.class));
+                            savedDeals.add(deal);
+                            if (savedDeals.size() == snapshot.getChildrenCount()) {
+                                noSavedDeals.setVisibility(View.GONE); // remove the noDeals text
+                                adapter.updateData(savedDeals);
+                            }
+                        });
+                    }
                 }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.e("DB_ERROR", error.getMessage());
-            }
-        });
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Log.e("DB_ERROR", error.getMessage());
+                }
+            });
+        }
     }
 
     public void upVoteDeal(String dealID) {
@@ -186,8 +189,12 @@ public class PlatformHelpers {
                 for (DataSnapshot child : snapshot.getChildren()) {
                     Comment comment = child.getValue(Comment.class);
                     assert comment != null;
+                    // Converts nested responses to a list.
+                    List <Comment> responses = comment.RepliesMapToList();
+                    comment.setListReplies(responses);
                     comments.add(comment);
                 }
+                Collections.sort(comments);
                 Collections.reverse(comments);
                 adapter.updateComments(comments);
             }
@@ -198,7 +205,6 @@ public class PlatformHelpers {
             }
         });
     }
-
 
     public void getDealsAndUpdateMainRV(DealAdapter adapter, String search) {
         //TODO case switch queryEnum to get the correct query from FireBase
@@ -227,7 +233,7 @@ public class PlatformHelpers {
                         deals.add(deal);
                     }
                 }
-
+                Collections.reverse(deals);
                 adapter.updateData(deals);
             }
 
@@ -273,26 +279,19 @@ public class PlatformHelpers {
     public static void loadPicassoImg(Context context, String imgUri, ImageView view, int defaultImg) {
         Picasso picasso = new Picasso.Builder(context).build();
         if (imgUri != null && !imgUri.isEmpty()) {
-            picasso.load(imgUri)
-                    .placeholder(defaultImg)
-                    .error(defaultImg)
-                    .into(view);
+            picasso.load(imgUri).placeholder(defaultImg).error(defaultImg).into(view);
         } else {
-            picasso.load(defaultImg)
-                    .placeholder(defaultImg)
-                    .error(defaultImg)
-                    .into(view);
+            picasso.load(defaultImg).placeholder(defaultImg).error(defaultImg).into(view);
         }
     }
 
     public void getFcmToken(StringInterface stringInterface) {
-        FirebaseMessaging.getInstance().getToken()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        String fcmToken = task.getResult();
-                        stringInterface.onCallback(fcmToken);
-                    }
-                });
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                String fcmToken = task.getResult();
+                stringInterface.onCallback(fcmToken);
+            }
+        });
     }
 
     public void validateCredentials(String finalEmailAddress, String passwordInput, UserInterface userInterface) {
