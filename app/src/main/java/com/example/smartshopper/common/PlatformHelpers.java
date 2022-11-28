@@ -189,8 +189,12 @@ public class PlatformHelpers {
                 for (DataSnapshot child : snapshot.getChildren()) {
                     Comment comment = child.getValue(Comment.class);
                     assert comment != null;
+                    // Converts nested responses to a list.
+                    List <Comment> responses = comment.RepliesMapToList();
+                    comment.setListReplies(responses);
                     comments.add(comment);
                 }
+                Collections.sort(comments);
                 Collections.reverse(comments);
                 adapter.updateComments(comments);
             }
@@ -201,7 +205,6 @@ public class PlatformHelpers {
             }
         });
     }
-
 
     public void getDealsAndUpdateMainRV(DealAdapter adapter, String search) {
         //TODO case switch queryEnum to get the correct query from FireBase
