@@ -48,15 +48,15 @@ public class RTDBService {
         return ref.child(Constants.COMMENTS).child(key);
     }
 
-    public Query getRepsonses(String dealKey, String commentKey){
-        return database
-                .getReference()
-                .child(Constants.DEALS)
-                .child(dealKey)
-                .child(Constants.COMMENTS)
-                .child(commentKey)
-                .child(Constants.Responses);
-    }
+//    public Query getRepsonses(String dealKey, String commentKey){
+//        return database
+//                .getReference()
+//                .child(Constants.DEALS)
+//                .child(dealKey)
+//                .child(Constants.COMMENTS)
+//                .child(commentKey)
+//                .child(Constants.Responses);
+//    }
 
     // Get most upvoted deals
     public Query getBestDeals() {
@@ -145,6 +145,7 @@ public class RTDBService {
                 .child(dealID)
                 .child(Constants.COMMENTS)
                 .child(commentKey)
+                .child(Constants.Responses)
                 .push()
                 .getKey();
         response.setCommentID(key);
@@ -156,6 +157,7 @@ public class RTDBService {
                 .child(dealID)
                 .child(Constants.COMMENTS)
                 .child(commentKey)
+                .child(Constants.Responses)
                 .child(key)
                 .setValue(response);
     }

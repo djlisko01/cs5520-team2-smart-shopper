@@ -24,10 +24,11 @@ import com.example.smartshopper.utilities.CommentInputDialog;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public class CommentsAdapter extends RecyclerView.Adapter<CommentsViewHolder> {
     List<Comment> comments;
-    List<Comment> responses = new ArrayList<>();
+    List<Comment> responses;
     Context context;
     boolean isShowingResponses = false;
     CommentsAdapter response_adapter;
@@ -64,7 +65,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsViewHolder> {
         holder.tv_comment.setText(comments.get(position).getText());
         holder.tv_userName.setText(user.getUsername());
         holder.rv_responses.setLayoutManager(new LinearLayoutManager(context));
-        responses = comments.get(holder.getAbsoluteAdapterPosition()).getResponses();
+//        responses = comments.get(position).getListReplies();
 
         // Load user profile picture.
         PlatformHelpers.loadPicassoImg(context,
@@ -75,22 +76,21 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsViewHolder> {
         // Hides Reply and Comments if Max Depth reach
         this.hideReply(holder, depth);
 
-
         // Toggle Responses to comment:
-        if (responses.size() > 0) {
-            holder.iv_toggleResponses.setOnClickListener(v -> {
-                response_adapter = new CommentsAdapter(v.getContext(), deal,depth + 1);
-                holder.rv_responses.setAdapter(response_adapter);
+        holder.iv_toggleResponses.setOnClickListener(v -> {
+            responses = comments.get(holder.getAbsoluteAdapterPosition()).getListReplies();
+            response_adapter = new CommentsAdapter(v.getContext(), deal,depth + 1);
+            holder.rv_responses.setAdapter(response_adapter);
 
-                isShowingResponses = !isShowingResponses;
-                if (isShowingResponses) {
-                    holder.iv_toggleResponses.setRotation(0);
-                    response_adapter.updateComments(responses);
-                } else {
-                    holder.iv_toggleResponses.setRotation(90);
-                }
-            });
-        }
+            isShowingResponses = !isShowingResponses;
+            if (isShowingResponses) {
+                holder.iv_toggleResponses.setRotation(0);
+                response_adapter.updateComments(responses);
+            } else {
+                holder.iv_toggleResponses.setRotation(90);
+            }
+        });
+
 
         holder.tv_reply.setOnClickListener(v -> {
             response_adapter = new CommentsAdapter(v.getContext(), deal,depth + 1);
@@ -100,7 +100,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsViewHolder> {
                     holder.getAbsoluteAdapterPosition(),
                     response_adapter,
                     this);
-            this.notifyItemChanged(holder.getAbsoluteAdapterPosition());
+            this.notifyItemChanged(position);
             commentInputDialog.show(((AppCompatActivity)context).getSupportFragmentManager(), "Title");
         });
     }
