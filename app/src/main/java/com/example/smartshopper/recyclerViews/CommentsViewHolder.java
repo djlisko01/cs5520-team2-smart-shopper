@@ -27,10 +27,10 @@ public class CommentsViewHolder extends RecyclerView.ViewHolder {
         this.tv_comment = itemView.findViewById(R.id.tv_comment);
         this.tv_userName = itemView.findViewById(R.id.tv_commentBy);
         this.img_profilePic = itemView.findViewById(R.id.iv_profilePic);
-        this.iv_toggleResponses = itemView.findViewById(R.id.iv_toggleResponses);
-        this.rv_responses = itemView.findViewById(R.id.rv_responses);
-        this.tv_reply = itemView.findViewById(R.id.tv_reply);
-        this.img_replyBubble = itemView.findViewById(R.id.iv_replyBubble);
-        this.tv_replyCount = itemView.findViewById(R.id.tv_replyCount);
+//        this.iv_toggleResponses = itemView.findViewById(R.id.iv_toggleResponses);
+//        this.rv_responses = itemView.findViewById(R.id.rv_responses);
+//        this.tv_reply = itemView.findViewById(R.id.tv_reply);
+//        this.img_replyBubble = itemView.findViewById(R.id.iv_replyBubble);
+//        this.tv_replyCount = itemView.findViewById(R.id.tv_replyCount);
     }
 }
