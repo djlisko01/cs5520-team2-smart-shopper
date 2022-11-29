@@ -44,6 +44,10 @@ public class MainActivity extends MenuActivity {
         // Setup button listener on add deal (+) button
         setCreateDealButtonListener();
 
+        // Notification channel
+        if (localStorage.userIsLoggedIn()) {
+            platformHelpers.createNotifChannel();
+        }
     }
 
     private void setSearchListener() {

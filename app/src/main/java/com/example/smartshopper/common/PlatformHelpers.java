@@ -1,10 +1,13 @@
 package com.example.smartshopper.common;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import androidx.annotation.NonNull;
@@ -29,6 +32,15 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -38,9 +50,13 @@ import java.util.Objects;
 public class PlatformHelpers {
     private final RTDBService rtdbDatabase;
     private LocalStorage localStorage;
+    private Context context;
+
+    private static final String API_KEY = "key=AAAAK0dsXYI:APA91bEA8XruUT0Lyd6WCdmnrae9tsppGI3Rs0_sG6iJMm5EfCG9nMCIPcuzdGcdC8BzFxdXBQ7mpKt_r-g2IQRH96d348MH3oHaxDFK0SjYMabmTbA8ieMDWoVU-Cbie6PqvVlK2pTm";
 
     public PlatformHelpers(Context context) {
         this.rtdbDatabase = new RTDBService();
+        this.context = context;
         this.localStorage = new LocalStorage(context);
     }
 
@@ -285,6 +301,18 @@ public class PlatformHelpers {
         }
     }
 
+    // NOTIFICATIONS
+
+    public void createNotifChannel() {
+        CharSequence name = "Saved Deal";
+        String description = "Notification channel for saved deal activity.";
+        int importance = NotificationManager.IMPORTANCE_HIGH;
+        NotificationChannel channel = new NotificationChannel("Saved_Deal_Channel", name, importance);
+        channel.setDescription(description);
+        NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
+        notificationManager.createNotificationChannel(channel);
+    }
+
     public void getFcmToken(StringInterface stringInterface) {
         FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
@@ -292,6 +320,70 @@ public class PlatformHelpers {
                 stringInterface.onCallback(fcmToken);
             }
         });
+    }
+
+    public void subscribeToDeal(Deal deal) {
+        FirebaseMessaging.getInstance().subscribeToTopic(deal.getDealID()).addOnCompleteListener(task -> {
+            if(!task.isSuccessful()) {
+                Log.d("SUBSCRIBE", "Failed to subscribe to deal (" + deal.getDealID() + ").");
+            } else {
+                Log.d("SUBSCRIBE", "Successfully subscribed to deal (" + deal.getDealID() + ").");
+                Toast.makeText(context, "You'll now receive notifications for " + deal.getTitle(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void unsubscribeFromDeal(Deal deal) {
+        FirebaseMessaging.getInstance().unsubscribeFromTopic(deal.getDealID()).addOnCompleteListener(task -> {
+            if(!task.isSuccessful()) {
+                Log.d("SUBSCRIBE", "Failed to unsubscribe from deal (" + deal.getDealID() + ")");
+            } else {
+                Log.d("SUBSCRIBE", "Successfully unsubscribed from deal (" + deal.getDealID() + ").");
+                Toast.makeText(context, "You'll no longer receive notifications for " + deal.getTitle(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void sendNewCommentNotification(Deal deal, Comment comment) {
+        new Thread(() -> {
+            JSONObject notification = new JSONObject();
+            JSONObject payload = new JSONObject();
+
+            try {
+                notification.put("title", "New Comment on " + deal.getTitle());
+                notification.put("body", comment.getAuthor().getUsername() + " commented: " + comment.getText());
+
+                payload.put("to", "/topics/" + deal.getDealID());
+                payload.put("priority", "high");
+                payload.put("notification", notification);
+            } catch(Exception e) {
+                Log.e("NOTIFICATION", e.getMessage());
+            }
+
+            postToHTTPConnection(payload);
+        }).start();
+    }
+
+    private void postToHTTPConnection(JSONObject payload) {
+        try {
+            URL url = new URL("https://fcm.googleapis.com/fcm/send");
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setRequestProperty("Authorization", API_KEY);
+            connection.setDoOutput(true);
+
+            OutputStream outputStream = connection.getOutputStream();
+            outputStream.write(payload.toString().getBytes());
+            outputStream.close();
+
+            // Read FCM response.
+            InputStream inputStream = connection.getInputStream();
+            Log.d("HTTPCONNECTION", inputStream.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void validateCredentials(String finalEmailAddress, String passwordInput, UserInterface userInterface) {

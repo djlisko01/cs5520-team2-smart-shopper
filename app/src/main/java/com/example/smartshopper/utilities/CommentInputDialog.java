@@ -81,6 +81,7 @@ public class CommentInputDialog extends DialogFragment {
                 rtdbService.writeComment(newComment, deal.getDealID());
                 comments = adapter.getComments();
                 comments.add(0, newComment);
+                platformHelpers.sendNewCommentNotification(deal, newComment);
             } else {
                 Comment selectedComment = comments.get(position);
                 comments.set(position, selectedComment);
