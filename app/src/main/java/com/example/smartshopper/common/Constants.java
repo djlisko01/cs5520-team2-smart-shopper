@@ -12,8 +12,11 @@ public class Constants {
     public static final String DEAL_POSTED_BY = "dealPostedBy";
     public static final String SAVED_DEALS = "savedDeals";
     public static final String COMMENTS = "comments";
+    public static final String Responses = "responses";
     public static final String FRIENDS = "friends";
     public static final String TITLE = "title";
+    public static final int MAX_DEPTH = 1;
+    public static final String USERID = "userUUID";
     public static final String FCM_TOKEN = "fcmToken";
     public static final String FCM_TOKENS = "fcmTokens";
 }
