@@ -295,9 +295,9 @@ public class PlatformHelpers {
     public static void loadPicassoImg(Context context, String imgUri, ImageView view, int defaultImg) {
         Picasso picasso = new Picasso.Builder(context).build();
         if (imgUri != null && !imgUri.isEmpty()) {
-            picasso.load(imgUri).noPlaceholder().into(view);
+            picasso.load(imgUri).noPlaceholder().error(defaultImg).into(view);
         } else {
-            picasso.load(defaultImg).noPlaceholder().into(view);
+            picasso.load(defaultImg).noPlaceholder().error(defaultImg).into(view);
         }
     }
 
