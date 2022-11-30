@@ -65,6 +65,11 @@ public class PlatformHelpers {
         return localStorage.getCurrentUser();
     }
 
+    // Get logged in user
+    public String getCurrentUserID() {
+        return localStorage.getCurrentUserID();
+    }
+
 //    // Set logged in user
 //    public void setCurrentUser(String username) {
 //        // TODO: Implement
@@ -187,12 +192,70 @@ public class PlatformHelpers {
         }
     }
 
-    public void upVoteDeal(String dealID) {
-        rtdbDatabase.upVoteDeal(dealID);
+    public void checkIfUserDownVotedDeal(String dealID, String userID, BoolInterface boolInterface) {
+        Query query = rtdbDatabase.getDeal(dealID);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.hasChild(Constants.USERS_DOWN_VOTED)) {
+                    for (DataSnapshot user : snapshot.child(Constants.USERS_DOWN_VOTED).getChildren()) {
+                        if (Objects.equals(user.getKey(), userID)) {
+                            boolInterface.onCallback(true);
+                            return;
+                        }
+                    }
+                }
+                boolInterface.onCallback(false);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("DB_ERROR", error.getMessage());
+            }
+        });
     }
 
-    public void downVoteDeal(String dealID) {
-        rtdbDatabase.downVoteDeal(dealID);
+    public void checkIfUserUpVotedDeal(String dealID, String userID, BoolInterface boolInterface) {
+        Query query = rtdbDatabase.getDeal(dealID);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.hasChild(Constants.USERS_UP_VOTED)) {
+                    for (DataSnapshot user : snapshot.child(Constants.USERS_UP_VOTED).getChildren()) {
+                        if (Objects.equals(user.getKey(), userID)) {
+                            boolInterface.onCallback(true);
+                            return;
+                        }
+                    }
+                }
+                boolInterface.onCallback(false);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("DB_ERROR", error.getMessage());
+            }
+        });
+    }
+
+    public void upVoteDeal(String dealID, String userID, String username) {
+        if (userID.equals("")) {
+            Toast.makeText(context, "Please sign in to vote", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        checkIfUserUpVotedDeal(dealID, userID, upVotedAlready -> {
+            rtdbDatabase.upVoteDeal(dealID, userID, username, upVotedAlready);
+        });
+    }
+
+    public void downVoteDeal(String dealID, String userID, String username) {
+        if (userID.equals("")) {
+            Toast.makeText(context, "Please sign in to vote", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        checkIfUserDownVotedDeal(dealID, userID, downVotedAlready -> {
+            rtdbDatabase.downVoteDeal(dealID, userID, username, downVotedAlready);
+        });
     }
 
     public void getCommentsAndUpdateRv(Deal deal, CommentsAdapter adapter) {

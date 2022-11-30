@@ -191,23 +191,24 @@ public class RTDBService {
         ref.child(Constants.FCM_TOKENS).push().setValue(token);
     }
 
-    /**
-     * Write a upvote to the database
-     *
-     * @param dealId ID of the deal being upvoted
-     */
-    public void upVoteDeal(String dealId) {
-        ref.child(Constants.DEALS).child(dealId).child(Constants.UPVOTES).setValue(ServerValue.increment(1));
+    public void upVoteDeal(String dealId, String userID, String username, boolean upVotedAlready) {
+        if (!upVotedAlready && !userID.isEmpty()) {
+            ref.child(Constants.DEALS).child(dealId).child(Constants.USERS_UP_VOTED).child(userID).setValue(username);
+            ref.child(Constants.DEALS).child(dealId).child(Constants.UPVOTES).setValue(ServerValue.increment(1));
+        } else if (upVotedAlready && !userID.isEmpty()) {
+            ref.child(Constants.DEALS).child(dealId).child(Constants.USERS_UP_VOTED).child(userID).removeValue();
+            ref.child(Constants.DEALS).child(dealId).child(Constants.UPVOTES).setValue(ServerValue.increment(-1));
+        }
     }
 
-
-    /**
-     * Write a downvote to the database
-     *
-     * @param dealId ID of the deal being downvoted
-     */
-    public void downVoteDeal(String dealId) {
-        ref.child(Constants.DEALS).child(dealId).child(Constants.DOWNVOTES).setValue(ServerValue.increment(1));
+    public void downVoteDeal(String dealId, String userID, String username, boolean downVotedAlready) {
+        if (!downVotedAlready && !userID.isEmpty()) {
+            ref.child(Constants.DEALS).child(dealId).child(Constants.USERS_DOWN_VOTED).child(userID).setValue(username);
+            ref.child(Constants.DEALS).child(dealId).child(Constants.DOWNVOTES).setValue(ServerValue.increment(1));
+        } else if (downVotedAlready && !userID.isEmpty()) {
+            ref.child(Constants.DEALS).child(dealId).child(Constants.USERS_DOWN_VOTED).child(userID).removeValue();
+            ref.child(Constants.DEALS).child(dealId).child(Constants.DOWNVOTES).setValue(ServerValue.increment(-1));
+        }
     }
 
     // DELETE METHODS

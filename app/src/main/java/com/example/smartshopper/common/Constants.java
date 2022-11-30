@@ -19,4 +19,6 @@ public class Constants {
     public static final String USERID = "userUUID";
     public static final String FCM_TOKEN = "fcmToken";
     public static final String FCM_TOKENS = "fcmTokens";
+    public static final String USERS_UP_VOTED = "usersUpVoted";
+    public static final String USERS_DOWN_VOTED = "usersDownVoted";
 }
