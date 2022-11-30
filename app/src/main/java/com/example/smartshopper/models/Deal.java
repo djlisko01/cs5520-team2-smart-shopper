@@ -64,6 +64,7 @@ public class Deal implements Serializable {
     public void setDealID(String dealID){
         this.dealID = dealID;
     }
+
     public String getDealID(){
         return this.dealID;
     }
@@ -135,5 +136,9 @@ public class Deal implements Serializable {
 
     public String getProductImg() {
         return productImg;
+    }
+
+    public void setProductImg(String url) {
+        this.productImg = url;
     }
 }
