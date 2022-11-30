@@ -3,6 +3,7 @@ package com.example.smartshopper.common;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -11,7 +12,9 @@ import android.widget.Toast;
 
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 
+import com.bumptech.glide.Glide;
 import com.example.smartshopper.models.Comment;
 import com.example.smartshopper.models.Deal;
 import com.example.smartshopper.models.User;
@@ -30,7 +33,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
@@ -38,8 +40,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -184,6 +184,7 @@ public class PlatformHelpers {
                         });
                     }
                 }
+
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
                     Log.e("DB_ERROR", error.getMessage());
@@ -269,7 +270,7 @@ public class PlatformHelpers {
                     Comment comment = child.getValue(Comment.class);
                     assert comment != null;
                     // Converts nested responses to a list.
-                    List <Comment> responses = comment.RepliesMapToList();
+                    List<Comment> responses = comment.RepliesMapToList();
                     comment.setListReplies(responses);
                     comments.add(comment);
                 }
@@ -348,21 +349,20 @@ public class PlatformHelpers {
     }
 
     /**
-     * Loads picture using Piccasso Library
+     * Loads picture using Glide Library
      *
      * @param context    view you are loading into
      * @param imgUri     string of the URI of the image
      * @param view       ImageView you are trying to load the picture into
      * @param defaultImg default image if there is an error (should be a local asset)
      */
-    public static void loadPicassoImg(Context context, String imgUri, ImageView view, int defaultImg) {
-        Picasso picasso = new Picasso.Builder(context).build();
+    public static void loadImg(Context context, String imgUri, ImageView view, int defaultImg) {
+        Drawable drawable = ContextCompat.getDrawable(context, defaultImg);
         if (imgUri != null && !imgUri.isEmpty()) {
-            picasso.load(imgUri).noPlaceholder().error(defaultImg).into(view);
-        } else {
-            picasso.load(defaultImg).noPlaceholder().error(defaultImg).into(view);
+            Glide.with(context).load(imgUri).placeholder(drawable).into(view);
         }
     }
+
 
     // NOTIFICATIONS
 
@@ -387,7 +387,7 @@ public class PlatformHelpers {
 
     public void subscribeToDeal(Deal deal) {
         FirebaseMessaging.getInstance().subscribeToTopic(deal.getDealID()).addOnCompleteListener(task -> {
-            if(!task.isSuccessful()) {
+            if (!task.isSuccessful()) {
                 Log.d("SUBSCRIBE", "Failed to subscribe to deal (" + deal.getDealID() + ").");
             } else {
                 Log.d("SUBSCRIBE", "Successfully subscribed to deal (" + deal.getDealID() + ").");
@@ -398,7 +398,7 @@ public class PlatformHelpers {
 
     public void unsubscribeFromDeal(Deal deal) {
         FirebaseMessaging.getInstance().unsubscribeFromTopic(deal.getDealID()).addOnCompleteListener(task -> {
-            if(!task.isSuccessful()) {
+            if (!task.isSuccessful()) {
                 Log.d("SUBSCRIBE", "Failed to unsubscribe from deal (" + deal.getDealID() + ")");
             } else {
                 Log.d("SUBSCRIBE", "Successfully unsubscribed from deal (" + deal.getDealID() + ").");
@@ -419,7 +419,7 @@ public class PlatformHelpers {
                 payload.put("to", "/topics/" + deal.getDealID());
                 payload.put("priority", "high");
                 payload.put("notification", notification);
-            } catch(Exception e) {
+            } catch (Exception e) {
                 Log.e("NOTIFICATION", e.getMessage());
             }
 
