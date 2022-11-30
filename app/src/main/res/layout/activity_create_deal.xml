@@ -25,6 +25,18 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/gallery_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_margin="90dp"
+            android:contentDescription="TODO"
+            android:src="@android:drawable/ic_menu_gallery"
+            app:layout_constraintBottom_toTopOf="@id/create_deal_text_input_layout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/create_deal_text_input_layout"
             android:layout_width="match_parent"
@@ -198,6 +210,17 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/create_original_price_text_input_layout" />
+
+        <ImageView
+            android:id="@+id/iv_imagePreview"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            app:layout_constraintHorizontal_bias=".2"
+            app:layout_constraintBottom_toTopOf="@+id/create_deal_text_input_layout"
+            app:layout_constraintEnd_toStartOf="@+id/camera_fab"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_baseline_shopping_basket_24" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
