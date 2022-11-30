@@ -20,6 +20,8 @@ public class Deal implements Serializable {
     String store;
     Double originalPrice;
     Double salePrice;
+    Double latitude;
+    Double longitude;
     String userUUID;
     List<Comment> comments;
     Integer numUpVotes;
@@ -96,6 +98,13 @@ public class Deal implements Serializable {
         return this.salePrice;
     }
 
+    public Double getLatitude() { return this.latitude; }
+
+    public Double getLongitude() { return this.longitude; }
+
+    public void setLatitude(Double latitude) { this.latitude = latitude; }
+
+    public void setLongitude(Double longitude) { this.longitude = longitude; }
 //    public Double getSavings() {
 //        return this.originalPrice - this.salePrice;
 //    }
