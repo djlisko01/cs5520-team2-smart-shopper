@@ -29,14 +29,15 @@ import java.io.InputStream;
 
 
 public class CreateDealActivity extends MenuActivity {
+    private static final int LOAD_IMAGE_CODE = 123;
+    public static final int IMAGE_CAPTURE_CODE = 654;
+
     CloudStorageService cloudStorageService;
     FloatingActionButton fab_camera;
     FloatingActionButton fab_gallery;
     ImageView iv_imagePreview;
-
+    RTDBService rtdbService = new RTDBService();
     Uri image_uri;
-    private static final int LOAD_IMAGE_CODE = 123;
-    public static final int IMAGE_CAPTURE_CODE = 654;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +75,8 @@ public class CreateDealActivity extends MenuActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        // Camera Flow
         if (requestCode == IMAGE_CAPTURE_CODE && resultCode == RESULT_OK) {
             try (InputStream in = getContentResolver().openInputStream(image_uri)) {
                 // Set the image in imageview for display
@@ -83,6 +86,7 @@ public class CreateDealActivity extends MenuActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        // Gallery Flow
         } else if (requestCode == LOAD_IMAGE_CODE && resultCode == RESULT_OK && data != null) {
             image_uri = data.getData();
             iv_imagePreview.setImageURI(image_uri);
@@ -140,31 +144,36 @@ public class CreateDealActivity extends MenuActivity {
                 Double salePriceDouble = Double.parseDouble(salePrice);
                 Double originalPriceDouble = Double.parseDouble(originalPrice);
 
-
                 // Get currently logged in userUUID
                 LocalStorage localStorage = new LocalStorage(CreateDealActivity.this);
                 String userID = localStorage.getCurrentUserID();
 
                 // Create a new deal object
                 Deal deal = new Deal(upc, title, originalPriceDouble, salePriceDouble, description, store, userID);
-
-                // Get image
-                cloudStorageService.uploadWithURI("images/" + image_uri.getLastPathSegment(), image_uri, new StringInterface() {
-                    @Override
-                    public void onCallback(String response) {
-                        String downloadURL = response;
-                        deal.setProductImg(downloadURL);
-                    }
-                });
-
-                RTDBService rtdbService = new RTDBService();
-                String dealID = rtdbService.writeDeal(deal);
-                deal.setDealID(dealID);
-
-                // Go to detailed view of the deal
                 Intent intent = new Intent(CreateDealActivity.this, DealDetailsActivity.class);
-                intent.putExtra("dealItem", deal);
-                startActivity(intent);
+                // Check if image uploaded flow
+                if (!image_uri.toString().isEmpty() && image_uri != null) {
+                    // Get image
+                    cloudStorageService.uploadWithURI("images/" + image_uri.getLastPathSegment(), image_uri, new StringInterface() {
+                        @Override
+                        public void onCallback(String response) {
+                            String downloadURL = response;
+                            deal.setProductImg(downloadURL);
+                            String dealID = rtdbService.writeDeal(deal);
+                            deal.setDealID(dealID);
+                            // Go to detailed view of the deal
+                            intent.putExtra("dealItem", deal);
+                            startActivity(intent);
+                        }
+                    });
+                // no image uploaded flow
+                } else {
+                    String dealID = rtdbService.writeDeal(deal);
+                    deal.setDealID(dealID);
+                    // Go to detailed view of the deal
+                    intent.putExtra("dealItem", deal);
+                    startActivity(intent);
+                }
             }
         });
 
