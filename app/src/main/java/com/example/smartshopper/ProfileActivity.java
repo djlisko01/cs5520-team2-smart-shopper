@@ -1,12 +1,13 @@
 package com.example.smartshopper;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.smartshopper.common.PlatformHelpers;
-import com.example.smartshopper.recyclerViews.DealAdapter;
 import com.example.smartshopper.recyclerViews.ProfileAdapter;
 import com.example.smartshopper.utilities.LocalStorage;
 
@@ -14,6 +15,7 @@ public class ProfileActivity extends MenuActivity {
     RecyclerView rv_activity;
     ProfileAdapter adapter;
     PlatformHelpers platformHelpers;
+    TextView tv_username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +32,11 @@ public class ProfileActivity extends MenuActivity {
         rv_activity.setAdapter(adapter);
 
         LocalStorage localStorage = new LocalStorage(this);
-        platformHelpers.getDealAddedAndUpdateRv(localStorage.getCurrentUser(), adapter);
+        // Username
+        tv_username = findViewById(R.id.tv_username);
+        tv_username.setText(localStorage.getCurrentUser());
+
+        platformHelpers.getDealAddedAndUpdateRv(localStorage.getCurrentUserID(), adapter);
 
 
     }

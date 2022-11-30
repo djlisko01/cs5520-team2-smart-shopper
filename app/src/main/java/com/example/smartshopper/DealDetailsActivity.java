@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -38,6 +39,7 @@ public class DealDetailsActivity extends AppCompatActivity {
     RecyclerView rv_comments;
     CommentsAdapter adapter;
     Deal deal;
+    LocalStorage localStorage;
 
 
 
@@ -46,6 +48,7 @@ public class DealDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_deal_details);
 
+        localStorage = new LocalStorage(this);
         // Find views
         iv_deal_img = findViewById(R.id.iv_deal);
         btn_AddComment = findViewById(R.id.btn_add_comment);
@@ -55,6 +58,11 @@ public class DealDetailsActivity extends AppCompatActivity {
         tv_numDownvotes = findViewById(R.id.tv_numDownVotes);
         iv_upVote = findViewById(R.id.iv_upVote);
         iv_downVote = findViewById(R.id.iv_downVote);
+
+        if(!localStorage.userIsLoggedIn()){
+            btn_AddComment.setVisibility(View.GONE);
+        }
+
 
         platformHelpers = new PlatformHelpers(this);
 
@@ -84,13 +92,13 @@ public class DealDetailsActivity extends AppCompatActivity {
         });
 
         iv_upVote.setOnClickListener(v -> {
-            platformHelpers.upVoteDeal(deal.getDealID());
+            platformHelpers.upVoteDeal(deal.getDealID(), platformHelpers.getCurrentUserID(), platformHelpers.getCurrentUser());
             deal.upvote();
             tv_numUpvotes.setText(String.format(Locale.US,"%d", deal.getNumUpVotes()));
         });
 
         iv_downVote.setOnClickListener(v -> {
-            platformHelpers.downVoteDeal(deal.getDealID());
+            platformHelpers.downVoteDeal(deal.getDealID(), platformHelpers.getCurrentUserID(), platformHelpers.getCurrentUser());
             deal.downvote();
             tv_numDownvotes.setText(String.format(Locale.US,"%d", deal.getNumDownVotes()));
         });

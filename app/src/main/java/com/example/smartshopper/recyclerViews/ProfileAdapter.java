@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.smartshopper.R;
 import com.example.smartshopper.common.PlatformHelpers;
-import com.example.smartshopper.models.Comment;
 import com.example.smartshopper.models.Deal;
 
 import java.util.ArrayList;
@@ -19,17 +18,20 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileViewHolder>{
 
     private List<Deal> deals;
     private final Context context;
+    private final PlatformHelpers platformHelpers;
 
     public ProfileAdapter(Context context) {
         this.deals = new ArrayList<>();
         this.context = context;
+        this.platformHelpers = new PlatformHelpers(this.context);
     }
 
 
     @NonNull
     @Override
     public ProfileViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ProfileViewHolder(LayoutInflater.from(context).inflate(R.layout.activities, null));
+        return new ProfileViewHolder(LayoutInflater.from(context).inflate(R.layout.activities,null),context);
+
     }
 
     @Override
@@ -39,11 +41,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileViewHolder>{
 
     @Override
     public int getItemCount() {
-        return 0;
-    }
-
-    public List<Deal> getDeals(){
-        return this.deals;
+        return deals.size();
     }
 
     public void updateTitle(List<Deal> deals){

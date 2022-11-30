@@ -72,19 +72,21 @@ public class DealAdapter extends RecyclerView.Adapter<DealViewHolder> {
         holder.tb_saveDeal.setOnClickListener(v -> {
             if (holder.tb_saveDeal.isChecked()) {
                 platformHelpers.saveDeal(deals.get(position));
+                platformHelpers.subscribeToDeal(deals.get(position));
             } else {
                 platformHelpers.getSavedDealKey(deals.get(position).getDealID(), key -> {
                     platformHelpers.deleteSavedDeal(key);
+                    platformHelpers.unsubscribeFromDeal(deals.get(position));
                 });
             }
         });
 
         // Up vote down vote listeners
         holder.frame_downVote.setOnClickListener(v -> {
-            platformHelpers.downVoteDeal(deals.get(position).getDealID());
+            platformHelpers.downVoteDeal(deals.get(position).getDealID(), platformHelpers.getCurrentUserID(), platformHelpers.getCurrentUser());
         });
         holder.frame_upVote.setOnClickListener(v -> {
-            platformHelpers.upVoteDeal(deals.get(position).getDealID());
+            platformHelpers.upVoteDeal(deals.get(position).getDealID(), platformHelpers.getCurrentUserID(), platformHelpers.getCurrentUser());
         });
 
         // Entire deal card listener

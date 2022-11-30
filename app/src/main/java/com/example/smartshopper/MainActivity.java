@@ -13,10 +13,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.SearchView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.smartshopper.common.PlatformHelpers;
 import com.example.smartshopper.recyclerViews.DealAdapter;
 import com.example.smartshopper.utilities.LocalStorage;
@@ -25,10 +27,10 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class MainActivity extends MenuActivity {
-  RecyclerView rv_dealsRecyclerView;
-  PlatformHelpers platformHelpers;
-  DealAdapter adapter;
-  LocalStorage localStorage;
+    RecyclerView rv_dealsRecyclerView;
+    PlatformHelpers platformHelpers;
+    DealAdapter adapter;
+    LocalStorage localStorage;
   FusedLocationProviderClient fusedLocationProviderClient;
   LocationManager locationManager;
   private final static int FINE_REQUEST_CODE = 200;
@@ -61,73 +63,73 @@ public class MainActivity extends MenuActivity {
     Toast.makeText(context, "RESUMING", Toast.LENGTH_LONG).show();
   }
 
+
   @Override
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_main);
-    // Instantiate objects
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        localStorage = new LocalStorage(this);
+        // Instantiate objects
 
-    fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context);
-    localStorage = new LocalStorage(context);
-    platformHelpers = new PlatformHelpers(context);
-    adapter = new DealAdapter(context);
-    locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-    Toast.makeText(context, "onCreate", Toast.LENGTH_LONG).show();
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context);
+        platformHelpers = new PlatformHelpers(this);
+        adapter = new DealAdapter(this);
+        locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+        Toast.makeText(context, "onCreate", Toast.LENGTH_LONG).show();
+        // Recycler View setup
+        rv_dealsRecyclerView = findViewById(R.id.rv_dealsRecyclerView);
+        rv_dealsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        rv_dealsRecyclerView.setAdapter(adapter);
 
-    // Recycler View setup
-    rv_dealsRecyclerView = findViewById(R.id.rv_dealsRecyclerView);
-    rv_dealsRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-    rv_dealsRecyclerView.setAdapter(adapter);
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+          new AlertDialog.Builder(context)
+            .setMessage("This app uses device location. Please turn on your devices location for best experience.")
+            .setPositiveButton("OK", (paramDialogInterface, paramInt) -> {
+              startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+            })
+            .setNegativeButton("No thanks", (dialog, which) -> {
+              return;
+            })
+            .show();
+        }
+        getLocationAndUpdateRV();
 
-    if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-      new AlertDialog.Builder(context)
-        .setMessage("This app uses device location. Please turn on your devices location for best experience.")
-        .setPositiveButton("OK", (paramDialogInterface, paramInt) -> {
-          startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-        })
-        .setNegativeButton("No thanks", (dialog, which) -> {
-          return;
-        })
-        .show();
+        // Setup Search Listener
+        setSearchListener();
+
+        // Setup button listener on add deal (+) button
+        setCreateDealButtonListener();
+        // Notification channel
+        if (localStorage.userIsLoggedIn()) {
+          platformHelpers.createNotifChannel();
+        }
     }
-    if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-      askCoarsePermission();
+
+    private void setSearchListener() {
+        SearchView searchView = findViewById(R.id.sv_searchBar);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                platformHelpers.getDealsAndUpdateMainRV(adapter,null, query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newQuery) {
+                platformHelpers.getDealsAndUpdateMainRV(adapter, null, newQuery);
+                return false;
+            }
+        });
     }
-    if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-      askFinePermission();
+
+    private void setCreateDealButtonListener() {
+        FloatingActionButton buttonOne = (FloatingActionButton) findViewById(R.id.fab);
+        buttonOne.setOnClickListener(new Button.OnClickListener() {
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, CreateDealActivity.class));
+            }
+        });
     }
-    getLocationAndUpdateRV();
-    // Setup Search Listener
-    setSearchListener();
-    // Setup button listener on add deal (+) button
-    setCreateDealButtonListener();
-  }
-
-  private void setSearchListener() {
-    SearchView searchView = findViewById(R.id.sv_searchBar);
-    searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-      @Override
-      public boolean onQueryTextSubmit(String query) {
-        platformHelpers.getDealsAndUpdateMainRV(adapter, null, query);
-        return false;
-      }
-
-      @Override
-      public boolean onQueryTextChange(String newQuery) {
-        platformHelpers.getDealsAndUpdateMainRV(adapter, null, newQuery);
-        return false;
-      }
-    });
-  }
-
-  private void setCreateDealButtonListener() {
-    FloatingActionButton buttonOne = (FloatingActionButton) findViewById(R.id.fab);
-    buttonOne.setOnClickListener(new Button.OnClickListener() {
-      public void onClick(View v) {
-        startActivity(new Intent(MainActivity.this, CreateDealActivity.class));
-      }
-    });
-  }
 
   @Override
   public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
