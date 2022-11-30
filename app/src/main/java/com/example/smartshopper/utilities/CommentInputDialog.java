@@ -18,6 +18,7 @@ import com.example.smartshopper.models.Comment;
 import com.example.smartshopper.models.Deal;
 import com.example.smartshopper.models.User;
 import com.example.smartshopper.recyclerViews.CommentsAdapter;
+import com.example.smartshopper.recyclerViews.CommentsViewHolder;
 import com.example.smartshopper.services.RTDBService;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -34,18 +35,22 @@ public class CommentInputDialog extends DialogFragment {
     Deal deal;
     CommentsAdapter adapter;
     CommentsAdapter parent;
+    CommentsViewHolder holder;
 
     public CommentInputDialog(Deal deal, CommentsAdapter adapter){
         this.deal = deal;
         this.adapter = adapter;
     }
 
-    public CommentInputDialog(Deal deal, List<Comment> comments, int position, CommentsAdapter adapter, CommentsAdapter parent){
+    public CommentInputDialog(Deal deal, List<Comment> comments,
+                              CommentsViewHolder holder,
+                              CommentsAdapter adapter, CommentsAdapter parent){
         this.comments = comments;
         this.deal = deal;
         this.adapter = adapter;
-        this.position = position;
+        this.position = holder.getAbsoluteAdapterPosition();
         this.parent = parent;
+        this.holder = holder;
     }
 
     @NonNull
@@ -90,6 +95,9 @@ public class CommentInputDialog extends DialogFragment {
                         selectedComment.getCommentID(),
                         deal.getDealID(),
                         newComment);
+
+                parent.notifyItemChanged(position);
+                holder.iv_toggleResponses.setVisibility(View.VISIBLE);
             }
             adapter.updateComments(comments);
         });
