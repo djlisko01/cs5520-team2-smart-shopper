@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,6 +18,8 @@ import androidx.annotation.NonNull;
 
 import com.bumptech.glide.Glide;
 import com.example.smartshopper.models.Deal;
+import com.example.smartshopper.responseInterfaces.StringInterface;
+import com.example.smartshopper.services.CloudStorageService;
 import com.example.smartshopper.services.RTDBService;
 import com.example.smartshopper.utilities.LocalStorage;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -26,6 +29,7 @@ import java.io.InputStream;
 
 
 public class CreateDealActivity extends MenuActivity {
+    CloudStorageService cloudStorageService;
     FloatingActionButton fab_camera;
     FloatingActionButton fab_gallery;
     ImageView iv_imagePreview;
@@ -39,6 +43,7 @@ public class CreateDealActivity extends MenuActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_deal);
         setCreateDealButtonListener();
+        cloudStorageService = new CloudStorageService();
 
         fab_camera = findViewById(R.id.camera_fab);
         fab_gallery = findViewById(R.id.gallery_fab);
@@ -142,6 +147,15 @@ public class CreateDealActivity extends MenuActivity {
 
                 // Create a new deal object
                 Deal deal = new Deal(upc, title, originalPriceDouble, salePriceDouble, description, store, userID);
+
+                // Get image
+                cloudStorageService.uploadWithURI("images/" + image_uri.getLastPathSegment(), image_uri, new StringInterface() {
+                    @Override
+                    public void onCallback(String response) {
+                        String downloadURL = response;
+                        deal.setProductImg(downloadURL);
+                    }
+                });
 
                 RTDBService rtdbService = new RTDBService();
                 String dealID = rtdbService.writeDeal(deal);
