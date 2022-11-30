@@ -359,6 +359,7 @@ public class PlatformHelpers {
     public static void loadImg(Context context, String imgUri, ImageView view, int defaultImg) {
         Drawable drawable = ContextCompat.getDrawable(context, defaultImg);
         if (imgUri != null && !imgUri.isEmpty()) {
+            Log.d("IMG", imgUri);
             Glide.with(context).load(imgUri).placeholder(drawable).into(view);
         }
     }

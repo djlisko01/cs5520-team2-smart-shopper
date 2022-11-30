@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
@@ -72,7 +71,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsViewHolder> {
 //        holder.rv_responses.setLayoutManager(new LinearLayoutManager(context));
 
         // Load user profile picture.
-        PlatformHelpers.loadPicassoImg(context,
+        PlatformHelpers.loadImg(context,
                 "/hello/",
                 holder.img_profilePic,
                 R.drawable.missing_profile_pic);

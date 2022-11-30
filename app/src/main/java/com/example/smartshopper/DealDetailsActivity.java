@@ -1,28 +1,22 @@
 package com.example.smartshopper;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.smartshopper.common.PlatformHelpers;
-import com.example.smartshopper.models.Comment;
 import com.example.smartshopper.models.Deal;
-import com.example.smartshopper.models.User;
 import com.example.smartshopper.recyclerViews.CommentsAdapter;
-import com.example.smartshopper.services.RTDBService;
 import com.example.smartshopper.utilities.CommentInputDialog;
 import com.example.smartshopper.utilities.LocalStorage;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 
-import java.util.List;
 import java.util.Locale;
 
 public class DealDetailsActivity extends AppCompatActivity {
@@ -78,10 +72,12 @@ public class DealDetailsActivity extends AppCompatActivity {
 
             setDealDetails(deal); // Set the deal details views;
 
-            PlatformHelpers.loadPicassoImg(this,
+            PlatformHelpers.loadImg(this,
                     deal.getProductImg(),
                     iv_deal_img,
-                    R.drawable.ic_baseline_shopping_basket_24);
+                    R.drawable.ic_baseline_shopping_basket_large);
+
+
         }
 
 
