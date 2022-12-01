@@ -3,16 +3,13 @@ package com.example.smartshopper.common;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 
 import com.bumptech.glide.Glide;
@@ -26,11 +23,11 @@ import com.example.smartshopper.recyclerViews.ProfileAdapter;
 import com.example.smartshopper.responseInterfaces.BoolInterface;
 import com.example.smartshopper.responseInterfaces.CommentInterface;
 import com.example.smartshopper.responseInterfaces.DealInterface;
+import com.example.smartshopper.responseInterfaces.IntegerInterface;
 import com.example.smartshopper.responseInterfaces.StringInterface;
 import com.example.smartshopper.responseInterfaces.UserInterface;
 import com.example.smartshopper.services.RTDBService;
 import com.example.smartshopper.utilities.LocalStorage;
-import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
@@ -198,6 +195,37 @@ public class PlatformHelpers {
                 }
             });
         }
+    }
+
+    public void getNumUpVotesAndUpdateDeal(String dealID, IntegerInterface integerInterface) {
+        Query query = rtdbDatabase.getNumUpVotes(dealID);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                integerInterface.onCallback(snapshot.getValue(Integer.class));
+                Log.d("UPVOTEEEEE", "" + snapshot.getValue());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    public void getNumDownVotesAndUpdateDeal(String dealID, IntegerInterface integerInterface) {
+        Query query = rtdbDatabase.getNumDownVotes(dealID);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                integerInterface.onCallback(snapshot.getValue(Integer.class));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     public void checkIfUserDownVotedDeal(String dealID, String userID, BoolInterface boolInterface) {
