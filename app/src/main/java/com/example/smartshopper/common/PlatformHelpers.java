@@ -16,6 +16,7 @@ import androidx.core.content.ContextCompat;
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.smartshopper.models.Comment;
 import com.example.smartshopper.models.Deal;
 import com.example.smartshopper.models.User;
@@ -372,9 +373,9 @@ public class PlatformHelpers {
         loading.start();
         if (imgUri != null && !imgUri.isEmpty()) {
             Log.d("IMG", imgUri);
-            Glide.with(context).load(imgUri).placeholder(loading).into(view);
+            Glide.with(context).load(imgUri).diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).placeholder(loading).into(view);
         } else if (imgUri != null && imgUri.isEmpty()) {
-            Glide.with(context).load(defaultImg).placeholder(loading).into(view);
+            Glide.with(context).load(defaultImg).diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).placeholder(loading).into(view);
         }
     }
 
