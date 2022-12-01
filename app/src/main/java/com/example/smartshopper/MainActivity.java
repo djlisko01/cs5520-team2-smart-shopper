@@ -8,12 +8,17 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -26,15 +31,19 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Map;
+
 public class MainActivity extends MenuActivity {
-    RecyclerView rv_dealsRecyclerView;
-    PlatformHelpers platformHelpers;
-    DealAdapter adapter;
-    LocalStorage localStorage;
+  RecyclerView rv_dealsRecyclerView;
+  PlatformHelpers platformHelpers;
+  DealAdapter adapter;
+  LocalStorage localStorage;
   FusedLocationProviderClient fusedLocationProviderClient;
   LocationManager locationManager;
   private final static int FINE_REQUEST_CODE = 200;
-  private final static int COARSE_REQUEST_CODE = 200;
+  private final static int COARSE_REQUEST_CODE = 100;
   Context context = this;
   Location currentLocation;
 
@@ -49,18 +58,18 @@ public class MainActivity extends MenuActivity {
   @Override
   protected void onResume() {
     super.onResume();
-    if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-      askCoarsePermission();
-    }
-    if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-      askFinePermission();
+    if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+      new AlertDialog.Builder(context)
+        .setMessage("This app uses device location. Please turn on your devices location for optimal experience.")
+        .setPositiveButton("OK", (paramDialogInterface, paramInt) -> {
+          startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+        })
+        .setNegativeButton("No thanks", (dialog, which) -> {
+          return;
+        })
+        .show();
     }
     getLocationAndUpdateRV();
-    // Setup Search Listener
-    setSearchListener();
-    // Setup button listener on add deal (+) button
-    setCreateDealButtonListener();
-    Toast.makeText(context, "RESUMING", Toast.LENGTH_LONG).show();
   }
 
 
@@ -75,7 +84,6 @@ public class MainActivity extends MenuActivity {
         platformHelpers = new PlatformHelpers(this);
         adapter = new DealAdapter(this);
         locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-        Toast.makeText(context, "onCreate", Toast.LENGTH_LONG).show();
         // Recycler View setup
         rv_dealsRecyclerView = findViewById(R.id.rv_dealsRecyclerView);
         rv_dealsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -83,7 +91,7 @@ public class MainActivity extends MenuActivity {
 
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
           new AlertDialog.Builder(context)
-            .setMessage("This app uses device location. Please turn on your devices location for best experience.")
+            .setMessage("This app uses device location. Please turn on your devices location for optimal experience.")
             .setPositiveButton("OK", (paramDialogInterface, paramInt) -> {
               startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
             })
@@ -92,6 +100,7 @@ public class MainActivity extends MenuActivity {
             })
             .show();
         }
+
         getLocationAndUpdateRV();
 
         // Setup Search Listener
@@ -134,29 +143,58 @@ public class MainActivity extends MenuActivity {
   @Override
   public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
     super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    if (grantResults.length > 0 && grantResults[0] == -1) {
-      Toast.makeText(context, "Unable to retrieve location information. Your results will not be local.", Toast.LENGTH_LONG).show();
-    }
-    else {
-      Log.v("onRequestPermissionsResult", "updating");
-      getLocationAndUpdateRV();
+
+    switch (requestCode) {
+      case COARSE_REQUEST_CODE:
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_DENIED) {
+          platformHelpers.getDealsAndUpdateMainRV(adapter, null, null);
+        }
+        else if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+          getLocationAndUpdateRV();
+        }
+        else if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+          askFinePermission();
+        }
+        else {
+          platformHelpers.getDealsAndUpdateMainRV(adapter, null, null);
+        }
+        break;
+      case FINE_REQUEST_CODE:
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_DENIED) {
+          platformHelpers.getDealsAndUpdateMainRV(adapter, null, null);
+        }
+        else if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+          getLocationAndUpdateRV();
+        }
+        else if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+          askCoarsePermission();
+        }
+        else {
+          platformHelpers.getDealsAndUpdateMainRV(adapter, null, null);
+        }
+        break;
     }
   }
 
   public void getLocationAndUpdateRV() {
-    if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ) {
-      if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+    if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_DENIED || ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED ) {
+      currentLocation = null;
+      Toast.makeText(getApplicationContext(), "Please allow location access to engage users locally.", Toast.LENGTH_LONG).show();
+    }
+    else if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ) {
+      if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_DENIED || ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED) {
+        currentLocation = null;
+      }
+      else if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
         askCoarsePermission();
       }
       if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
         askFinePermission();
       }
-      currentLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-      platformHelpers.getDealsAndUpdateMainRV(adapter, currentLocation, null);
     }
     else {
       currentLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-      platformHelpers.getDealsAndUpdateMainRV(adapter, currentLocation, null);
     }
+    platformHelpers.getDealsAndUpdateMainRV(adapter, currentLocation, null);
   }
 }
