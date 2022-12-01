@@ -48,6 +48,14 @@ public class RTDBService {
         return ref.child(Constants.COMMENTS).child(key);
     }
 
+    public Query getNumUpVotes(String dealID) {
+        return ref.child(Constants.DEALS).child(dealID).child(Constants.UPVOTES);
+    }
+
+    public Query getNumDownVotes(String dealID) {
+        return ref.child(Constants.DEALS).child(dealID).child(Constants.DOWNVOTES);
+    }
+
 //    public Query getRepsonses(String dealKey, String commentKey){
 //        return database
 //                .getReference()
