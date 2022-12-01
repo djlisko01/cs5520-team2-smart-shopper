@@ -9,6 +9,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.example.smartshopper.MainActivity;
 import com.example.smartshopper.ProfileActivity;
 import com.example.smartshopper.R;
 import com.example.smartshopper.SavedDealsActivity;
@@ -36,6 +37,9 @@ public class NavigationDrawer implements NavigationView.OnNavigationItemSelected
             context.startActivity(intent);
         } else if (item.getItemId() == R.id.nav_savedDeals) {
             Intent intent = new Intent(context, SavedDealsActivity.class);
+            context.startActivity(intent);
+        } else if (item.getItemId() == R.id.nav_hotDeals) {
+            Intent intent = new Intent(context, MainActivity.class);
             context.startActivity(intent);
         }
         //close navigation drawer
