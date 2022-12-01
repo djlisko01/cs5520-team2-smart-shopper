@@ -4,9 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,13 +13,11 @@ import com.example.smartshopper.DealDetailsActivity;
 import com.example.smartshopper.R;
 import com.example.smartshopper.common.PlatformHelpers;
 import com.example.smartshopper.models.Deal;
-import com.example.smartshopper.responseInterfaces.StringInterface;
 
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class DealAdapter extends RecyclerView.Adapter<DealViewHolder> {
     private List<Deal> deals;
@@ -45,7 +41,7 @@ public class DealAdapter extends RecyclerView.Adapter<DealViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull DealViewHolder holder, int position) {
         // Image
-        PlatformHelpers.loadPicassoImg(context,
+        PlatformHelpers.loadImg(context,
           deals.get(position).getProductImg(),
           holder.iv_itemPicture,
           R.drawable.ic_baseline_shopping_basket_24);

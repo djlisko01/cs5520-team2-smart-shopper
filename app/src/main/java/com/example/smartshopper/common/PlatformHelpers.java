@@ -3,6 +3,7 @@ package com.example.smartshopper.common;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +13,8 @@ import android.widget.Toast;
 
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import com.bumptech.glide.Glide;
 
 import com.example.smartshopper.models.Comment;
 import com.example.smartshopper.models.Deal;
@@ -307,32 +310,29 @@ public class PlatformHelpers {
                                 }
                             }
                         }
-
                     }
                     else if (location != null){
-                        // TODO: this check for null needs to be improved.
-                        // it can't just be checking 0.0
+                            // TODO: this check for null needs to be improved.
+                            // it can't just be checking 0.0
 
-                        if (deal.getLatitude() == null || deal.getLongitude() == null) {
-                            Log.v("is nan", "true");
-                        }
-                        else {
-                            Log.v("deal.getLatitude()", deal.getLatitude().toString());
-                            Location dealLocation = new Location("deal");
-                            dealLocation.setLatitude(new Double(deal.getLatitude()));
-                            dealLocation.setLongitude(new Double(deal.getLongitude()));
-                            Log.v("dealLocation 2", dealLocation.getProvider());
-                            float distance = location.distanceTo(dealLocation);
-                            if ( distance > (float)10 ) {
-                                deals.add(deal);
+                            if (deal.getLatitude() == null || deal.getLongitude() == null) {
+                                Log.v("is nan", "true");
+                            }
+                            else {
+                                Log.v("deal.getLatitude()", deal.getLatitude().toString());
+                                Location dealLocation = new Location("deal");
+                                dealLocation.setLatitude(new Double(deal.getLatitude()));
+                                dealLocation.setLongitude(new Double(deal.getLongitude()));
+                                Log.v("dealLocation 2", dealLocation.getProvider());
+                                float distance = location.distanceTo(dealLocation);
+                                if ( distance > (float)10 ) {
+                                    deals.add(deal);
+                                }
                             }
                         }
 
-
-                    }
-                    // If no search term is provided, add all deals
-                    else {
-                        Log.v("adding all", "true");
+                        // If no search term is provided, add all deals
+                     else {
                         deals.add(deal);
                     }
                 }
@@ -379,12 +379,13 @@ public class PlatformHelpers {
      * @param view       ImageView you are trying to load the picture into
      * @param defaultImg default image if there is an error (should be a local asset)
      */
-    public static void loadPicassoImg(Context context, String imgUri, ImageView view, int defaultImg) {
-        Picasso picasso = new Picasso.Builder(context).build();
+    public static void loadImg(Context context, String imgUri, ImageView view, int defaultImg) {
+        Drawable drawable = ContextCompat.getDrawable(context, defaultImg);
         if (imgUri != null && !imgUri.isEmpty()) {
-            picasso.load(imgUri).noPlaceholder().error(defaultImg).into(view);
-        } else {
-            picasso.load(defaultImg).noPlaceholder().error(defaultImg).into(view);
+            Log.d("IMG", imgUri);
+            Glide.with(context).load(imgUri).into(view);
+        } else if (imgUri != null && imgUri.isEmpty()) {
+            Glide.with(context).load(drawable).into(view);
         }
     }
 
