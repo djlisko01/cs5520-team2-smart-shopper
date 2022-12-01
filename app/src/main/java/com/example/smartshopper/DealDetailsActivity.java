@@ -87,14 +87,16 @@ public class DealDetailsActivity extends AppCompatActivity {
 
         iv_upVote.setOnClickListener(v -> {
             platformHelpers.upVoteDeal(deal.getDealID(), platformHelpers.getCurrentUserID(), platformHelpers.getCurrentUser());
-            deal.upvote();
-            tv_numUpvotes.setText(String.format(Locale.US,"%d", deal.getNumUpVotes()));
+            platformHelpers.getNumUpVotesAndUpdateDeal(deal.getDealID(), response -> {
+                tv_numUpvotes.setText(String.valueOf(response));
+            });
         });
 
         iv_downVote.setOnClickListener(v -> {
             platformHelpers.downVoteDeal(deal.getDealID(), platformHelpers.getCurrentUserID(), platformHelpers.getCurrentUser());
-            deal.downvote();
-            tv_numDownvotes.setText(String.format(Locale.US,"%d", deal.getNumDownVotes()));
+            platformHelpers.getNumDownVotesAndUpdateDeal(deal.getDealID(), response -> {
+                tv_numDownvotes.setText(String.valueOf(response));
+            });
         });
     }
 
