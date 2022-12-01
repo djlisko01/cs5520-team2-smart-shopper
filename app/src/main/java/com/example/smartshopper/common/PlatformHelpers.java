@@ -360,7 +360,9 @@ public class PlatformHelpers {
         Drawable drawable = ContextCompat.getDrawable(context, defaultImg);
         if (imgUri != null && !imgUri.isEmpty()) {
             Log.d("IMG", imgUri);
-            Glide.with(context).load(imgUri).placeholder(drawable).into(view);
+            Glide.with(context).load(imgUri).into(view);
+        } else if (imgUri != null && imgUri.isEmpty()) {
+            Glide.with(context).load(drawable).into(view);
         }
     }
 

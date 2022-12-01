@@ -76,8 +76,6 @@ public class DealDetailsActivity extends AppCompatActivity {
                     deal.getProductImg(),
                     iv_deal_img,
                     R.drawable.ic_baseline_shopping_basket_large);
-
-
         }
 
 
