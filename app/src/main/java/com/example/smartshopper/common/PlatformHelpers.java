@@ -373,9 +373,9 @@ public class PlatformHelpers {
         loading.start();
         if (imgUri != null && !imgUri.isEmpty()) {
             Log.d("IMG", imgUri);
-            Glide.with(context).load(imgUri).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(loading).into(view);
+            Glide.with(context).load(imgUri).diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).placeholder(loading).into(view);
         } else if (imgUri != null && imgUri.isEmpty()) {
-            Glide.with(context).load(defaultImg).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(loading).into(view);
+            Glide.with(context).load(defaultImg).diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).placeholder(loading).into(view);
         }
     }
 
