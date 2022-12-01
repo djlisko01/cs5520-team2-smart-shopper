@@ -152,7 +152,7 @@ public class CreateDealActivity extends MenuActivity {
                 Deal deal = new Deal(upc, title, originalPriceDouble, salePriceDouble, description, store, userID);
                 Intent intent = new Intent(CreateDealActivity.this, DealDetailsActivity.class);
                 // Check if image uploaded flow
-                if (!image_uri.toString().isEmpty() && image_uri != null) {
+                if (image_uri != null && !image_uri.toString().isEmpty()) {
                     // Get image
                     cloudStorageService.uploadWithURI("images/" + image_uri.getLastPathSegment(), image_uri, new StringInterface() {
                         @Override
@@ -169,6 +169,7 @@ public class CreateDealActivity extends MenuActivity {
                 // no image uploaded flow
                 } else {
                     String dealID = rtdbService.writeDeal(deal);
+                    Log.d("DEALS", dealID);
                     deal.setDealID(dealID);
                     // Go to detailed view of the deal
                     intent.putExtra("dealItem", deal);
