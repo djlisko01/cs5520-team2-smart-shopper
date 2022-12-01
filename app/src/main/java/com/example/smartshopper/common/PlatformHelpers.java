@@ -372,7 +372,7 @@ public class PlatformHelpers {
     }
 
     /**
-     * Loads picture using Piccasso Library
+     * Loads picture using Glide Library
      *
      * @param context    view you are loading into
      * @param imgUri     string of the URI of the image
