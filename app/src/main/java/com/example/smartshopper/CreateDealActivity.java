@@ -1,9 +1,13 @@
 package com.example.smartshopper;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -15,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 
 import com.bumptech.glide.Glide;
 import com.example.smartshopper.models.Deal;
@@ -38,6 +43,9 @@ public class CreateDealActivity extends MenuActivity {
     ImageView iv_imagePreview;
     RTDBService rtdbService = new RTDBService();
     Uri image_uri;
+    LocationManager locationManager;
+    Context context = this;
+    Location currentLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +57,23 @@ public class CreateDealActivity extends MenuActivity {
         fab_camera = findViewById(R.id.camera_fab);
         fab_gallery = findViewById(R.id.gallery_fab);
         iv_imagePreview = findViewById(R.id.iv_imagePreview);
+        locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            new AlertDialog.Builder(context)
+              .setMessage("This app uses device location. Please turn on your devices location for optimal experience.")
+              .setPositiveButton("OK", (paramDialogInterface, paramInt) -> startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS)))
+              .setNegativeButton("No thanks", (dialog, which) -> {
+              })
+              .show();
+        }
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            currentLocation = null;
+        }
+        else {
+            currentLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        }
 
         // Camera image
         fab_camera.setOnClickListener(v -> {
@@ -143,13 +168,34 @@ public class CreateDealActivity extends MenuActivity {
                 String originalPrice = ((EditText) findViewById(R.id.editTextPrice)).getText().toString();
                 Double salePriceDouble = Double.parseDouble(salePrice);
                 Double originalPriceDouble = Double.parseDouble(originalPrice);
-
+                Double latitude = 0.0;
+                Double longitude = 0.0;
+                double newLatitude = currentLocation.getLatitude();
+                if (currentLocation != null) {
+                    latitude = new Double(currentLocation.getLatitude());
+//                    TODO: fix bug (this shouldn't have to be taken the absolute value of)
+                    longitude = Math.abs(new Double(currentLocation.getLongitude()));
+                }
                 // Get currently logged in userUUID
                 LocalStorage localStorage = new LocalStorage(CreateDealActivity.this);
                 String userID = localStorage.getCurrentUserID();
 
                 // Create a new deal object
-                Deal deal = new Deal(upc, title, originalPriceDouble, salePriceDouble, description, store, userID);
+                Deal deal;
+                if (currentLocation == null) {
+                    deal = new Deal(upc, title, originalPriceDouble, salePriceDouble, description, store, userID);
+                }
+                else {
+                    deal = new Deal(upc,
+                      title,
+                      originalPriceDouble,
+                      salePriceDouble,
+                      description,
+                      store,
+                      userID,
+                      latitude,
+                      longitude);
+                }
                 Intent intent = new Intent(CreateDealActivity.this, DealDetailsActivity.class);
                 // Check if image uploaded flow
                 if (image_uri != null && !image_uri.toString().isEmpty()) {

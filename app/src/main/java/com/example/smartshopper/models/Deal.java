@@ -47,6 +47,22 @@ public class Deal implements Serializable {
         this.productImg = "";
         this.comments = new ArrayList<>();
     }
+    public Deal(String upc, String title, Double originalPriceDouble, Double salePrice, String description, String store, String userUUID, Double latitude, Double longitude) {
+        this.upc = upc;
+        this.title = title;
+        this.originalPrice = originalPrice;
+        this.salePrice = salePrice;
+        this.description = description;
+        this.timePosted = System.currentTimeMillis();
+        this.store = store;
+        this.userUUID = userUUID;
+        this.numUpVotes = 0;
+        this.numDownVotes = 0;
+        this.productImg = "";
+        this.comments = new ArrayList<>();
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
 
     // Initial Creation - For inserting a deal that lacks a UPC (e.g. Tomatoes 0.99/lb)
     public Deal(String title, Double originalPrice, Double salePrice, String description, String store, String userUUID) {
@@ -62,6 +78,8 @@ public class Deal implements Serializable {
         this.numDownVotes = 0;
         this.productImg = "";
     }
+
+
 
     public void setDealID(String dealID){
         this.dealID = dealID;

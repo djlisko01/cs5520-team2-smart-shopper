@@ -312,26 +312,17 @@ public class PlatformHelpers {
                         }
                     }
                     else if (location != null){
-                            // TODO: this check for null needs to be improved.
-                            // it can't just be checking 0.0
-
-                            if (deal.getLatitude() == null || deal.getLongitude() == null) {
-                                Log.v("is nan", "true");
-                            }
-                            else {
-                                Log.v("deal.getLatitude()", deal.getLatitude().toString());
-                                Location dealLocation = new Location("deal");
-                                dealLocation.setLatitude(new Double(deal.getLatitude()));
-                                dealLocation.setLongitude(new Double(deal.getLongitude()));
-                                Log.v("dealLocation 2", dealLocation.getProvider());
-                                float distance = location.distanceTo(dealLocation);
-                                if ( distance > (float)10 ) {
-                                    deals.add(deal);
-                                }
+                        if (deal.getLatitude() != null || deal.getLongitude() != null) {
+                            assert deal != null;
+                            Location dealLocation = new Location("deal");
+                            dealLocation.setLatitude(deal.getLatitude());
+                            dealLocation.setLongitude(deal.getLongitude());
+                            float distance = location.distanceTo(dealLocation);
+                            if ( distance > (float)10 ) {
+                                deals.add(deal);
                             }
                         }
-
-                        // If no search term is provided, add all deals
+                    } // If no search term is provided, add all deals
                      else {
                         deals.add(deal);
                     }
