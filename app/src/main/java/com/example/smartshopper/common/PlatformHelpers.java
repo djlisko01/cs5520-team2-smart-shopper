@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 
 import com.bumptech.glide.Glide;
 import com.example.smartshopper.models.Comment;
@@ -28,6 +29,7 @@ import com.example.smartshopper.responseInterfaces.StringInterface;
 import com.example.smartshopper.responseInterfaces.UserInterface;
 import com.example.smartshopper.services.RTDBService;
 import com.example.smartshopper.utilities.LocalStorage;
+import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
@@ -357,10 +359,15 @@ public class PlatformHelpers {
      * @param defaultImg default image if there is an error (should be a local asset)
      */
     public static void loadImg(Context context, String imgUri, ImageView view, int defaultImg) {
-        Drawable drawable = ContextCompat.getDrawable(context, defaultImg);
+        CircularProgressDrawable loading = new CircularProgressDrawable(context);
+        loading.setStyle(CircularProgressDrawable.LARGE);
+        loading.setStrokeWidth(3);
+        loading.start();
         if (imgUri != null && !imgUri.isEmpty()) {
             Log.d("IMG", imgUri);
-            Glide.with(context).load(imgUri).placeholder(drawable).into(view);
+            Glide.with(context).load(imgUri).placeholder(loading).into(view);
+        } else if (imgUri != null && imgUri.isEmpty()) {
+            Glide.with(context).load(defaultImg).placeholder(loading).into(view);
         }
     }
 
