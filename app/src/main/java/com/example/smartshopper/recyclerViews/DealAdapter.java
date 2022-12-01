@@ -82,7 +82,7 @@ public class DealAdapter extends RecyclerView.Adapter<DealViewHolder> {
             platformHelpers.downVoteDeal(deals.get(position).getDealID(), platformHelpers.getCurrentUserID(), platformHelpers.getCurrentUser());
             platformHelpers.getNumDownVotesAndUpdateDeal(deals.get(position).getDealID(), response -> {
                 holder.tv_numDownVotes.setText(String.valueOf(response));
-            });;
+            });
         });
         holder.frame_upVote.setOnClickListener(v -> {
             platformHelpers.upVoteDeal(deals.get(position).getDealID(), platformHelpers.getCurrentUserID(), platformHelpers.getCurrentUser());
