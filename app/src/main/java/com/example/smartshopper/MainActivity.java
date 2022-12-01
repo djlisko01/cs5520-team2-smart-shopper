@@ -16,6 +16,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class MainActivity extends MenuActivity {
     RecyclerView rv_dealsRecyclerView;
+    View loadingAnimation;
     PlatformHelpers platformHelpers;
     DealAdapter adapter;
     LocalStorage localStorage;
@@ -29,6 +30,7 @@ public class MainActivity extends MenuActivity {
         // Instantiate objects
         platformHelpers = new PlatformHelpers(this);
         adapter = new DealAdapter(this);
+        loadingAnimation = findViewById(R.id.loadingAnimation);
 
         // Recycler View setup
         rv_dealsRecyclerView = findViewById(R.id.rv_dealsRecyclerView);
@@ -36,7 +38,7 @@ public class MainActivity extends MenuActivity {
         rv_dealsRecyclerView.setAdapter(adapter);
 
         // Get deals from firebase:
-        platformHelpers.getDealsAndUpdateMainRV(adapter, null);
+        platformHelpers.getDealsAndUpdateMainRV(adapter, null, loadingAnimation);
 
         // Setup Search Listener
         setSearchListener();
@@ -55,13 +57,13 @@ public class MainActivity extends MenuActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                platformHelpers.getDealsAndUpdateMainRV(adapter, query);
+                platformHelpers.getDealsAndUpdateMainRV(adapter, query, loadingAnimation);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newQuery) {
-                platformHelpers.getDealsAndUpdateMainRV(adapter, newQuery);
+                platformHelpers.getDealsAndUpdateMainRV(adapter, newQuery, loadingAnimation);
                 return false;
             }
         });

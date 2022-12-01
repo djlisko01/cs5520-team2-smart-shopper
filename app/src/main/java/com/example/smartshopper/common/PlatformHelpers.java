@@ -165,14 +165,18 @@ public class PlatformHelpers {
         });
     }
 
-    public void getSavedDealsAndUpdateRV(DealAdapter adapter, TextView noSavedDeals) {
+    public void getSavedDealsAndUpdateRV(DealAdapter adapter, TextView noSavedDeals, View loadingAnimation) {
         if (localStorage.getCurrentUserID() == "") {
+            loadingAnimation.setVisibility(View.GONE);
             noSavedDeals.setVisibility(View.VISIBLE);
         } else {
             Query query = rtdbDatabase.getSavedDeals(localStorage.getCurrentUserID());
             query.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (loadingAnimation.getVisibility() != View.GONE) {
+                        loadingAnimation.setVisibility(View.GONE);
+                    }
                     List<Deal> savedDeals = new ArrayList<>();
                     for (DataSnapshot child : snapshot.getChildren()) {
                         getDealByKey(child.getValue(String.class), deal -> {
@@ -288,12 +292,15 @@ public class PlatformHelpers {
         });
     }
 
-    public void getDealsAndUpdateMainRV(DealAdapter adapter, String search) {
+    public void getDealsAndUpdateMainRV(DealAdapter adapter, String search, View loadingAnimation) {
         //TODO case switch queryEnum to get the correct query from FireBase
         Query query = rtdbDatabase.getBestDeals();
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (loadingAnimation.getVisibility() != View.GONE) {
+                    loadingAnimation.setVisibility(View.GONE);
+                }
                 List<Deal> deals = new ArrayList<>();
                 for (DataSnapshot child : snapshot.getChildren()) {
                     Deal deal = child.getValue(Deal.class);
