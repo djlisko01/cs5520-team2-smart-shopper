@@ -57,7 +57,6 @@ public class DealDetailsActivity extends AppCompatActivity {
             btn_AddComment.setVisibility(View.GONE);
         }
 
-
         platformHelpers = new PlatformHelpers(this);
 
         // Set view for current deal
@@ -87,22 +86,25 @@ public class DealDetailsActivity extends AppCompatActivity {
 
         iv_upVote.setOnClickListener(v -> {
             platformHelpers.upVoteDeal(deal.getDealID(), platformHelpers.getCurrentUserID(), platformHelpers.getCurrentUser());
-            platformHelpers.getNumUpVotesAndUpdateDeal(deal.getDealID(), response -> {
-                tv_numUpvotes.setText(String.valueOf(response));
-            });
         });
 
         iv_downVote.setOnClickListener(v -> {
+            // Send vote results to db after voting.
             platformHelpers.downVoteDeal(deal.getDealID(), platformHelpers.getCurrentUserID(), platformHelpers.getCurrentUser());
-            platformHelpers.getNumDownVotesAndUpdateDeal(deal.getDealID(), response -> {
-                tv_numDownvotes.setText(String.valueOf(response));
             });
-        });
     }
 
     public void setDealDetails(Deal data){
-        tv_numDownvotes.setText(String.format(Locale.US, "%d", data.getNumDownVotes()));
-        tv_numUpvotes.setText(String.format(Locale.US, "%d", data.getNumUpVotes()));
+        // UP VOTES
+        platformHelpers.getNumUpVotesAndUpdateDeal(deal.getDealID(), response -> {
+            tv_numUpvotes.setText(String.valueOf(response));
+        });
+
+        // DOWN VOTES
+        platformHelpers.getNumDownVotesAndUpdateDeal(deal.getDealID(), response -> {
+                    tv_numDownvotes.setText(String.valueOf(response));
+                });
+
         tv_salePrice.setText(
                 String.format(Locale.US, "$%.2f", data.getSalePrice())
         );
