@@ -68,10 +68,12 @@ public class CreateDealActivity extends MenuActivity {
               .show();
         }
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            Log.d("CURRENTLOC", "HERE");
             currentLocation = null;
         }
         else {
+            Log.d("CURRENTLOC", "THERE");
             currentLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         }
 
