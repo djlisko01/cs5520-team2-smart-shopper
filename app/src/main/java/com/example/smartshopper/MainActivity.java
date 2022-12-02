@@ -6,21 +6,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.SearchView;
-import android.widget.Toast;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -30,19 +21,10 @@ import com.example.smartshopper.common.PlatformHelpers;
 import com.example.smartshopper.recyclerViews.DealAdapter;
 import com.example.smartshopper.utilities.LocalStorage;
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.Priority;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.concurrent.Executor;
-import java.util.function.Consumer;
 
 public class MainActivity extends MenuActivity {
   RecyclerView rv_dealsRecyclerView;
@@ -56,32 +38,6 @@ public class MainActivity extends MenuActivity {
   private final static int COARSE_REQUEST_CODE = 100;
   Context context = this;
   Location currentLocation;
-
-  private void askCoarsePermission() {
-    ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, COARSE_REQUEST_CODE);
-  }
-
-  private void askFinePermission() {
-    ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, FINE_REQUEST_CODE);
-  }
-
-  @Override
-  protected void onResume() {
-    super.onResume();
-    if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-      new AlertDialog.Builder(context)
-        .setMessage("This app uses device location. Please turn on your devices location for optimal experience.")
-        .setPositiveButton("OK", (paramDialogInterface, paramInt) -> {
-          startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-        })
-        .setNegativeButton("No thanks", (dialog, which) -> {
-          return;
-        })
-        .show();
-    }
-    getLocationAndUpdateRV();
-  }
-
 
   @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,31 +57,26 @@ public class MainActivity extends MenuActivity {
         rv_dealsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         rv_dealsRecyclerView.setAdapter(adapter);
 
-        // Get deals from firebase:
-//        platformHelpers.getDealsAndUpdateMainRV(adapter, null, loadingAnimation);
-        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-          new AlertDialog.Builder(context)
-            .setMessage("This app uses device location. Please turn on your devices location for optimal experience.")
-            .setPositiveButton("OK", (paramDialogInterface, paramInt) -> {
-              startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-            })
-            .setNegativeButton("No thanks", (dialog, which) -> {
-              return;
-            })
-            .show();
-        }
-
-        getLocationAndUpdateRV();
+        // are these both checking location permissions? confused between the two -- MICHAEL
+        checkLocationManagerEnabled();
+        checkLocationPermissionAndGetLocation();
 
         // Setup Search Listener
         setSearchListener();
 
         // Setup button listener on add deal (+) button
         setCreateDealButtonListener();
+
         // Notification channel
         if (localStorage.userIsLoggedIn()) {
           platformHelpers.createNotifChannel();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        platformHelpers.getDealsAndUpdateMainRV(adapter, null, currentLocation, loadingAnimation);
     }
 
     private void setSearchListener() {
@@ -184,12 +135,34 @@ public class MainActivity extends MenuActivity {
     }
   }
 
-  public void getLocationAndUpdateRV() {
+    private void askCoarsePermission() {
+        ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, COARSE_REQUEST_CODE);
+    }
+
+    private void askFinePermission() {
+        ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, FINE_REQUEST_CODE);
+    }
+
+  public void checkLocationManagerEnabled() {
+      if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+          new AlertDialog.Builder(context)
+                  .setMessage("This app uses device location. Please turn on your devices location for optimal experience.")
+                  .setPositiveButton("OK", (paramDialogInterface, paramInt) -> {
+                      startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                  })
+                  .setNegativeButton("No thanks", (dialog, which) -> {
+                      return;
+                  })
+                  .show();
+      }
+  }
+
+  public void checkLocationPermissionAndGetLocation() {
     if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
       askFinePermission();
     }
     if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-      askFinePermission();
+      askCoarsePermission();
     }
     if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
         fusedLocationProviderClient.getCurrentLocation(Priority.PRIORITY_BALANCED_POWER_ACCURACY, null).addOnSuccessListener(location -> {
@@ -198,6 +171,5 @@ public class MainActivity extends MenuActivity {
             }
         });
     }
-      platformHelpers.getDealsAndUpdateMainRV(adapter, null, currentLocation, loadingAnimation);
   }
 }

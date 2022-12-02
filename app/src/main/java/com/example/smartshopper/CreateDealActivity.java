@@ -170,9 +170,11 @@ public class CreateDealActivity extends MenuActivity {
                 Double originalPriceDouble = Double.parseDouble(originalPrice);
                 Double latitude = 0.0;
                 Double longitude = 0.0;
+                double newLatitude = currentLocation.getLatitude();
                 if (currentLocation != null) {
                     latitude = new Double(currentLocation.getLatitude());
-                    longitude = new Double(currentLocation.getLongitude());
+//                    TODO: fix bug (this shouldn't have to be taken the absolute value of)
+                    longitude = Math.abs(new Double(currentLocation.getLongitude()));
                 }
                 // Get currently logged in userUUID
                 LocalStorage localStorage = new LocalStorage(CreateDealActivity.this);
