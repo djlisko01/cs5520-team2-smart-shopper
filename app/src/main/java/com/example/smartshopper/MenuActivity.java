@@ -28,10 +28,10 @@ public class MenuActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         localStorage = new LocalStorage(this);
         loginMenuItem = findViewById(R.id.nav_logout);
-        if (localStorage != null && localStorage.userIsLoggedIn()) {
+        if (loginMenuItem != null && localStorage != null && localStorage.userIsLoggedIn()) {
             loginMenuItem.setTitle("Sign Out");
         }
-        else if (localStorage != null && !localStorage.userIsLoggedIn()) {
+        else if (loginMenuItem != null && localStorage != null && !localStorage.userIsLoggedIn()) {
             loginMenuItem.setTitle("Sign In");
         }
         // https://www.geeksforgeeks.org/navigation-drawer-in-android/
@@ -66,7 +66,9 @@ public class MenuActivity extends AppCompatActivity {
             startActivity(loginIntent);
         }
         else {
-            loginMenuItem.setTitle("Sign In");
+            if (loginMenuItem != null) {
+                loginMenuItem.setTitle("Sign In");
+            }
             localStorage.signOut();
         }
     }
