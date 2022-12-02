@@ -71,8 +71,9 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsViewHolder> {
 //        holder.rv_responses.setLayoutManager(new LinearLayoutManager(context));
 
         // Load user profile picture.
+        // TODO: change imgURI from empty string
         PlatformHelpers.loadImg(context,
-                "/hello/",
+                "",
                 holder.img_profilePic,
                 R.drawable.missing_profile_pic);
 

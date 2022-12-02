@@ -11,10 +11,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import androidx.annotation.NonNull;
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
+
 import androidx.core.content.ContextCompat;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import com.example.smartshopper.models.Comment;
 import com.example.smartshopper.models.Deal;
@@ -25,6 +27,7 @@ import com.example.smartshopper.recyclerViews.ProfileAdapter;
 import com.example.smartshopper.responseInterfaces.BoolInterface;
 import com.example.smartshopper.responseInterfaces.CommentInterface;
 import com.example.smartshopper.responseInterfaces.DealInterface;
+import com.example.smartshopper.responseInterfaces.IntegerInterface;
 import com.example.smartshopper.responseInterfaces.StringInterface;
 import com.example.smartshopper.responseInterfaces.UserInterface;
 import com.example.smartshopper.services.RTDBService;
@@ -167,14 +170,18 @@ public class PlatformHelpers {
         });
     }
 
-    public void getSavedDealsAndUpdateRV(DealAdapter adapter, TextView noSavedDeals) {
+    public void getSavedDealsAndUpdateRV(DealAdapter adapter, TextView noSavedDeals, View loadingAnimation) {
         if (localStorage.getCurrentUserID() == "") {
+            loadingAnimation.setVisibility(View.GONE);
             noSavedDeals.setVisibility(View.VISIBLE);
         } else {
             Query query = rtdbDatabase.getSavedDeals(localStorage.getCurrentUserID());
             query.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (loadingAnimation.getVisibility() != View.GONE) {
+                        loadingAnimation.setVisibility(View.GONE);
+                    }
                     List<Deal> savedDeals = new ArrayList<>();
                     for (DataSnapshot child : snapshot.getChildren()) {
                         getDealByKey(child.getValue(String.class), deal -> {
@@ -194,6 +201,37 @@ public class PlatformHelpers {
                 }
             });
         }
+    }
+
+    public void getNumUpVotesAndUpdateDeal(String dealID, IntegerInterface integerInterface) {
+        Query query = rtdbDatabase.getNumUpVotes(dealID);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                integerInterface.onCallback(snapshot.getValue(Integer.class));
+                Log.d("UPVOTEEEEE", "" + snapshot.getValue());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    public void getNumDownVotesAndUpdateDeal(String dealID, IntegerInterface integerInterface) {
+        Query query = rtdbDatabase.getNumDownVotes(dealID);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                integerInterface.onCallback(snapshot.getValue(Integer.class));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     public void checkIfUserDownVotedDeal(String dealID, String userID, BoolInterface boolInterface) {
@@ -289,12 +327,15 @@ public class PlatformHelpers {
         });
     }
 
-    public void getDealsAndUpdateMainRV(DealAdapter adapter, Location location, String search) {
+    public void getDealsAndUpdateMainRV(DealAdapter adapter, String search, Location location, View loadingAnimation) {
         //TODO case switch queryEnum to get the correct query from FireBase
         Query query = rtdbDatabase.getBestDeals();
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (loadingAnimation.getVisibility() != View.GONE) {
+                    loadingAnimation.setVisibility(View.GONE);
+                }
                 List<Deal> deals = new ArrayList<>();
                 for (DataSnapshot child : snapshot.getChildren()) {
                     Deal deal = child.getValue(Deal.class);
@@ -371,12 +412,15 @@ public class PlatformHelpers {
      * @param defaultImg default image if there is an error (should be a local asset)
      */
     public static void loadImg(Context context, String imgUri, ImageView view, int defaultImg) {
-        Drawable drawable = ContextCompat.getDrawable(context, defaultImg);
+        CircularProgressDrawable loading = new CircularProgressDrawable(context);
+        loading.setStyle(CircularProgressDrawable.LARGE);
+        loading.setStrokeWidth(3);
+        loading.start();
         if (imgUri != null && !imgUri.isEmpty()) {
             Log.d("IMG", imgUri);
-            Glide.with(context).load(imgUri).into(view);
+            Glide.with(context).load(imgUri).diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).placeholder(loading).into(view);
         } else if (imgUri != null && imgUri.isEmpty()) {
-            Glide.with(context).load(drawable).into(view);
+            Glide.with(context).load(defaultImg).diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).placeholder(loading).into(view);
         }
     }
 

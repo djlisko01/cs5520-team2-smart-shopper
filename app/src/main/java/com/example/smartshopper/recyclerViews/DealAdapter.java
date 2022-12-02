@@ -77,13 +77,25 @@ public class DealAdapter extends RecyclerView.Adapter<DealViewHolder> {
             }
         });
 
+        // Get up/down votes from database;
+        //up votes
+        platformHelpers.getNumUpVotesAndUpdateDeal(deals.get(position).getDealID(), response -> {
+                    holder.tv_numUpvotes.setText(String.valueOf(response));
+                });
+
+        //down votes
+        platformHelpers.getNumDownVotesAndUpdateDeal(deals.get(position).getDealID(), response -> {
+            holder.tv_numDownVotes.setText(String.valueOf(response));
+        });
+
         // Up vote down vote listeners
         holder.frame_downVote.setOnClickListener(v -> {
             platformHelpers.downVoteDeal(deals.get(position).getDealID(), platformHelpers.getCurrentUserID(), platformHelpers.getCurrentUser());
         });
+
         holder.frame_upVote.setOnClickListener(v -> {
             platformHelpers.upVoteDeal(deals.get(position).getDealID(), platformHelpers.getCurrentUserID(), platformHelpers.getCurrentUser());
-        });
+            });
 
         // Entire deal card listener
         holder.itemView.setOnClickListener(v -> {

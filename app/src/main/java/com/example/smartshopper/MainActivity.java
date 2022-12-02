@@ -36,10 +36,11 @@ import java.util.Arrays;
 import java.util.Map;
 
 public class MainActivity extends MenuActivity {
-  RecyclerView rv_dealsRecyclerView;
-  PlatformHelpers platformHelpers;
-  DealAdapter adapter;
-  LocalStorage localStorage;
+    RecyclerView rv_dealsRecyclerView;
+    View loadingAnimation;
+    PlatformHelpers platformHelpers;
+    DealAdapter adapter;
+    LocalStorage localStorage;
   FusedLocationProviderClient fusedLocationProviderClient;
   LocationManager locationManager;
   private final static int FINE_REQUEST_CODE = 200;
@@ -83,12 +84,16 @@ public class MainActivity extends MenuActivity {
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context);
         platformHelpers = new PlatformHelpers(this);
         adapter = new DealAdapter(this);
+        loadingAnimation = findViewById(R.id.loadingAnimation);
+
         locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         // Recycler View setup
         rv_dealsRecyclerView = findViewById(R.id.rv_dealsRecyclerView);
         rv_dealsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         rv_dealsRecyclerView.setAdapter(adapter);
 
+        // Get deals from firebase:
+//        platformHelpers.getDealsAndUpdateMainRV(adapter, null, loadingAnimation);
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
           new AlertDialog.Builder(context)
             .setMessage("This app uses device location. Please turn on your devices location for optimal experience.")
@@ -119,13 +124,13 @@ public class MainActivity extends MenuActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                platformHelpers.getDealsAndUpdateMainRV(adapter,null, query);
+                platformHelpers.getDealsAndUpdateMainRV(adapter, query, null,loadingAnimation);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newQuery) {
-                platformHelpers.getDealsAndUpdateMainRV(adapter, null, newQuery);
+                platformHelpers.getDealsAndUpdateMainRV(adapter, newQuery,  null,loadingAnimation);
                 return false;
             }
         });
@@ -147,7 +152,7 @@ public class MainActivity extends MenuActivity {
     switch (requestCode) {
       case COARSE_REQUEST_CODE:
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_DENIED) {
-          platformHelpers.getDealsAndUpdateMainRV(adapter, null, null);
+          platformHelpers.getDealsAndUpdateMainRV(adapter, null, null, loadingAnimation);
         }
         else if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
           getLocationAndUpdateRV();
@@ -156,12 +161,12 @@ public class MainActivity extends MenuActivity {
           askFinePermission();
         }
         else {
-          platformHelpers.getDealsAndUpdateMainRV(adapter, null, null);
+            platformHelpers.getDealsAndUpdateMainRV(adapter, null, null, loadingAnimation);
         }
         break;
       case FINE_REQUEST_CODE:
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_DENIED) {
-          platformHelpers.getDealsAndUpdateMainRV(adapter, null, null);
+            platformHelpers.getDealsAndUpdateMainRV(adapter, null, null, loadingAnimation);
         }
         else if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
           getLocationAndUpdateRV();
@@ -170,7 +175,7 @@ public class MainActivity extends MenuActivity {
           askCoarsePermission();
         }
         else {
-          platformHelpers.getDealsAndUpdateMainRV(adapter, null, null);
+            platformHelpers.getDealsAndUpdateMainRV(adapter, null, null, loadingAnimation);
         }
         break;
     }
@@ -195,6 +200,6 @@ public class MainActivity extends MenuActivity {
     else {
       currentLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
     }
-    platformHelpers.getDealsAndUpdateMainRV(adapter, currentLocation, null);
+      platformHelpers.getDealsAndUpdateMainRV(adapter, null, currentLocation, loadingAnimation);
   }
 }
