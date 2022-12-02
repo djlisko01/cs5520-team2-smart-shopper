@@ -166,59 +166,65 @@ public class CreateDealActivity extends MenuActivity {
                 String store = ((EditText) findViewById(R.id.editTextStore)).getText().toString();
                 String salePrice = ((EditText) findViewById(R.id.editTextSalePrice)).getText().toString();
                 String originalPrice = ((EditText) findViewById(R.id.editTextPrice)).getText().toString();
-                Double salePriceDouble = Double.parseDouble(salePrice);
-                Double originalPriceDouble = Double.parseDouble(originalPrice);
-                Double latitude = 0.0;
-                Double longitude = 0.0;
-                double newLatitude = currentLocation.getLatitude();
-                if (currentLocation != null) {
-                    latitude = new Double(currentLocation.getLatitude());
-                    longitude = new Double(currentLocation.getLongitude());
-                }
-                // Get currently logged in userUUID
-                LocalStorage localStorage = new LocalStorage(CreateDealActivity.this);
-                String userID = localStorage.getCurrentUserID();
 
-                // Create a new deal object
-                Deal deal;
-                if (currentLocation == null) {
-                    deal = new Deal(upc, title, originalPriceDouble, salePriceDouble, description, store, userID);
-                }
-                else {
-                    deal = new Deal(upc,
-                      title,
-                      originalPriceDouble,
-                      salePriceDouble,
-                      description,
-                      store,
-                      userID,
-                      latitude,
-                      longitude);
-                }
-                Intent intent = new Intent(CreateDealActivity.this, DealDetailsActivity.class);
-                // Check if image uploaded flow
-                if (image_uri != null && !image_uri.toString().isEmpty()) {
-                    // Get image
-                    cloudStorageService.uploadWithURI("images/" + image_uri.getLastPathSegment(), image_uri, new StringInterface() {
-                        @Override
-                        public void onCallback(String response) {
-                            String downloadURL = response;
-                            deal.setProductImg(downloadURL);
-                            String dealID = rtdbService.writeDeal(deal);
-                            deal.setDealID(dealID);
-                            // Go to detailed view of the deal
-                            intent.putExtra("dealItem", deal);
-                            startActivity(intent);
-                        }
-                    });
-                // no image uploaded flow
+                // Check for required fields
+                if (title.trim().isEmpty() || store.trim().isEmpty() || salePrice.isEmpty() || originalPrice.isEmpty()) {
+                    Toast.makeText(getApplicationContext(), "Please fill out required fields.", Toast.LENGTH_SHORT).show();
                 } else {
-                    String dealID = rtdbService.writeDeal(deal);
-                    Log.d("DEALS", dealID);
-                    deal.setDealID(dealID);
-                    // Go to detailed view of the deal
-                    intent.putExtra("dealItem", deal);
-                    startActivity(intent);
+                    Double salePriceDouble = Double.parseDouble(salePrice);
+                    Double originalPriceDouble = Double.parseDouble(originalPrice);
+                    Double latitude = 0.0;
+                    Double longitude = 0.0;
+
+                    if (currentLocation != null) {
+                        latitude = new Double(currentLocation.getLatitude());
+                        longitude = new Double(currentLocation.getLongitude());
+                    }
+                    // Get currently logged in userUUID
+                    LocalStorage localStorage = new LocalStorage(CreateDealActivity.this);
+                    String userID = localStorage.getCurrentUserID();
+
+                    // Create a new deal object
+                    Deal deal;
+                    if (currentLocation == null) {
+                        deal = new Deal(upc, title, originalPriceDouble, salePriceDouble, description, store, userID);
+                    }
+                    else {
+                        deal = new Deal(upc,
+                                title,
+                                originalPriceDouble,
+                                salePriceDouble,
+                                description,
+                                store,
+                                userID,
+                                latitude,
+                                longitude);
+                    }
+                    Intent intent = new Intent(CreateDealActivity.this, DealDetailsActivity.class);
+                    // Check if image uploaded flow
+                    if (image_uri != null && !image_uri.toString().isEmpty()) {
+                        // Get image
+                        cloudStorageService.uploadWithURI("images/" + image_uri.getLastPathSegment(), image_uri, new StringInterface() {
+                            @Override
+                            public void onCallback(String response) {
+                                String downloadURL = response;
+                                deal.setProductImg(downloadURL);
+                                String dealID = rtdbService.writeDeal(deal);
+                                deal.setDealID(dealID);
+                                // Go to detailed view of the deal
+                                intent.putExtra("dealItem", deal);
+                                startActivity(intent);
+                            }
+                        });
+                        // no image uploaded flow
+                    } else {
+                        String dealID = rtdbService.writeDeal(deal);
+                        Log.d("DEALS", dealID);
+                        deal.setDealID(dealID);
+                        // Go to detailed view of the deal
+                        intent.putExtra("dealItem", deal);
+                        startActivity(intent);
+                    }
                 }
             }
         });
