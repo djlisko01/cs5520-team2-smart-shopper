@@ -80,7 +80,6 @@ public class MainActivity extends MenuActivity {
         .show();
     }
     getLocationAndUpdateRV();
-    Log.d("CURRENTLOC", currentLocation + "");
   }
 
 
