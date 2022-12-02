@@ -47,7 +47,6 @@ public class CreateAccountActivity extends AppCompatActivity {
       String email = emailET.getText().toString();
       String password = passwordET.getText().toString();
       String confirmPassword = confirmPasswordET.getText().toString();
-      Log.v("Checkbox value", String.valueOf(agreeToTerms.isChecked()));
 
 //        todo: would be nice if we checked for valid email with regex here
       if (username.equals("") || email.equals("") || password.equals("") || confirmPassword.equals("") || !agreeToTerms.isChecked()) {

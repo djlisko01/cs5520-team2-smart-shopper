@@ -3,6 +3,8 @@ package com.example.smartshopper.common;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.location.Location;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -12,8 +14,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 
+import androidx.core.content.ContextCompat;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+
 import com.example.smartshopper.models.Comment;
 import com.example.smartshopper.models.Deal;
 import com.example.smartshopper.models.User;
@@ -33,6 +37,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
@@ -40,6 +45,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -188,7 +195,6 @@ public class PlatformHelpers {
                         });
                     }
                 }
-
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
                     Log.e("DB_ERROR", error.getMessage());
@@ -305,7 +311,7 @@ public class PlatformHelpers {
                     Comment comment = child.getValue(Comment.class);
                     assert comment != null;
                     // Converts nested responses to a list.
-                    List<Comment> responses = comment.RepliesMapToList();
+                    List <Comment> responses = comment.RepliesMapToList();
                     comment.setListReplies(responses);
                     comments.add(comment);
                 }
@@ -321,7 +327,7 @@ public class PlatformHelpers {
         });
     }
 
-    public void getDealsAndUpdateMainRV(DealAdapter adapter, String search, View loadingAnimation) {
+    public void getDealsAndUpdateMainRV(DealAdapter adapter, String search, Location location, View loadingAnimation) {
         //TODO case switch queryEnum to get the correct query from FireBase
         Query query = rtdbDatabase.getBestDeals();
         query.addValueEventListener(new ValueEventListener() {
@@ -345,9 +351,20 @@ public class PlatformHelpers {
                                 }
                             }
                         }
-
-                        // If no search term is provided, add all deals
-                    } else {
+                    }
+                    else if (location != null){
+                        if (deal.getLatitude() != null || deal.getLongitude() != null) {
+                            assert deal != null;
+                            Location dealLocation = new Location("deal");
+                            dealLocation.setLatitude(deal.getLatitude());
+                            dealLocation.setLongitude(deal.getLongitude());
+                            float distance = location.distanceTo(dealLocation);
+                            if ( distance > (float)10 ) {
+                                deals.add(deal);
+                            }
+                        }
+                    } // If no search term is provided, add all deals
+                     else {
                         deals.add(deal);
                     }
                 }
@@ -407,7 +424,6 @@ public class PlatformHelpers {
         }
     }
 
-
     // NOTIFICATIONS
 
     public void createNotifChannel() {
@@ -431,7 +447,7 @@ public class PlatformHelpers {
 
     public void subscribeToDeal(Deal deal) {
         FirebaseMessaging.getInstance().subscribeToTopic(deal.getDealID()).addOnCompleteListener(task -> {
-            if (!task.isSuccessful()) {
+            if(!task.isSuccessful()) {
                 Log.d("SUBSCRIBE", "Failed to subscribe to deal (" + deal.getDealID() + ").");
             } else {
                 Log.d("SUBSCRIBE", "Successfully subscribed to deal (" + deal.getDealID() + ").");
@@ -442,7 +458,7 @@ public class PlatformHelpers {
 
     public void unsubscribeFromDeal(Deal deal) {
         FirebaseMessaging.getInstance().unsubscribeFromTopic(deal.getDealID()).addOnCompleteListener(task -> {
-            if (!task.isSuccessful()) {
+            if(!task.isSuccessful()) {
                 Log.d("SUBSCRIBE", "Failed to unsubscribe from deal (" + deal.getDealID() + ")");
             } else {
                 Log.d("SUBSCRIBE", "Successfully unsubscribed from deal (" + deal.getDealID() + ").");
@@ -463,7 +479,7 @@ public class PlatformHelpers {
                 payload.put("to", "/topics/" + deal.getDealID());
                 payload.put("priority", "high");
                 payload.put("notification", notification);
-            } catch (Exception e) {
+            } catch(Exception e) {
                 Log.e("NOTIFICATION", e.getMessage());
             }
 
