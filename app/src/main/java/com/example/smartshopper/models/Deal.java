@@ -47,7 +47,7 @@ public class Deal implements Serializable {
         this.productImg = "";
         this.comments = new ArrayList<>();
     }
-    public Deal(String upc, String title, Double originalPriceDouble, Double salePrice, String description, String store, String userUUID, Double latitude, Double longitude) {
+    public Deal(String upc, String title, Double originalPrice, Double salePrice, String description, String store, String userUUID, Double latitude, Double longitude) {
         this.upc = upc;
         this.title = title;
         this.originalPrice = originalPrice;
