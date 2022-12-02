@@ -336,7 +336,7 @@ public class PlatformHelpers {
         });
     }
 
-    public void getDealsAndUpdateMainRV(DealAdapter adapter, String search, Location location, View loadingAnimation) {
+    public void getDealsAndUpdateMainRV(DealAdapter adapter, String search, Location userLocation, View loadingAnimation) {
         //TODO case switch queryEnum to get the correct query from FireBase
         Query query = rtdbDatabase.getBestDeals();
         query.addValueEventListener(new ValueEventListener() {
@@ -361,16 +361,19 @@ public class PlatformHelpers {
                             }
                         }
                     }
-                    else if (location != null){
-                        if (deal.getLatitude() != null || deal.getLongitude() != null) {
+                    // location
+                    else if (userLocation != null) {
+                        if (deal.getLatitude() != null && deal.getLongitude() != null) {
                             assert deal != null;
                             Location dealLocation = new Location("deal");
                             dealLocation.setLatitude(deal.getLatitude());
                             dealLocation.setLongitude(deal.getLongitude());
-                            float distance = location.distanceTo(dealLocation);
-                            if ( distance > (float)10 ) {
-                                deals.add(deal);
-                            }
+                            float distance = userLocation.distanceTo(dealLocation);
+                            // have list of deals, least to most popular
+                            // list of distances
+                        } else {
+                            // if deal has no location, add it to beginning of list (will appear last in RecyclerView)
+                            deals.add(0, deal);
                         }
                     } // If no search term is provided, add all deals
                      else {
