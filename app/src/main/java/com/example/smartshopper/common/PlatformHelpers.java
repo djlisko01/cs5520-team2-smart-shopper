@@ -5,7 +5,6 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.util.Log;
 import android.view.View;
@@ -17,12 +16,12 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 
-import androidx.core.content.ContextCompat;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import com.example.smartshopper.models.Comment;
 import com.example.smartshopper.models.Deal;
+import com.example.smartshopper.models.DealDistance;
 import com.example.smartshopper.models.User;
 import com.example.smartshopper.recyclerViews.CommentsAdapter;
 import com.example.smartshopper.recyclerViews.DealAdapter;
@@ -44,7 +43,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
@@ -52,8 +50,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -204,6 +200,7 @@ public class PlatformHelpers {
                         });
                     }
                 }
+
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
                     Log.e("DB_ERROR", error.getMessage());
@@ -320,7 +317,7 @@ public class PlatformHelpers {
                     Comment comment = child.getValue(Comment.class);
                     assert comment != null;
                     // Converts nested responses to a list.
-                    List <Comment> responses = comment.RepliesMapToList();
+                    List<Comment> responses = comment.RepliesMapToList();
                     comment.setListReplies(responses);
                     comments.add(comment);
                 }
@@ -346,6 +343,8 @@ public class PlatformHelpers {
                     loadingAnimation.setVisibility(View.GONE);
                 }
                 List<Deal> deals = new ArrayList<>();
+                List<DealDistance> dealsByDistance = new ArrayList<>(); // Only used for location sorting
+
                 for (DataSnapshot child : snapshot.getChildren()) {
                     Deal deal = child.getValue(Deal.class);
                     assert deal != null;
@@ -368,19 +367,29 @@ public class PlatformHelpers {
                             Location dealLocation = new Location("deal");
                             dealLocation.setLatitude(deal.getLatitude());
                             dealLocation.setLongitude(deal.getLongitude());
-                            float distance = userLocation.distanceTo(dealLocation);
-                            // have list of deals, least to most popular
-                            // list of distances
+                            float distanceBetweenUserAndDeal = userLocation.distanceTo(dealLocation);
+                            DealDistance tempDeal = new DealDistance(distanceBetweenUserAndDeal, deal);
+                            dealsByDistance.add(tempDeal);
                         } else {
-                            // if deal has no location, add it to beginning of list (will appear last in RecyclerView)
-                            deals.add(0, deal);
+                            // if deal has no location, make it INFINITY meters
+                            dealsByDistance.add(new DealDistance(Float.POSITIVE_INFINITY, deal));
                         }
                     } // If no search term is provided, add all deals
-                     else {
+                    else {
                         deals.add(deal);
                     }
                 }
-                Collections.reverse(deals);
+
+                // If user is sorting by distance
+                if (!dealsByDistance.isEmpty()) {
+                    Collections.sort(dealsByDistance);
+                    for (DealDistance dealDistance : dealsByDistance) {
+                        deals.add(dealDistance.getDeal());
+                    }
+                } else {
+                    Collections.reverse(deals);
+                }
+
                 adapter.updateData(deals);
             }
 
@@ -459,7 +468,7 @@ public class PlatformHelpers {
 
     public void subscribeToDeal(Deal deal) {
         FirebaseMessaging.getInstance().subscribeToTopic(deal.getDealID()).addOnCompleteListener(task -> {
-            if(!task.isSuccessful()) {
+            if (!task.isSuccessful()) {
                 Log.d("SUBSCRIBE", "Failed to subscribe to deal (" + deal.getDealID() + ").");
             } else {
                 Log.d("SUBSCRIBE", "Successfully subscribed to deal (" + deal.getDealID() + ").");
@@ -470,7 +479,7 @@ public class PlatformHelpers {
 
     public void unsubscribeFromDeal(Deal deal) {
         FirebaseMessaging.getInstance().unsubscribeFromTopic(deal.getDealID()).addOnCompleteListener(task -> {
-            if(!task.isSuccessful()) {
+            if (!task.isSuccessful()) {
                 Log.d("SUBSCRIBE", "Failed to unsubscribe from deal (" + deal.getDealID() + ")");
             } else {
                 Log.d("SUBSCRIBE", "Successfully unsubscribed from deal (" + deal.getDealID() + ").");
@@ -491,7 +500,7 @@ public class PlatformHelpers {
                 payload.put("to", "/topics/" + deal.getDealID());
                 payload.put("priority", "high");
                 payload.put("notification", notification);
-            } catch(Exception e) {
+            } catch (Exception e) {
                 Log.e("NOTIFICATION", e.getMessage());
             }
 
