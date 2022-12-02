@@ -28,6 +28,7 @@ import com.example.smartshopper.common.PlatformHelpers;
 import com.example.smartshopper.recyclerViews.DealAdapter;
 import com.example.smartshopper.utilities.LocalStorage;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -36,11 +37,11 @@ import java.util.Arrays;
 import java.util.Map;
 
 public class MainActivity extends MenuActivity {
-    RecyclerView rv_dealsRecyclerView;
-    View loadingAnimation;
-    PlatformHelpers platformHelpers;
-    DealAdapter adapter;
-    LocalStorage localStorage;
+  RecyclerView rv_dealsRecyclerView;
+  View loadingAnimation;
+  PlatformHelpers platformHelpers;
+  DealAdapter adapter;
+  LocalStorage localStorage;
   FusedLocationProviderClient fusedLocationProviderClient;
   LocationManager locationManager;
   private final static int FINE_REQUEST_CODE = 200;
