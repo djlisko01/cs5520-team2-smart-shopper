@@ -1,8 +1,10 @@
 package com.example.smartshopper.common;
 
+import android.Manifest;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.util.Log;
@@ -12,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 
 import androidx.core.content.ContextCompat;
@@ -28,10 +31,14 @@ import com.example.smartshopper.responseInterfaces.BoolInterface;
 import com.example.smartshopper.responseInterfaces.CommentInterface;
 import com.example.smartshopper.responseInterfaces.DealInterface;
 import com.example.smartshopper.responseInterfaces.IntegerInterface;
+import com.example.smartshopper.responseInterfaces.LocationInterface;
 import com.example.smartshopper.responseInterfaces.StringInterface;
 import com.example.smartshopper.responseInterfaces.UserInterface;
 import com.example.smartshopper.services.RTDBService;
 import com.example.smartshopper.utilities.LocalStorage;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.Priority;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
@@ -58,6 +65,7 @@ public class PlatformHelpers {
     private final RTDBService rtdbDatabase;
     private LocalStorage localStorage;
     private Context context;
+    private FusedLocationProviderClient fusedLocationProviderClient;
 
     private static final String API_KEY = "key=AAAAK0dsXYI:APA91bEA8XruUT0Lyd6WCdmnrae9tsppGI3Rs0_sG6iJMm5EfCG9nMCIPcuzdGcdC8BzFxdXBQ7mpKt_r-g2IQRH96d348MH3oHaxDFK0SjYMabmTbA8ieMDWoVU-Cbie6PqvVlK2pTm";
 
@@ -65,6 +73,7 @@ public class PlatformHelpers {
         this.rtdbDatabase = new RTDBService();
         this.context = context;
         this.localStorage = new LocalStorage(context);
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context);
     }
 
     // Get logged in user
@@ -589,5 +598,14 @@ public class PlatformHelpers {
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
+    }
+
+    // Location
+    public void getCurrentLocation(LocationInterface locationInterface) {
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            fusedLocationProviderClient.getCurrentLocation(Priority.PRIORITY_BALANCED_POWER_ACCURACY, null).addOnSuccessListener(location -> {
+                locationInterface.onCallback(location);
+            });
+        }
     }
 }

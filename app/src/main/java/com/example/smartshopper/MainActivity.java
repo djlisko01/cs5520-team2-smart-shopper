@@ -1,12 +1,10 @@
 package com.example.smartshopper;
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,10 +18,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.smartshopper.common.PlatformHelpers;
 import com.example.smartshopper.recyclerViews.DealAdapter;
+import com.example.smartshopper.responseInterfaces.LocationInterface;
 import com.example.smartshopper.utilities.LocalStorage;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.Priority;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 
@@ -34,8 +32,6 @@ public class MainActivity extends MenuActivity {
   DealAdapter adapter;
   LocalStorage localStorage;
   FusedLocationProviderClient fusedLocationProviderClient;
-  //LocationManager locationManager;
-  private final static int FINE_REQUEST_CODE = 200;
   private final static int COARSE_REQUEST_CODE = 100;
   Context context = this;
   Location currentLocation;
@@ -44,22 +40,19 @@ public class MainActivity extends MenuActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        localStorage = new LocalStorage(this);
-        // Instantiate objects
 
+      // Instantiate objects
+        localStorage = new LocalStorage(this);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context);
         platformHelpers = new PlatformHelpers(this);
         adapter = new DealAdapter(this);
         loadingAnimation = findViewById(R.id.loadingAnimation);
 
-        //locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         // Recycler View setup
         rv_dealsRecyclerView = findViewById(R.id.rv_dealsRecyclerView);
         rv_dealsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         rv_dealsRecyclerView.setAdapter(adapter);
 
-        // are these both checking location permissions? confused between the two -- MICHAEL
-        //checkLocationManagerEnabled();
         checkLocationPermissionAndGetLocation();
 
         // Setup Search Listener
@@ -77,7 +70,6 @@ public class MainActivity extends MenuActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d("CURRENTLOC", "onResume: " + currentLocation);
         platformHelpers.getDealsAndUpdateMainRV(adapter, null, currentLocation, loadingAnimation);
     }
 
@@ -116,27 +108,15 @@ public class MainActivity extends MenuActivity {
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_DENIED) {
           platformHelpers.getDealsAndUpdateMainRV(adapter, null, null, loadingAnimation);
         }
-//        else if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED &&
-//                ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//          askFinePermission();
-//        }
         else {
-            getCurrentLocation();
+            platformHelpers.getCurrentLocation(location -> {
+                if (location != null) {
+                    currentLocation = location;
+                }
+            });
             platformHelpers.getDealsAndUpdateMainRV(adapter, null, null, loadingAnimation);
         }
         break;
-//      case FINE_REQUEST_CODE:
-//        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_DENIED) {
-//            platformHelpers.getDealsAndUpdateMainRV(adapter, null, null, loadingAnimation);
-//        }
-//        else if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED
-//                && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//          askCoarsePermission();
-//        }
-//        else {
-//            platformHelpers.getDealsAndUpdateMainRV(adapter, null, null, loadingAnimation);
-//        }
-//        break;
     }
   }
 
@@ -144,42 +124,14 @@ public class MainActivity extends MenuActivity {
         ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, COARSE_REQUEST_CODE);
     }
 
-//    private void askFinePermission() {
-//        ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, FINE_REQUEST_CODE);
-//    }
-
-//  public void checkLocationManagerEnabled() {
-//      if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-//          new AlertDialog.Builder(context)
-//                  .setMessage("This app uses device location. Please turn on your devices location for optimal experience.")
-//                  .setPositiveButton("OK", (paramDialogInterface, paramInt) -> {
-//                      startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-//                  })
-//                  .setNegativeButton("No thanks", (dialog, which) -> {
-//                      return;
-//                  })
-//                  .show();
-//      }
-//  }
-
   public void checkLocationPermissionAndGetLocation() {
-//    if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//      askFinePermission();
-//    }
     if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
       askCoarsePermission();
     }
-    getCurrentLocation();
-  }
-
-  public void getCurrentLocation() {
-      if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-          fusedLocationProviderClient.getCurrentLocation(Priority.PRIORITY_BALANCED_POWER_ACCURACY, null).addOnSuccessListener(location -> {
-              if (location != null) {
-                  currentLocation = location;
-              }
-              Log.d("CURRENTLOC", "checkLocPermMethod: " + currentLocation);
-          });
-      }
+    platformHelpers.getCurrentLocation(location -> {
+        if (location != null) {
+            currentLocation = location;
+        }
+    });
   }
 }

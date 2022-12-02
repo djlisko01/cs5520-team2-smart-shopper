@@ -22,6 +22,7 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 
 import com.bumptech.glide.Glide;
+import com.example.smartshopper.common.PlatformHelpers;
 import com.example.smartshopper.models.Deal;
 import com.example.smartshopper.responseInterfaces.StringInterface;
 import com.example.smartshopper.services.CloudStorageService;
@@ -37,14 +38,13 @@ public class CreateDealActivity extends MenuActivity {
     private static final int LOAD_IMAGE_CODE = 123;
     public static final int IMAGE_CAPTURE_CODE = 654;
 
+    PlatformHelpers platformHelpers;
     CloudStorageService cloudStorageService;
     FloatingActionButton fab_camera;
     FloatingActionButton fab_gallery;
     ImageView iv_imagePreview;
     RTDBService rtdbService = new RTDBService();
     Uri image_uri;
-    LocationManager locationManager;
-    Context context = this;
     Location currentLocation;
 
     @Override
@@ -53,28 +53,21 @@ public class CreateDealActivity extends MenuActivity {
         setContentView(R.layout.activity_create_deal);
         setCreateDealButtonListener();
         cloudStorageService = new CloudStorageService();
+        platformHelpers = new PlatformHelpers(this);
 
         fab_camera = findViewById(R.id.camera_fab);
         fab_gallery = findViewById(R.id.gallery_fab);
         iv_imagePreview = findViewById(R.id.iv_imagePreview);
-        locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-
-        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            new AlertDialog.Builder(context)
-              .setMessage("This app uses device location. Please turn on your devices location for optimal experience.")
-              .setPositiveButton("OK", (paramDialogInterface, paramInt) -> startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS)))
-              .setNegativeButton("No thanks", (dialog, which) -> {
-              })
-              .show();
-        }
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            Log.d("CURRENTLOC", "HERE");
             currentLocation = null;
         }
         else {
-            Log.d("CURRENTLOC", "THERE");
-            currentLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            platformHelpers.getCurrentLocation(location -> {
+                if (location != null) {
+                    currentLocation = location;
+                }
+            });
         }
 
         // Camera image
