@@ -66,14 +66,10 @@ public class MainActivity extends MenuActivity {
           platformHelpers.createNotifChannel();
         }
 
+        platformHelpers.getDealsAndUpdateMainRV(adapter, null, null, loadingAnimation);
+
         // method puts MainActivity onPause()
         checkLocationPermissionAndGetLocation();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        platformHelpers.getDealsAndUpdateMainRV(adapter, null, currentLocation, loadingAnimation);
     }
 
     private void setSearchListener() {
@@ -110,14 +106,6 @@ public class MainActivity extends MenuActivity {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_DENIED) {
                 platformHelpers.getDealsAndUpdateMainRV(adapter, null, null, loadingAnimation);
             }
-//                else {
-//                    platformHelpers.getCurrentLocation(location -> {
-//                        if (location != null) {
-//                            currentLocation = location;
-//                            platformHelpers.getDealsAndUpdateMainRV(adapter, null, currentLocation, loadingAnimation);
-//                        }
-//                    });
-//                }
         }
     }
 
