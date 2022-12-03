@@ -65,7 +65,6 @@ public class CloudStorageService {
                 if (task.isSuccessful()) {
                     Uri downloadUri = task.getResult();
                     stringInterface.onCallback(downloadUri.toString());
-                    Log.d("IMAGES", downloadUri.toString());
                 }
             }
         });
