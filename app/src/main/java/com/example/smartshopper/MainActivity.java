@@ -77,12 +77,22 @@ public class MainActivity extends MenuActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                if (query.isEmpty()) {
+                    toggleSort.setVisibility(View.VISIBLE);
+                } else {
+                    toggleSort.setVisibility(View.GONE);
+                }
                 platformHelpers.getDealsAndUpdateMainRV(adapter, query, null,loadingAnimation);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newQuery) {
+                if (newQuery.isEmpty()) {
+                    toggleSort.setVisibility(View.VISIBLE);
+                } else {
+                    toggleSort.setVisibility(View.GONE);
+                }
                 platformHelpers.getDealsAndUpdateMainRV(adapter, newQuery,  null,loadingAnimation);
                 return false;
             }
