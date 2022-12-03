@@ -1,9 +1,10 @@
 package com.example.smartshopper.common;
 
+import android.Manifest;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.util.Log;
 import android.view.View;
@@ -12,14 +13,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 
-import androidx.core.content.ContextCompat;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import com.example.smartshopper.models.Comment;
 import com.example.smartshopper.models.Deal;
+import com.example.smartshopper.models.DealDistance;
 import com.example.smartshopper.models.User;
 import com.example.smartshopper.recyclerViews.CommentsAdapter;
 import com.example.smartshopper.recyclerViews.DealAdapter;
@@ -28,16 +30,19 @@ import com.example.smartshopper.responseInterfaces.BoolInterface;
 import com.example.smartshopper.responseInterfaces.CommentInterface;
 import com.example.smartshopper.responseInterfaces.DealInterface;
 import com.example.smartshopper.responseInterfaces.IntegerInterface;
+import com.example.smartshopper.responseInterfaces.LocationInterface;
 import com.example.smartshopper.responseInterfaces.StringInterface;
 import com.example.smartshopper.responseInterfaces.UserInterface;
 import com.example.smartshopper.services.RTDBService;
 import com.example.smartshopper.utilities.LocalStorage;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.Priority;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
@@ -45,8 +50,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -58,6 +61,7 @@ public class PlatformHelpers {
     private final RTDBService rtdbDatabase;
     private LocalStorage localStorage;
     private Context context;
+    private FusedLocationProviderClient fusedLocationProviderClient;
 
     private static final String API_KEY = "key=AAAAK0dsXYI:APA91bEA8XruUT0Lyd6WCdmnrae9tsppGI3Rs0_sG6iJMm5EfCG9nMCIPcuzdGcdC8BzFxdXBQ7mpKt_r-g2IQRH96d348MH3oHaxDFK0SjYMabmTbA8ieMDWoVU-Cbie6PqvVlK2pTm";
 
@@ -65,6 +69,7 @@ public class PlatformHelpers {
         this.rtdbDatabase = new RTDBService();
         this.context = context;
         this.localStorage = new LocalStorage(context);
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context);
     }
 
     // Get logged in user
@@ -195,6 +200,7 @@ public class PlatformHelpers {
                         });
                     }
                 }
+
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
                     Log.e("DB_ERROR", error.getMessage());
@@ -209,7 +215,6 @@ public class PlatformHelpers {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 integerInterface.onCallback(snapshot.getValue(Integer.class));
-                Log.d("UPVOTEEEEE", "" + snapshot.getValue());
             }
 
             @Override
@@ -311,7 +316,7 @@ public class PlatformHelpers {
                     Comment comment = child.getValue(Comment.class);
                     assert comment != null;
                     // Converts nested responses to a list.
-                    List <Comment> responses = comment.RepliesMapToList();
+                    List<Comment> responses = comment.RepliesMapToList();
                     comment.setListReplies(responses);
                     comments.add(comment);
                 }
@@ -327,7 +332,7 @@ public class PlatformHelpers {
         });
     }
 
-    public void getDealsAndUpdateMainRV(DealAdapter adapter, String search, Location location, View loadingAnimation) {
+    public void getDealsAndUpdateMainRV(DealAdapter adapter, String search, Location userLocation, View loadingAnimation) {
         //TODO case switch queryEnum to get the correct query from FireBase
         Query query = rtdbDatabase.getBestDeals();
         query.addValueEventListener(new ValueEventListener() {
@@ -337,6 +342,8 @@ public class PlatformHelpers {
                     loadingAnimation.setVisibility(View.GONE);
                 }
                 List<Deal> deals = new ArrayList<>();
+                List<DealDistance> dealsByDistance = new ArrayList<>(); // Only used for location sorting
+
                 for (DataSnapshot child : snapshot.getChildren()) {
                     Deal deal = child.getValue(Deal.class);
                     assert deal != null;
@@ -352,23 +359,36 @@ public class PlatformHelpers {
                             }
                         }
                     }
-                    else if (location != null){
-                        if (deal.getLatitude() != null || deal.getLongitude() != null) {
+                    // location
+                    else if (userLocation != null) {
+                        if (deal.getLatitude() != null && deal.getLongitude() != null) {
                             assert deal != null;
                             Location dealLocation = new Location("deal");
                             dealLocation.setLatitude(deal.getLatitude());
                             dealLocation.setLongitude(deal.getLongitude());
-                            float distance = location.distanceTo(dealLocation);
-                            if ( distance > (float)10 ) {
-                                deals.add(deal);
-                            }
+                            float distanceBetweenUserAndDeal = userLocation.distanceTo(dealLocation);
+                            DealDistance tempDeal = new DealDistance(distanceBetweenUserAndDeal, deal);
+                            dealsByDistance.add(tempDeal);
+                        } else {
+                            // if deal has no location, make it INFINITY meters
+                            dealsByDistance.add(new DealDistance(Float.POSITIVE_INFINITY, deal));
                         }
                     } // If no search term is provided, add all deals
-                     else {
+                    else {
                         deals.add(deal);
                     }
                 }
-                Collections.reverse(deals);
+
+                // If user is sorting by distance
+                if (!dealsByDistance.isEmpty()) {
+                    Collections.sort(dealsByDistance);
+                    for (DealDistance dealDistance : dealsByDistance) {
+                        deals.add(dealDistance.getDeal());
+                    }
+                } else {
+                    Collections.reverse(deals);
+                }
+
                 adapter.updateData(deals);
             }
 
@@ -417,7 +437,6 @@ public class PlatformHelpers {
         loading.setStrokeWidth(3);
         loading.start();
         if (imgUri != null && !imgUri.isEmpty()) {
-            Log.d("IMG", imgUri);
             Glide.with(context).load(imgUri).diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).placeholder(loading).into(view);
         } else if (imgUri != null && imgUri.isEmpty()) {
             Glide.with(context).load(defaultImg).diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).placeholder(loading).into(view);
@@ -447,7 +466,7 @@ public class PlatformHelpers {
 
     public void subscribeToDeal(Deal deal) {
         FirebaseMessaging.getInstance().subscribeToTopic(deal.getDealID()).addOnCompleteListener(task -> {
-            if(!task.isSuccessful()) {
+            if (!task.isSuccessful()) {
                 Log.d("SUBSCRIBE", "Failed to subscribe to deal (" + deal.getDealID() + ").");
             } else {
                 Log.d("SUBSCRIBE", "Successfully subscribed to deal (" + deal.getDealID() + ").");
@@ -458,7 +477,7 @@ public class PlatformHelpers {
 
     public void unsubscribeFromDeal(Deal deal) {
         FirebaseMessaging.getInstance().unsubscribeFromTopic(deal.getDealID()).addOnCompleteListener(task -> {
-            if(!task.isSuccessful()) {
+            if (!task.isSuccessful()) {
                 Log.d("SUBSCRIBE", "Failed to unsubscribe from deal (" + deal.getDealID() + ")");
             } else {
                 Log.d("SUBSCRIBE", "Successfully unsubscribed from deal (" + deal.getDealID() + ").");
@@ -479,7 +498,7 @@ public class PlatformHelpers {
                 payload.put("to", "/topics/" + deal.getDealID());
                 payload.put("priority", "high");
                 payload.put("notification", notification);
-            } catch(Exception e) {
+            } catch (Exception e) {
                 Log.e("NOTIFICATION", e.getMessage());
             }
 
@@ -502,7 +521,6 @@ public class PlatformHelpers {
 
             // Read FCM response.
             InputStream inputStream = connection.getInputStream();
-            Log.d("HTTPCONNECTION", inputStream.toString());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -589,5 +607,14 @@ public class PlatformHelpers {
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
+    }
+
+    // Location
+    public void getCurrentLocation(LocationInterface locationInterface) {
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            fusedLocationProviderClient.getCurrentLocation(Priority.PRIORITY_BALANCED_POWER_ACCURACY, null).addOnSuccessListener(location -> {
+                locationInterface.onCallback(location);
+            });
+        }
     }
 }

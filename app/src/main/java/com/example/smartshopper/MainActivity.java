@@ -1,16 +1,16 @@
 package com.example.smartshopper;
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.SearchView;
+import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -22,7 +22,6 @@ import com.example.smartshopper.recyclerViews.DealAdapter;
 import com.example.smartshopper.utilities.LocalStorage;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.Priority;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 
@@ -33,33 +32,28 @@ public class MainActivity extends MenuActivity {
   DealAdapter adapter;
   LocalStorage localStorage;
   FusedLocationProviderClient fusedLocationProviderClient;
-  LocationManager locationManager;
-  private final static int FINE_REQUEST_CODE = 200;
   private final static int COARSE_REQUEST_CODE = 100;
   Context context = this;
   Location currentLocation;
+  ToggleButton toggleSort;
 
   @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        localStorage = new LocalStorage(this);
-        // Instantiate objects
 
+      // Instantiate objects
+        localStorage = new LocalStorage(this);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context);
         platformHelpers = new PlatformHelpers(this);
         adapter = new DealAdapter(this);
         loadingAnimation = findViewById(R.id.loadingAnimation);
+        toggleSort = findViewById(R.id.toggle_sortByDistance);
 
-        locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         // Recycler View setup
         rv_dealsRecyclerView = findViewById(R.id.rv_dealsRecyclerView);
         rv_dealsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         rv_dealsRecyclerView.setAdapter(adapter);
-
-        // are these both checking location permissions? confused between the two -- MICHAEL
-        checkLocationManagerEnabled();
-        checkLocationPermissionAndGetLocation();
 
         // Setup Search Listener
         setSearchListener();
@@ -71,12 +65,11 @@ public class MainActivity extends MenuActivity {
         if (localStorage.userIsLoggedIn()) {
           platformHelpers.createNotifChannel();
         }
-    }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        platformHelpers.getDealsAndUpdateMainRV(adapter, null, currentLocation, loadingAnimation);
+        platformHelpers.getDealsAndUpdateMainRV(adapter, null, null, loadingAnimation);
+
+        // method puts MainActivity onPause()
+        checkLocationPermissionAndGetLocation();
     }
 
     private void setSearchListener() {
@@ -84,12 +77,22 @@ public class MainActivity extends MenuActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                if (query.isEmpty()) {
+                    toggleSort.setVisibility(View.VISIBLE);
+                } else {
+                    toggleSort.setVisibility(View.GONE);
+                }
                 platformHelpers.getDealsAndUpdateMainRV(adapter, query, null,loadingAnimation);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newQuery) {
+                if (newQuery.isEmpty()) {
+                    toggleSort.setVisibility(View.VISIBLE);
+                } else {
+                    toggleSort.setVisibility(View.GONE);
+                }
                 platformHelpers.getDealsAndUpdateMainRV(adapter, newQuery,  null,loadingAnimation);
                 return false;
             }
@@ -105,71 +108,47 @@ public class MainActivity extends MenuActivity {
         });
     }
 
-  @Override
-  public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-    super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-    switch (requestCode) {
-      case COARSE_REQUEST_CODE:
-        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_DENIED) {
-          platformHelpers.getDealsAndUpdateMainRV(adapter, null, null, loadingAnimation);
+        if (requestCode == COARSE_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_DENIED) {
+                platformHelpers.getDealsAndUpdateMainRV(adapter, null, null, loadingAnimation);
+            } else {
+                platformHelpers.getCurrentLocation(location -> {
+                    if (location != null) {
+                        currentLocation = location;
+                    }
+                });
+            }
         }
-        else if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-          askFinePermission();
-        }
-        else {
-            platformHelpers.getDealsAndUpdateMainRV(adapter, null, null, loadingAnimation);
-        }
-        break;
-      case FINE_REQUEST_CODE:
-        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_DENIED) {
-            platformHelpers.getDealsAndUpdateMainRV(adapter, null, null, loadingAnimation);
-        }
-        else if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-          askCoarsePermission();
-        }
-        else {
-            platformHelpers.getDealsAndUpdateMainRV(adapter, null, null, loadingAnimation);
-        }
-        break;
     }
-  }
 
     private void askCoarsePermission() {
         ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, COARSE_REQUEST_CODE);
     }
 
-    private void askFinePermission() {
-        ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, FINE_REQUEST_CODE);
+    public void checkLocationPermissionAndGetLocation() {
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            askCoarsePermission();
+        } else {
+            platformHelpers.getCurrentLocation(location -> {
+                if (location != null) {
+                    currentLocation = location;
+                }
+            });
+        }
     }
 
-  public void checkLocationManagerEnabled() {
-      if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-          new AlertDialog.Builder(context)
-                  .setMessage("This app uses device location. Please turn on your devices location for optimal experience.")
-                  .setPositiveButton("OK", (paramDialogInterface, paramInt) -> {
-                      startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-                  })
-                  .setNegativeButton("No thanks", (dialog, which) -> {
-                      return;
-                  })
-                  .show();
+    public void sortDealsBy(View view) {
+      if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+          toggleSort.setChecked(false);
+          Toast.makeText(getApplicationContext(), "Please allow location permission to sort by distance.", Toast.LENGTH_SHORT).show();
+      } else if (toggleSort.isChecked() && currentLocation != null) {
+          platformHelpers.getDealsAndUpdateMainRV(adapter, null, currentLocation, loadingAnimation);
+      } else {
+          platformHelpers.getDealsAndUpdateMainRV(adapter, null, null, loadingAnimation);
       }
-  }
-
-  public void checkLocationPermissionAndGetLocation() {
-    if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-      askFinePermission();
     }
-    if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-      askCoarsePermission();
-    }
-    if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-        fusedLocationProviderClient.getCurrentLocation(Priority.PRIORITY_BALANCED_POWER_ACCURACY, null).addOnSuccessListener(location -> {
-            if (location != null) {
-                currentLocation = location;
-            }
-        });
-    }
-  }
 }

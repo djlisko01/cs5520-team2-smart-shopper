@@ -42,4 +42,6 @@
     <string name="remove_deal_button">Remove</string>
     <string name="reply_to_post">Reply to post...</string>
     <string name="bookmark_deals_to_see_them_here">Bookmark deals to see them here!</string>
+    <string name="sort_by_distance">Sort By Distance</string>
+    <string name="sort_by_popularity">Sort by Popularity</string>
 </resources>
