@@ -6,10 +6,10 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.SearchView;
+import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.smartshopper.common.PlatformHelpers;
 import com.example.smartshopper.recyclerViews.DealAdapter;
-import com.example.smartshopper.responseInterfaces.LocationInterface;
 import com.example.smartshopper.utilities.LocalStorage;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -35,6 +34,7 @@ public class MainActivity extends MenuActivity {
   private final static int COARSE_REQUEST_CODE = 100;
   Context context = this;
   Location currentLocation;
+  ToggleButton toggleSort;
 
   @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +47,7 @@ public class MainActivity extends MenuActivity {
         platformHelpers = new PlatformHelpers(this);
         adapter = new DealAdapter(this);
         loadingAnimation = findViewById(R.id.loadingAnimation);
+        toggleSort = findViewById(R.id.toggle_sortByDistance);
 
         // Recycler View setup
         rv_dealsRecyclerView = findViewById(R.id.rv_dealsRecyclerView);
@@ -103,19 +104,18 @@ public class MainActivity extends MenuActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        switch (requestCode) {
-            case COARSE_REQUEST_CODE:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_DENIED) {
-                    platformHelpers.getDealsAndUpdateMainRV(adapter, null, null, loadingAnimation);
-                } else {
-                    platformHelpers.getCurrentLocation(location -> {
-                        if (location != null) {
-                            currentLocation = location;
-                            platformHelpers.getDealsAndUpdateMainRV(adapter, null, currentLocation, loadingAnimation);
-                        }
-                    });
-                }
-                break;
+        if (requestCode == COARSE_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_DENIED) {
+                platformHelpers.getDealsAndUpdateMainRV(adapter, null, null, loadingAnimation);
+            }
+//                else {
+//                    platformHelpers.getCurrentLocation(location -> {
+//                        if (location != null) {
+//                            currentLocation = location;
+//                            platformHelpers.getDealsAndUpdateMainRV(adapter, null, currentLocation, loadingAnimation);
+//                        }
+//                    });
+//                }
         }
     }
 
@@ -133,6 +133,19 @@ public class MainActivity extends MenuActivity {
                 }
             });
         }
+    }
 
-  }
+    public void sortDealsBy(View view) {
+      if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+          askCoarsePermission();
+      } else if {
+            if (toggleSort.isChecked() && currentLocation != null) {
+                platformHelpers.getDealsAndUpdateMainRV(adapter, null, currentLocation, loadingAnimation);
+            } else {
+                platformHelpers.getDealsAndUpdateMainRV(adapter, null, null, loadingAnimation);
+            }
+        }
+
+
+    }
 }
