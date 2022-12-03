@@ -38,7 +38,7 @@ public class NavigationDrawer implements NavigationView.OnNavigationItemSelected
         } else if (item.getItemId() == R.id.nav_savedDeals) {
             Intent intent = new Intent(context, SavedDealsActivity.class);
             context.startActivity(intent);
-        } else if (item.getItemId() == R.id.nav_hotDeals) {
+        } else if (item.getItemId() == R.id.nav_home) {
             Intent intent = new Intent(context, MainActivity.class);
             context.startActivity(intent);
         }
