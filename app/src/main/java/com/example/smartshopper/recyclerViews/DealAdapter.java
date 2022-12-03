@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,6 +14,7 @@ import com.example.smartshopper.DealDetailsActivity;
 import com.example.smartshopper.R;
 import com.example.smartshopper.common.PlatformHelpers;
 import com.example.smartshopper.models.Deal;
+import com.example.smartshopper.utilities.LocalStorage;
 
 import java.text.DateFormat;
 import java.text.NumberFormat;
@@ -23,11 +25,13 @@ public class DealAdapter extends RecyclerView.Adapter<DealViewHolder> {
     private List<Deal> deals;
     private final Context context;
     private final PlatformHelpers platformHelpers;
+    private LocalStorage localStorage;
 
     public DealAdapter(Context context) {
         this.deals = new ArrayList<>();
         this.context = context;
         this.platformHelpers = new PlatformHelpers(this.context);
+        this.localStorage = new LocalStorage(this.context);
     }
 
     @NonNull
@@ -61,21 +65,26 @@ public class DealAdapter extends RecyclerView.Adapter<DealViewHolder> {
         holder.tv_numUpvotes.setText(deals.get(position).getNumUpVotes().toString());
 
         // Save deals
-        platformHelpers.checkSavedDealExists(deals.get(position), response -> {
-            holder.tb_saveDeal.setChecked(response);
-        });
+        if (localStorage.userIsLoggedIn()) {
+            platformHelpers.checkSavedDealExists(deals.get(position), response -> {
+                holder.tb_saveDeal.setChecked(response);
+            });
 
-        holder.tb_saveDeal.setOnClickListener(v -> {
-            if (holder.tb_saveDeal.isChecked()) {
-                platformHelpers.saveDeal(deals.get(position));
-                platformHelpers.subscribeToDeal(deals.get(position));
-            } else {
-                platformHelpers.getSavedDealKey(deals.get(position).getDealID(), key -> {
-                    platformHelpers.deleteSavedDeal(key);
-                    platformHelpers.unsubscribeFromDeal(deals.get(position));
-                });
-            }
-        });
+            holder.tb_saveDeal.setOnClickListener(v -> {
+                if (holder.tb_saveDeal.isChecked()) {
+                    platformHelpers.saveDeal(deals.get(position));
+                    platformHelpers.subscribeToDeal(deals.get(position));
+                } else {
+                    platformHelpers.getSavedDealKey(deals.get(position).getDealID(), key -> {
+                        platformHelpers.deleteSavedDeal(key);
+                        platformHelpers.unsubscribeFromDeal(deals.get(position));
+                    });
+                }
+            });
+        } else {
+            holder.tb_saveDeal.setVisibility(View.INVISIBLE);
+            holder.tb_saveDeal.setEnabled(false);
+        }
 
         // Get up/down votes from database;
         //up votes
