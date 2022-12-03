@@ -215,7 +215,6 @@ public class PlatformHelpers {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 integerInterface.onCallback(snapshot.getValue(Integer.class));
-                Log.d("UPVOTEEEEE", "" + snapshot.getValue());
             }
 
             @Override
@@ -438,7 +437,6 @@ public class PlatformHelpers {
         loading.setStrokeWidth(3);
         loading.start();
         if (imgUri != null && !imgUri.isEmpty()) {
-            Log.d("IMG", imgUri);
             Glide.with(context).load(imgUri).diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).placeholder(loading).into(view);
         } else if (imgUri != null && imgUri.isEmpty()) {
             Glide.with(context).load(defaultImg).diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).placeholder(loading).into(view);
@@ -523,7 +521,6 @@ public class PlatformHelpers {
 
             // Read FCM response.
             InputStream inputStream = connection.getInputStream();
-            Log.d("HTTPCONNECTION", inputStream.toString());
         } catch (IOException e) {
             e.printStackTrace();
         }

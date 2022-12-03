@@ -59,7 +59,6 @@ public class Comment implements Serializable, Comparable<Comment> {
         List<Comment> listReplies = new ArrayList<>();
         if (responses != null) {
             for (String key:  responses.keySet()){
-                Log.v("KEYTEST", key);
                 Comment currReply =  responses.get(key);
                 listReplies.add(currReply);
             }

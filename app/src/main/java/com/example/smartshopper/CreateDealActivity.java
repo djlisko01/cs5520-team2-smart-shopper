@@ -214,7 +214,6 @@ public class CreateDealActivity extends MenuActivity {
                         // no image uploaded flow
                     } else {
                         String dealID = rtdbService.writeDeal(deal);
-                        Log.d("DEALS", dealID);
                         deal.setDealID(dealID);
                         // Go to detailed view of the deal
                         intent.putExtra("dealItem", deal);
