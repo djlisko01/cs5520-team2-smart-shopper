@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.SearchView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
@@ -54,8 +55,6 @@ public class MainActivity extends MenuActivity {
         rv_dealsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         rv_dealsRecyclerView.setAdapter(adapter);
 
-        checkLocationPermissionAndGetLocation();
-
         // Setup Search Listener
         setSearchListener();
 
@@ -66,6 +65,9 @@ public class MainActivity extends MenuActivity {
         if (localStorage.userIsLoggedIn()) {
           platformHelpers.createNotifChannel();
         }
+
+        // method puts MainActivity onPause()
+        checkLocationPermissionAndGetLocation();
     }
 
     @Override
@@ -137,15 +139,12 @@ public class MainActivity extends MenuActivity {
 
     public void sortDealsBy(View view) {
       if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-          askCoarsePermission();
-      } else if {
-            if (toggleSort.isChecked() && currentLocation != null) {
-                platformHelpers.getDealsAndUpdateMainRV(adapter, null, currentLocation, loadingAnimation);
-            } else {
-                platformHelpers.getDealsAndUpdateMainRV(adapter, null, null, loadingAnimation);
-            }
-        }
-
-
+          toggleSort.setChecked(false);
+          Toast.makeText(getApplicationContext(), "Please allow location permission to sort by distance.", Toast.LENGTH_SHORT).show();
+      } else if (toggleSort.isChecked() && currentLocation != null) {
+          platformHelpers.getDealsAndUpdateMainRV(adapter, null, currentLocation, loadingAnimation);
+      } else {
+          platformHelpers.getDealsAndUpdateMainRV(adapter, null, null, loadingAnimation);
+      }
     }
 }
