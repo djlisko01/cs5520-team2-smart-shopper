@@ -32,6 +32,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collections;
 
 
 public class CreateDealActivity extends MenuActivity {
@@ -46,18 +48,52 @@ public class CreateDealActivity extends MenuActivity {
     RTDBService rtdbService = new RTDBService();
     Uri image_uri;
     Location currentLocation;
+    View loadingAnimation;
+    ArrayList<View> formElements = new ArrayList();
+    Button buttonOne;
+    EditText titleET;
+    EditText upcET;
+    EditText descriptionET;
+    EditText storeET;
+    EditText salePriceET;
+    EditText originalPriceET;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_deal);
-        setCreateDealButtonListener();
         cloudStorageService = new CloudStorageService();
         platformHelpers = new PlatformHelpers(this);
-
         fab_camera = findViewById(R.id.camera_fab);
         fab_gallery = findViewById(R.id.gallery_fab);
         iv_imagePreview = findViewById(R.id.iv_imagePreview);
+        locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+        iv_imagePreview = findViewById(R.id.iv_imagePreview);
+
+        loadingAnimation = findViewById(R.id.loadingAnimation);
+        loadingAnimation.setVisibility(View.INVISIBLE);
+
+        fab_camera = findViewById(R.id.camera_fab);
+        fab_gallery = findViewById(R.id.gallery_fab);
+        buttonOne = findViewById(R.id.createDealButton);
+        titleET = findViewById(R.id.editTextCreateTitle);
+        upcET = findViewById(R.id.editTextCreateUPC);
+        descriptionET = findViewById(R.id.editTextCreateDescription);
+        storeET = findViewById(R.id.editTextStore);
+        salePriceET = findViewById(R.id.editTextSalePrice);
+        originalPriceET = findViewById(R.id.editTextPrice);
+        Collections.addAll(formElements, buttonOne, titleET, fab_camera, fab_gallery, upcET, descriptionET, storeET, salePriceET, originalPriceET);
+
+        setCreateDealButtonListener();
+
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            new AlertDialog.Builder(context)
+              .setMessage("This app uses device location. Please turn on your devices location for optimal experience.")
+              .setPositiveButton("OK", (paramDialogInterface, paramInt) -> startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS)))
+              .setNegativeButton("No thanks", (dialog, which) -> {
+              })
+              .show();
+        }
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             currentLocation = null;
@@ -151,19 +187,26 @@ public class CreateDealActivity extends MenuActivity {
     }
 
     private void setCreateDealButtonListener() {
-        Button buttonOne = (Button) findViewById(R.id.createDealButton);
         buttonOne.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
+                loadingAnimation.setVisibility(View.VISIBLE);
+                for (View view : formElements) {
+                    view.setEnabled(false);
+                }
                 // Get the deal information from the form
-                String title = ((EditText) findViewById(R.id.editTextCreateTitle)).getText().toString();
-                String upc = ((EditText) findViewById(R.id.editTextCreateUPC)).getText().toString();
-                String description = ((EditText) findViewById(R.id.editTextCreateDescription)).getText().toString();
-                String store = ((EditText) findViewById(R.id.editTextStore)).getText().toString();
-                String salePrice = ((EditText) findViewById(R.id.editTextSalePrice)).getText().toString();
-                String originalPrice = ((EditText) findViewById(R.id.editTextPrice)).getText().toString();
+                String title = titleET.getText().toString();
+                String upc = upcET.getText().toString();
+                String description = descriptionET.getText().toString();
+                String store = storeET.getText().toString();
+                String salePrice = salePriceET.getText().toString();
+                String originalPrice = originalPriceET.getText().toString();
 
                 // Check for required fields
                 if (title.trim().isEmpty() || store.trim().isEmpty() || salePrice.isEmpty() || originalPrice.isEmpty()) {
+                    loadingAnimation.setVisibility(View.GONE);
+                    for (View view : formElements) {
+                        view.setEnabled(true);
+                    }
                     Toast.makeText(getApplicationContext(), "Please fill out required fields.", Toast.LENGTH_SHORT).show();
                 } else {
                     Double salePriceDouble = Double.parseDouble(salePrice);
@@ -208,6 +251,7 @@ public class CreateDealActivity extends MenuActivity {
                                 deal.setDealID(dealID);
                                 // Go to detailed view of the deal
                                 intent.putExtra("dealItem", deal);
+                                loadingAnimation.setVisibility(View.GONE);
                                 startActivity(intent);
                             }
                         });
