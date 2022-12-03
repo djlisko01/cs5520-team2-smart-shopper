@@ -83,7 +83,9 @@ public class CreateDealActivity extends MenuActivity {
         originalPriceET = findViewById(R.id.editTextPrice);
         Collections.addAll(formElements, buttonOne, titleET, fab_camera, fab_gallery, upcET, descriptionET, storeET, salePriceET, originalPriceET);
 
-        setCreateDealButtonListener();
+        if (buttonOne != null) {
+            setCreateDealButtonListener();
+        }
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             currentLocation = null;

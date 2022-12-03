@@ -4,23 +4,23 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+      android:id="@+id/nav_hotDeals"
+      android:title="Home"
+      android:icon="@drawable/ic_baseline_home_24"/>
+    <item
         android:id="@+id/nav_account"
-        android:title="@string/my_account_button" />
+        android:title="@string/my_account_button"
+        android:icon="@drawable/ic_baseline_account_circle_24"/>
 
-    <item android:id="@+id/nav_hotDeals"
-        android:title="Hot Deals" />
     <item
         android:id="@+id/nav_savedDeals"
-        android:title="@string/saved_deals_button" />
-
-    <item
-        android:id="@+id/nav_settings"
-        android:title="@string/settings_button" />
-
+        android:title="@string/saved_deals_button"
+        android:icon="@drawable/ic_saved"/>
     <item
         android:id="@+id/nav_logout"
         android:title="@string/signin_button"
         android:onClick="sendToLoginActivity"
+        android:icon="@drawable/ic_baseline_login_24"
         />
 
 </menu>
