@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -19,7 +20,7 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.Locale;
 
-public class DealDetailsActivity extends AppCompatActivity {
+public class DealDetailsActivity extends MenuActivity {
     PlatformHelpers platformHelpers;
     ImageView iv_deal_img;
     TextView tv_dealTitle;
@@ -109,5 +110,15 @@ public class DealDetailsActivity extends AppCompatActivity {
                 String.format(Locale.US, "$%.2f", data.getSalePrice())
         );
         tv_dealTitle.setText(data.getTitle());
+    }
+
+    public void sendToForgotPasswordActivity(View view) {
+        Intent forgotPasswordIntent = new Intent(this, ForgotPasswordActivity.class);
+        startActivity(forgotPasswordIntent);
+    }
+
+    public void sendToCreateAccountActivity(View view) {
+        Intent createAccountIntent = new Intent(this, CreateAccountActivity.class);
+        startActivity(createAccountIntent);
     }
 }
