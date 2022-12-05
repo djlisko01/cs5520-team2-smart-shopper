@@ -38,6 +38,8 @@ public class ProfileActivity extends MenuActivity {
 
         platformHelpers.getDealAddedAndUpdateRv(localStorage.getCurrentUserID(), adapter);
 
+        platformHelpers.getCommentAddedAndUpdateRv(localStorage.getCurrentUser(), adapter);
+
 
     }
 }

@@ -27,13 +27,22 @@
     android:layout_height="match_parent"
     tools:context=".ProfileActivity" >
 
+<!--    <TextView-->
+<!--        android:id="@+id/txtView"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginRight="5dp"-->
+<!--        android:singleLine="true"-->
+<!--        android:text="You posted "-->
+<!--        android:textSize="20sp" />-->
+
     <TextView
         android:id="@+id/txtView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="5dp"
         android:singleLine="true"
-        android:text="You posted "
+        android:text="You commented on "
         android:textSize="20sp" />
 
     <TextView

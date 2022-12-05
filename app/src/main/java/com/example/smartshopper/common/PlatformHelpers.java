@@ -423,6 +423,30 @@ public class PlatformHelpers {
 
     }
 
+    public void getCommentAddedAndUpdateRv(String username, ProfileAdapter adapter) {
+        Query query = rtdbDatabase.getDealsUserCommentedOn(username);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<Deal> deals = new ArrayList<>();
+
+                for (DataSnapshot child : snapshot.getChildren()) {
+                    Deal deal = child.getValue(Deal.class);
+                    assert deal != null;
+                    deals.add(deal);
+                }
+                adapter.updateTitle(deals);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
+
     /**
      * Loads picture using Glide Library
      *

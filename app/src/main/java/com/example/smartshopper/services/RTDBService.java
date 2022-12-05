@@ -23,6 +23,21 @@ public class RTDBService {
         return ref.child(child);
     }
 
+    // Get all of deals
+    public Query getAllDeals() {
+        return ref.child(Constants.DEALS);
+    }
+
+    // Get deals by username
+    public Query getDealsByUsername (String username){
+        return ref.child(Constants.DEALS).orderByChild(Constants.USERNAME).equalTo(username);
+    }
+
+    // Get deals user commented on
+    public Query getDealsUserCommentedOn (String username){
+        return ref.child(Constants.DEALS).orderByChild(Constants.COMMENTS);
+    }
+
     // Get user by username
     public Query getUser(String username) {
         return ref.child(Constants.USERS).orderByChild(Constants.USERNAME).equalTo(username);
