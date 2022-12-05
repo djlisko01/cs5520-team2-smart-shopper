@@ -23,6 +23,7 @@ import com.example.smartshopper.models.Comment;
 import com.example.smartshopper.models.Deal;
 import com.example.smartshopper.models.DealDistance;
 import com.example.smartshopper.models.User;
+import com.example.smartshopper.models.UserScore;
 import com.example.smartshopper.recyclerViews.CommentsAdapter;
 import com.example.smartshopper.recyclerViews.DealAdapter;
 import com.example.smartshopper.recyclerViews.ProfileAdapter;
@@ -209,6 +210,7 @@ public class PlatformHelpers {
         }
     }
 
+
     public void getNumUpVotesAndUpdateDeal(String dealID, IntegerInterface integerInterface) {
         Query query = rtdbDatabase.getNumUpVotes(dealID);
         query.addValueEventListener(new ValueEventListener() {
@@ -223,6 +225,23 @@ public class PlatformHelpers {
             }
         });
     }
+
+    public void getUserRank(String userID){
+
+        Query query = rtdbDatabase.getUserScores();
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                //TODO
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
 
     public void getNumDownVotesAndUpdateDeal(String dealID, IntegerInterface integerInterface) {
         Query query = rtdbDatabase.getNumDownVotes(dealID);
@@ -596,7 +615,10 @@ public class PlatformHelpers {
                         // Store user with FCM Token upon account creation in DB
                         getFcmToken(response1 -> {
                             User newUser = new User(username, finalEmailAddress, password, response1);
-                            rtdbDatabase.writeUser(newUser);
+                            String key = rtdbDatabase.writeUser(newUser);
+
+                            // Create a score for the user
+                            rtdbDatabase.writeUserStats(key, new UserScore(0, 0));
                             userInterface.onCallback(newUser);
                         });
                     }

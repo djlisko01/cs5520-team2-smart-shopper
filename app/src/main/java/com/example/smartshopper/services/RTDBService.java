@@ -3,6 +3,7 @@ package com.example.smartshopper.services;
 import com.example.smartshopper.common.Constants;
 import com.example.smartshopper.models.Comment;
 import com.example.smartshopper.models.Deal;
+import com.example.smartshopper.models.UserScore;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ServerValue;
 import com.example.smartshopper.models.User;
@@ -27,6 +28,13 @@ public class RTDBService {
     public Query getUser(String username) {
         return ref.child(Constants.USERS).orderByChild(Constants.USERNAME).equalTo(username);
     }
+
+
+    public Query getUserScores(){
+        //TODO
+        return ref.child(Constants.USER_STATS).orderByChild(Constants.USER_SCORES);
+    };
+
 
     // Get user by email
     public Query getUserByEmailAddress(String emailAddress) {
@@ -146,6 +154,20 @@ public class RTDBService {
         return key;
     }
 
+
+    /**
+     * Create stats in for a new user that is added to the database.
+     *
+     * @param userID Unique key for the newly created user.
+     * @param userScore A new user score object
+     */
+    public void writeUserStats(String userID, UserScore userScore){
+        String key = ref.child(Constants.USER_STATS).push().getKey();
+        assert key != null;
+        ref.child(Constants.USER_STATS).child(userID).setValue(userScore);
+    }
+
+
     public void writeResponse(String commentKey, String dealID, Comment response){
         String key = database
                 .getReference()
@@ -203,6 +225,7 @@ public class RTDBService {
         if (!upVotedAlready && !userID.isEmpty()) {
             ref.child(Constants.DEALS).child(dealId).child(Constants.USERS_UP_VOTED).child(userID).setValue(username);
             ref.child(Constants.DEALS).child(dealId).child(Constants.UPVOTES).setValue(ServerValue.increment(1));
+
         } else if (upVotedAlready && !userID.isEmpty()) {
             ref.child(Constants.DEALS).child(dealId).child(Constants.USERS_UP_VOTED).child(userID).removeValue();
             ref.child(Constants.DEALS).child(dealId).child(Constants.UPVOTES).setValue(ServerValue.increment(-1));
