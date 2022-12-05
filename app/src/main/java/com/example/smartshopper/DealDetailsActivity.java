@@ -86,12 +86,12 @@ public class DealDetailsActivity extends MenuActivity {
         });
 
         iv_upVote.setOnClickListener(v -> {
-            platformHelpers.upVoteDeal(deal.getDealID(), platformHelpers.getCurrentUserID(), platformHelpers.getCurrentUser());
+            platformHelpers.upVoteDeal(deal, platformHelpers.getCurrentUserID(), platformHelpers.getCurrentUser());
         });
 
         iv_downVote.setOnClickListener(v -> {
             // Send vote results to db after voting.
-            platformHelpers.downVoteDeal(deal.getDealID(), platformHelpers.getCurrentUserID(), platformHelpers.getCurrentUser());
+            platformHelpers.downVoteDeal(deal, platformHelpers.getCurrentUserID(), platformHelpers.getCurrentUser());
             });
     }
 

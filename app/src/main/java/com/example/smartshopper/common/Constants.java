@@ -23,4 +23,7 @@ public class Constants {
     public static final String USER_STATS = "userStats";
     public static final String USER_SCORES = "thumbsUpRatio";
     public static final String USERS_DOWN_VOTED = "usersDownVoted";
+    public static final String UP_VOTE = "UPVOTE";
+    public static final String DOWN_VOTE = "DOWN VOTE";
+
 }

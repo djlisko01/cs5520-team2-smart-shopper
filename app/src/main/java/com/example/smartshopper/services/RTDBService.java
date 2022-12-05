@@ -1,14 +1,21 @@
 package com.example.smartshopper.services;
 
+import androidx.annotation.NonNull;
+
 import com.example.smartshopper.common.Constants;
 import com.example.smartshopper.models.Comment;
 import com.example.smartshopper.models.Deal;
 import com.example.smartshopper.models.UserScore;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ServerValue;
 import com.example.smartshopper.models.User;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.Objects;
 
 public class RTDBService {
     FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -30,9 +37,8 @@ public class RTDBService {
     }
 
 
-    public Query getUserScores(){
-        //TODO
-        return ref.child(Constants.USER_STATS).orderByChild(Constants.USER_SCORES);
+    public Query getUserStats(String userID){
+        return ref.child(Constants.USER_STATS).child(userID);
     };
 
 
@@ -162,9 +168,9 @@ public class RTDBService {
      * @param userScore A new user score object
      */
     public void writeUserStats(String userID, UserScore userScore){
-        String key = ref.child(Constants.USER_STATS).push().getKey();
-        assert key != null;
-        ref.child(Constants.USER_STATS).child(userID).setValue(userScore);
+        if (!Objects.equals(userID, "")) {
+            ref.child(Constants.USER_STATS).child(userID).setValue(userScore);
+        }
     }
 
 
@@ -221,7 +227,8 @@ public class RTDBService {
         ref.child(Constants.FCM_TOKENS).push().setValue(token);
     }
 
-    public void upVoteDeal(String dealId, String userID, String username, boolean upVotedAlready) {
+    public void upVoteDeal(Deal deal, String userID, String username, boolean upVotedAlready) {
+        String dealId = deal.getDealID();
         if (!upVotedAlready && !userID.isEmpty()) {
             ref.child(Constants.DEALS).child(dealId).child(Constants.USERS_UP_VOTED).child(userID).setValue(username);
             ref.child(Constants.DEALS).child(dealId).child(Constants.UPVOTES).setValue(ServerValue.increment(1));
@@ -232,13 +239,18 @@ public class RTDBService {
         }
     }
 
-    public void downVoteDeal(String dealId, String userID, String username, boolean downVotedAlready) {
+    public void downVoteDeal(Deal deal, String userID, String username, boolean downVotedAlready) {
+        String dealId = deal.getDealID();
+        String dealAuthor = deal.getUserUUID();
+
+
         if (!downVotedAlready && !userID.isEmpty()) {
             ref.child(Constants.DEALS).child(dealId).child(Constants.USERS_DOWN_VOTED).child(userID).setValue(username);
             ref.child(Constants.DEALS).child(dealId).child(Constants.DOWNVOTES).setValue(ServerValue.increment(1));
+
         } else if (downVotedAlready && !userID.isEmpty()) {
             ref.child(Constants.DEALS).child(dealId).child(Constants.USERS_DOWN_VOTED).child(userID).removeValue();
-            ref.child(Constants.DEALS).child(dealId).child(Constants.DOWNVOTES).setValue(ServerValue.increment(-1));
+            ref.child(Constants.DEALS).child(dealId).child(Constants.DOWNVOTES).setValue(ServerValue.increment(-1));;
         }
     }
 

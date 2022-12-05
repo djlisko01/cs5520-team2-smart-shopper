@@ -32,6 +32,7 @@ import com.example.smartshopper.responseInterfaces.CommentInterface;
 import com.example.smartshopper.responseInterfaces.DealInterface;
 import com.example.smartshopper.responseInterfaces.IntegerInterface;
 import com.example.smartshopper.responseInterfaces.LocationInterface;
+import com.example.smartshopper.responseInterfaces.ObjectInterface;
 import com.example.smartshopper.responseInterfaces.StringInterface;
 import com.example.smartshopper.responseInterfaces.UserInterface;
 import com.example.smartshopper.services.RTDBService;
@@ -226,13 +227,33 @@ public class PlatformHelpers {
         });
     }
 
-    public void getUserRank(String userID){
-
-        Query query = rtdbDatabase.getUserScores();
-        query.addValueEventListener(new ValueEventListener() {
+    public void updateUserStats(Deal deal, String voteCase, boolean userVoted){
+        Query query = rtdbDatabase.getUserStats(deal.getUserUUID());
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                //TODO
+                UserScore userStats = snapshot.getValue(UserScore.class);
+                if (userStats == null){
+                    userStats = new UserScore(deal.getNumUpVotes(), deal.getNumDownVotes());
+                }
+                switch (voteCase) {
+                    case Constants.UP_VOTE:
+                        if (userVoted) {
+                            userStats.decrementUpVote();
+                        } else {
+                            userStats.incrementUpVote();
+                        }
+                        break;
+                    case Constants.DOWN_VOTE:
+                        if (userVoted) {
+                            userStats.decrementDownVote();
+                        } else {
+                            userStats.incrementDownVote();
+                        }
+                        break;
+                }
+                userStats.calculateThumbsUpRatio();
+                rtdbDatabase.writeUserStats(deal.getUserUUID(), userStats);
             }
 
             @Override
@@ -240,6 +261,20 @@ public class PlatformHelpers {
 
             }
         });
+    }
+    public void getUserRank(String userID){
+
+//        query.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                //TODO
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
     }
 
 
@@ -304,23 +339,25 @@ public class PlatformHelpers {
         });
     }
 
-    public void upVoteDeal(String dealID, String userID, String username) {
+    public void upVoteDeal(Deal deal, String userID, String username) {
         if (userID.equals("")) {
             Toast.makeText(context, "Please sign in to vote", Toast.LENGTH_SHORT).show();
             return;
         }
-        checkIfUserUpVotedDeal(dealID, userID, upVotedAlready -> {
-            rtdbDatabase.upVoteDeal(dealID, userID, username, upVotedAlready);
+        checkIfUserUpVotedDeal(deal.getDealID(), userID, upVotedAlready -> {
+            rtdbDatabase.upVoteDeal(deal, userID, username, upVotedAlready);
+            this.updateUserStats(deal, Constants.UP_VOTE, upVotedAlready);
         });
     }
 
-    public void downVoteDeal(String dealID, String userID, String username) {
+    public void downVoteDeal(Deal deal, String userID, String username) {
         if (userID.equals("")) {
             Toast.makeText(context, "Please sign in to vote", Toast.LENGTH_SHORT).show();
             return;
         }
-        checkIfUserDownVotedDeal(dealID, userID, downVotedAlready -> {
-            rtdbDatabase.downVoteDeal(dealID, userID, username, downVotedAlready);
+        checkIfUserDownVotedDeal(deal.getDealID(), userID, downVotedAlready -> {
+            rtdbDatabase.downVoteDeal(deal, userID, username, downVotedAlready);
+            this.updateUserStats(deal, Constants.DOWN_VOTE, downVotedAlready);
         });
     }
 

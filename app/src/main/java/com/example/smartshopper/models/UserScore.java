@@ -1,20 +1,20 @@
 package com.example.smartshopper.models;
 
 public class UserScore {
-    int totalThumbsUp;
-    int totalThumbsDown;
+    float totalThumbsUp;
+    float totalThumbsDown;
     float thumbsUpRatio;
 
     public UserScore() {
     }
 
-    public UserScore(int totalThumbsUp, int totalThumbsDown){
+    public UserScore(float totalThumbsUp, float totalThumbsDown){
         this.totalThumbsUp = totalThumbsUp;
         this.totalThumbsDown = totalThumbsDown;
-        this.thumbsUpRatio = this.calculateThumbsUpRatio();
+        this.thumbsUpRatio = 0.0f;
     }
 
-    public int getTotalThumbsUp() {
+    public float getTotalThumbsUp() {
         return totalThumbsUp;
     }
 
@@ -22,7 +22,7 @@ public class UserScore {
         this.totalThumbsUp = totalThumbsUp;
     }
 
-    public int getTotalThumbsDown() {
+    public float getTotalThumbsDown() {
         return totalThumbsDown;
     }
 
@@ -34,11 +34,26 @@ public class UserScore {
         return thumbsUpRatio;
     }
 
-    public float calculateThumbsUpRatio(){
-        int totalVotes = totalThumbsDown + totalThumbsDown;
-        if (totalVotes <= 0.0){
-           return 0;
+    public void incrementUpVote(){
+        this.totalThumbsUp += 1;
+    }
+
+    public void incrementDownVote(){
+        this.totalThumbsDown += 1;
+    }
+
+    public void decrementUpVote(){
+        this.totalThumbsUp -= 1;
+    }
+
+    public void decrementDownVote(){
+        this.totalThumbsDown -= 1;
+    }
+
+    public void calculateThumbsUpRatio(){
+        float totalVotes = totalThumbsDown + totalThumbsUp;
+        if (totalVotes > 0.0){
+            this.thumbsUpRatio = totalThumbsUp/ totalVotes;
         }
-        return (float) totalThumbsDown/ (float) totalVotes;
     }
 }
