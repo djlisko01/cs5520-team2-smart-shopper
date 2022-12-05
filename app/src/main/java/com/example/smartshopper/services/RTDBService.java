@@ -34,8 +34,10 @@ public class RTDBService {
     }
 
     // Get deals user commented on
-    public Query getDealsUserCommentedOn (String username){
-        return ref.child(Constants.DEALS).orderByChild(Constants.COMMENTS);
+
+    public Query getDealsUserCommentedOn (String username) {
+        return ref.child(Constants.DEALS).child(Constants.COMMENTS)
+                .child("author").child("username").equalTo(username);
     }
 
     // Get user by username

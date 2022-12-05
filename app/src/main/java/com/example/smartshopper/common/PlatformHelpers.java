@@ -433,6 +433,8 @@ public class PlatformHelpers {
                 for (DataSnapshot child : snapshot.getChildren()) {
                     Deal deal = child.getValue(Deal.class);
                     assert deal != null;
+
+
                     deals.add(deal);
                 }
                 adapter.updateTitle(deals);
