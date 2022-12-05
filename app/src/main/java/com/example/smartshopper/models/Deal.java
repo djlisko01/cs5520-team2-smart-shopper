@@ -168,4 +168,8 @@ public class Deal implements Serializable {
     public void setProductImg(String url) {
         this.productImg = url;
     }
+
+    public  List<Comment> getComments(){
+        return this.comments;
+    }
 }

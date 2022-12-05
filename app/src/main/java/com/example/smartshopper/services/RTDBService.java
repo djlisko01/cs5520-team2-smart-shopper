@@ -82,15 +82,22 @@ public class RTDBService {
         return ref.child(Constants.DEALS).orderByChild(Constants.USERID).equalTo(userID);
     }
 
+    // Get all of deals
+    public Query getAllDeals() {
+        return ref.child(Constants.DEALS);
+    }
+
     // Get comments posted by user
-    public Query getComments(User user) {
-        return ref.child(Constants.DEALS).orderByChild(Constants.COMMENTS).equalTo(user.getUsername());
+    public Query getComments(String username) {
+        return ref.child(Constants.DEALS).orderByChild(Constants.COMMENTS).
+                orderByChild(Constants.AUTHOR).equalTo(username);
     }
 
     // Get comments for a deal
     public Query getComments(Deal deal) {
         return ref.child(Constants.DEALS).child(deal.getDealID()).child(Constants.COMMENTS);
     }
+
 
     // Get friends for a user
     public Query getFriends(User user) {

@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.smartshopper.R;
 import com.example.smartshopper.common.PlatformHelpers;
+import com.example.smartshopper.models.Comment;
 import com.example.smartshopper.models.Deal;
 
 import java.util.ArrayList;
@@ -16,11 +17,13 @@ import java.util.List;
 
 public class ProfileAdapter extends RecyclerView.Adapter<ProfileViewHolder>{
 
+    List<Comment> comments;
     private List<Deal> deals;
     private final Context context;
     private final PlatformHelpers platformHelpers;
 
     public ProfileAdapter(Context context) {
+        this.comments = new ArrayList<>();
         this.deals = new ArrayList<>();
         this.context = context;
         this.platformHelpers = new PlatformHelpers(this.context);
@@ -48,6 +51,5 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileViewHolder>{
         this.deals = deals;
         notifyDataSetChanged();
     }
-
 
 }

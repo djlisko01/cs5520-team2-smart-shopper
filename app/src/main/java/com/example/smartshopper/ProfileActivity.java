@@ -36,7 +36,10 @@ public class ProfileActivity extends MenuActivity {
         tv_username = findViewById(R.id.tv_username);
         tv_username.setText(localStorage.getCurrentUser());
 
+        //rv
         platformHelpers.getDealAddedAndUpdateRv(localStorage.getCurrentUserID(), adapter);
+//        platformHelpers.getCommentAddedAndUpdateRv(localStorage.getCurrentUserID(),
+//                localStorage.getCurrentUser(), adapter);
 
 
     }

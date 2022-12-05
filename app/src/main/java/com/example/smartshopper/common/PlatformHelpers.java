@@ -423,6 +423,45 @@ public class PlatformHelpers {
 
     }
 
+    public void getCommentAddedAndUpdateRv(String userID, String username, ProfileAdapter adapter) {
+        Query query = rtdbDatabase.getAllDeals();
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                //get all the deals in the query
+                //instantiate list of deals and comments
+                List<Deal> deals = new ArrayList<>();
+                List<Comment> comments = new ArrayList<>();
+                //loop through every deal
+                for (DataSnapshot child : snapshot.getChildren()) {
+                    Deal deal = child.getValue(Deal.class);
+                    assert deal != null;
+                    //in each loop, check if it has comment child
+                    if(snapshot.hasChild(Constants.COMMENTS)){
+                        //loop through every comment if it exists
+                        for(Comment comment : deal.getComments()) {
+                            assert comment != null;
+                            //check author username is equal to login username
+                            if((comment.getAuthor().getUsername().equals(localStorage.getCurrentUser()))){
+                                //add deal
+                                deals.add(deal);
+                            }
+                        }
+                    }
+
+                }
+                adapter.updateTitle(deals);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
+
     /**
      * Loads picture using Glide Library
      *
