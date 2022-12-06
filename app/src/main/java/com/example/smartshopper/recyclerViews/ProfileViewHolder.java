@@ -12,10 +12,13 @@ import com.example.smartshopper.R;
 public class ProfileViewHolder extends RecyclerView.ViewHolder {
     public TextView tv_username;
     public TextView tv_activities;
+    public TextView tv_timestamp;
 
     public ProfileViewHolder(@NonNull View itemView, Context context) {
         super(itemView);
         this.tv_username = itemView.findViewById(R.id.tv_username);
         this.tv_activities = itemView.findViewById(R.id.activities);
+        this.tv_timestamp = itemView.findViewById(R.id.tv_timestamp);
+
     }
 }

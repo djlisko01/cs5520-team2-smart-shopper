@@ -13,6 +13,7 @@ import com.example.smartshopper.models.ActivityTimestamp;
 import com.example.smartshopper.models.Comment;
 import com.example.smartshopper.models.Deal;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +40,13 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileViewHolder>{
     @Override
     public void onBindViewHolder(@NonNull ProfileViewHolder holder, int position) {
         holder.tv_activities.setText(activities.get(position).getActivityMessage());
+        String date = DateFormat.getDateInstance(DateFormat.SHORT).format(activities.get(position).getTimeStamp())
+                + '\n'+ DateFormat.getTimeInstance(DateFormat.SHORT).format(activities.get(position).getTimeStamp());
+        holder.tv_timestamp.setText(date);
+
+//        String date = DateFormat.getDateInstance(DateFormat.SHORT).format(timestamp)
+//                + '\n'+ DateFormat.getTimeInstance(DateFormat.SHORT).format(timestamp);
+//        return date;
     }
 
     @Override
