@@ -10,7 +10,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+      >
 
         <android.widget.SearchView
             android:id="@+id/sv_searchBar"
@@ -51,21 +52,46 @@
             android:src="@drawable/baseline_add_20"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
+        <ImageView
+          android:id="@+id/sortIcon"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="5dp"
+          android:src="@drawable/ic_baseline_sort_24"
+          app:layout_constraintBottom_toBottomOf="@+id/toggle_group"
+          app:layout_constraintEnd_toStartOf="@+id/toggle_group"
+          app:layout_constraintHorizontal_bias=".1"
+          app:layout_constraintTop_toTopOf="@+id/toggle_group"
+          app:layout_constraintStart_toStartOf="parent"
+          />
 
-        <ToggleButton
-            android:id="@+id/toggle_sortByDistance"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="#B3D1B9"
-            android:onClick="sortDealsBy"
-            android:textOff="@string/sort_by_distance"
-            android:textOn="@string/sort_by_popularity"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/fab"
-            app:layout_constraintHorizontal_bias=".1"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/rv_dealsRecyclerView" />
+        <com.google.android.material.button.MaterialButtonToggleGroup
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="5dp"
+          android:id="@+id/toggle_group"
+          app:singleSelection="true"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintEnd_toStartOf="@+id/fab"
+          app:layout_constraintHorizontal_bias=".1"
+          app:layout_constraintStart_toEndOf="@id/sortIcon"
+          app:layout_constraintTop_toBottomOf="@+id/rv_dealsRecyclerView" >
 
+            <com.google.android.material.button.MaterialButton
+              android:id="@+id/toggle_sortByDistance"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:backgroundTint="#B3D1B9"
+              android:text="Distance" />
+
+            <com.google.android.material.button.MaterialButton
+              android:id="@+id/toggle_sortByPopularity"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:backgroundTint="#BEBEBE"
+              android:text="Popularity"
+ />
+    </com.google.android.material.button.MaterialButtonToggleGroup>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

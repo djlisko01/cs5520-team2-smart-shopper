@@ -2,6 +2,7 @@ package com.example.smartshopper.models;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class Deal implements Serializable {
@@ -23,7 +24,7 @@ public class Deal implements Serializable {
     Double latitude;
     Double longitude;
     String userUUID;
-    List<Comment> comments;
+    HashMap<String, Comment> comments;
     Integer numUpVotes;
     Integer numDownVotes;
     String productImg;
@@ -45,7 +46,7 @@ public class Deal implements Serializable {
         this.numUpVotes = 0;
         this.numDownVotes = 0;
         this.productImg = "";
-        this.comments = new ArrayList<>();
+        this.comments = new HashMap<>();
     }
     public Deal(String upc, String title, Double originalPrice, Double salePrice, String description, String store, String userUUID, Double latitude, Double longitude) {
         this.upc = upc;
@@ -59,7 +60,7 @@ public class Deal implements Serializable {
         this.numUpVotes = 0;
         this.numDownVotes = 0;
         this.productImg = "";
-        this.comments = new ArrayList<>();
+        this.comments = new HashMap<>();
         this.latitude = latitude;
         this.longitude = longitude;
     }
@@ -167,5 +168,13 @@ public class Deal implements Serializable {
 
     public void setProductImg(String url) {
         this.productImg = url;
+    }
+
+    public HashMap<String , Comment> getComments(){
+        return this.comments;
+    }
+
+    public void setComments( HashMap<String , Comment> comments){
+        this.comments = comments;
     }
 }
