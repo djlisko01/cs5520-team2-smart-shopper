@@ -19,6 +19,7 @@ import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
+import com.example.smartshopper.models.ActivityTimestamp;
 import com.example.smartshopper.models.Comment;
 import com.example.smartshopper.models.Deal;
 import com.example.smartshopper.models.DealDistance;
@@ -55,6 +56,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 
 public class PlatformHelpers {
@@ -399,19 +401,59 @@ public class PlatformHelpers {
         });
     }
 
-    public void getDealAddedAndUpdateRv(String userID, ProfileAdapter adapter) {
-        Query query = rtdbDatabase.getPostedDeals(userID);
+//    public void getDealAddedAndUpdateRv(String userID, ProfileAdapter adapter) {
+//        Query query = rtdbDatabase.getPostedDeals(userID);
+//        query.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                List<String> deals = new ArrayList<>();
+//
+//                for (DataSnapshot child : snapshot.getChildren()) {
+//                    Deal deal = child.getValue(Deal.class);
+//                    assert deal != null;
+//                    deals.add(deal);
+//                }
+//                adapter.updateTitle(deals);
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
+//
+//    }
+
+    public void getActivities(String username, ProfileAdapter adapter) {
+        Query query = rtdbDatabase.getAllDeals();
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                List<Deal> deals = new ArrayList<>();
+                List<ActivityTimestamp> activities = new ArrayList<>();
 
                 for (DataSnapshot child : snapshot.getChildren()) {
                     Deal deal = child.getValue(Deal.class);
                     assert deal != null;
-                    deals.add(deal);
+
+                    if(deal.getUserUUID().equals(localStorage.getCurrentUserID())){
+
+                        activities.add(new ActivityTimestamp("You posted "+ deal.getTitle(), deal.getTimePosted()));
+                    }
+
+                    if(deal.getComments() != null){
+                        for (Map.Entry<String, Comment> set :
+                                deal.getComments().entrySet()){
+                            if(set.getValue().getAuthor().getUsername().equals(localStorage.getCurrentUser())){
+                                activities.add(new ActivityTimestamp("You commented on " + deal.getTitle(),set.getValue().getTimePosted()));
+                            }
+                        }
+
+                    }
                 }
-                adapter.updateTitle(deals);
+                Collections.sort(activities);
+                Collections.reverse(activities);
+                adapter.updateTitle(activities);
 
             }
 
