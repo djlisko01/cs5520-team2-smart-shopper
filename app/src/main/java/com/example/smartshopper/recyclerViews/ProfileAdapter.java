@@ -17,14 +17,12 @@ import java.util.List;
 
 public class ProfileAdapter extends RecyclerView.Adapter<ProfileViewHolder>{
 
-    private List<Deal> deals;
-    private List<Comment> comments;
+    private List<String> activities;
     private final Context context;
     private final PlatformHelpers platformHelpers;
 
     public ProfileAdapter(Context context) {
-        this.deals = new ArrayList<>();
-        this.comments = new ArrayList<>();
+        this.activities = new ArrayList<>();
         this.context = context;
         this.platformHelpers = new PlatformHelpers(this.context);
     }
@@ -39,16 +37,16 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileViewHolder>{
 
     @Override
     public void onBindViewHolder(@NonNull ProfileViewHolder holder, int position) {
-        holder.tv_activities.setText(deals.get(position).getTitle());
+        holder.tv_activities.setText(activities.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return deals.size();
+        return activities.size();
     }
 
-    public void updateTitle(List<Deal> deals){
-        this.deals = deals;
+    public void updateTitle(List<String> activities){
+        this.activities = activities;
         notifyDataSetChanged();
     }
 

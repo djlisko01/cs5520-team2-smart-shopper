@@ -55,6 +55,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 
 public class PlatformHelpers {
@@ -399,45 +400,56 @@ public class PlatformHelpers {
         });
     }
 
-    public void getDealAddedAndUpdateRv(String userID, ProfileAdapter adapter) {
-        Query query = rtdbDatabase.getPostedDeals(userID);
+//    public void getDealAddedAndUpdateRv(String userID, ProfileAdapter adapter) {
+//        Query query = rtdbDatabase.getPostedDeals(userID);
+//        query.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                List<String> deals = new ArrayList<>();
+//
+//                for (DataSnapshot child : snapshot.getChildren()) {
+//                    Deal deal = child.getValue(Deal.class);
+//                    assert deal != null;
+//                    deals.add(deal);
+//                }
+//                adapter.updateTitle(deals);
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
+//
+//    }
+
+    public void getActivities(String username, ProfileAdapter adapter) {
+        Query query = rtdbDatabase.getAllDeals();
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                List<Deal> deals = new ArrayList<>();
+                List<String> activities = new ArrayList<>();
 
                 for (DataSnapshot child : snapshot.getChildren()) {
                     Deal deal = child.getValue(Deal.class);
                     assert deal != null;
-                    deals.add(deal);
+
+                    if(deal.getUserUUID().equals(localStorage.getCurrentUserID())){
+                        activities.add("You posted " + deal.getTitle());
+                    }
+
+                    if(deal.getComments() != null){
+                        for (Map.Entry<String, Comment> set :
+                                deal.getComments().entrySet()){
+                            if(set.getValue().getAuthor().getUsername().equals(localStorage.getCurrentUser())){
+                                activities.add("You commented on " + deal.getTitle());
+                            }
+                        }
+
+                    }
                 }
-                adapter.updateTitle(deals);
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-    }
-
-    public void getCommentAddedAndUpdateRv(String username, ProfileAdapter adapter) {
-        Query query = rtdbDatabase.getDealsUserCommentedOn(username);
-        query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                List<Deal> deals = new ArrayList<>();
-
-                for (DataSnapshot child : snapshot.getChildren()) {
-                    Deal deal = child.getValue(Deal.class);
-                    assert deal != null;
-
-
-                    deals.add(deal);
-                }
-                adapter.updateTitle(deals);
+                adapter.updateTitle(activities);
 
             }
 
