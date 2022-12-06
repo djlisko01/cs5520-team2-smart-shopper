@@ -43,13 +43,6 @@ public class MainActivity extends MenuActivity {
   MaterialButtonToggleGroup buttonGroup;
   ImageView sortIcon;
 
-
-  @Override
-  protected void onResume() {
-    super.onResume();
-    checkLocationPermissionAndGetLocation();
-  }
-
   @SuppressLint("ResourceAsColor")
   @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +96,15 @@ public class MainActivity extends MenuActivity {
       }
     });
   }
+
+    @Override
+    protected void onRestart() {
+      super.onRestart();
+      if (localStorage.userIsLoggedIn()) {
+          platformHelpers.createNotifChannel();
+      }
+      checkLocationPermissionAndGetLocation();
+    }
 
     private void setSearchListener() {
         SearchView searchView = findViewById(R.id.sv_searchBar);
