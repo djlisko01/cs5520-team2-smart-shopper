@@ -19,6 +19,7 @@ import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
+import com.example.smartshopper.models.ActivityTimestamp;
 import com.example.smartshopper.models.Comment;
 import com.example.smartshopper.models.Deal;
 import com.example.smartshopper.models.DealDistance;
@@ -429,26 +430,29 @@ public class PlatformHelpers {
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                List<String> activities = new ArrayList<>();
+                List<ActivityTimestamp> activities = new ArrayList<>();
 
                 for (DataSnapshot child : snapshot.getChildren()) {
                     Deal deal = child.getValue(Deal.class);
                     assert deal != null;
 
                     if(deal.getUserUUID().equals(localStorage.getCurrentUserID())){
-                        activities.add("You posted " + deal.getTitle());
+
+                        activities.add(new ActivityTimestamp("You posted "+ deal.getTitle(), deal.getTimePosted()));
                     }
 
                     if(deal.getComments() != null){
                         for (Map.Entry<String, Comment> set :
                                 deal.getComments().entrySet()){
                             if(set.getValue().getAuthor().getUsername().equals(localStorage.getCurrentUser())){
-                                activities.add("You commented on " + deal.getTitle());
+                                activities.add(new ActivityTimestamp("You commented on " + deal.getTitle(),set.getValue().getTimePosted()));
                             }
                         }
 
                     }
                 }
+                Collections.sort(activities);
+                Collections.reverse(activities);
                 adapter.updateTitle(activities);
 
             }

@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.smartshopper.R;
 import com.example.smartshopper.common.PlatformHelpers;
+import com.example.smartshopper.models.ActivityTimestamp;
 import com.example.smartshopper.models.Comment;
 import com.example.smartshopper.models.Deal;
 
@@ -17,7 +18,7 @@ import java.util.List;
 
 public class ProfileAdapter extends RecyclerView.Adapter<ProfileViewHolder>{
 
-    private List<String> activities;
+    private List<ActivityTimestamp> activities;
     private final Context context;
     private final PlatformHelpers platformHelpers;
 
@@ -37,7 +38,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileViewHolder>{
 
     @Override
     public void onBindViewHolder(@NonNull ProfileViewHolder holder, int position) {
-        holder.tv_activities.setText(activities.get(position));
+        holder.tv_activities.setText(activities.get(position).getActivityMessage());
     }
 
     @Override
@@ -45,7 +46,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileViewHolder>{
         return activities.size();
     }
 
-    public void updateTitle(List<String> activities){
+    public void updateTitle(List<ActivityTimestamp> activities){
         this.activities = activities;
         notifyDataSetChanged();
     }
