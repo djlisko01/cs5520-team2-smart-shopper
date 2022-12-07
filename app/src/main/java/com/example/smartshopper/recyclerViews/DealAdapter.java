@@ -99,12 +99,22 @@ public class DealAdapter extends RecyclerView.Adapter<DealViewHolder> {
 
         // Up vote down vote listeners
         holder.frame_downVote.setOnClickListener(v -> {
-            platformHelpers.downVoteDeal(deals.get(position).getDealID(), platformHelpers.getCurrentUserID(), platformHelpers.getCurrentUser());
+            platformHelpers.checkIfUserUpVotedDeal(deals.get(position).getDealID(), platformHelpers.getCurrentUserID(), isUpvoted -> {
+                // if user did not upvote, they can downvote
+                if (!isUpvoted) {
+                    platformHelpers.downVoteDeal(deals.get(position).getDealID(), platformHelpers.getCurrentUserID(), platformHelpers.getCurrentUser());
+                }
+            });
         });
 
         holder.frame_upVote.setOnClickListener(v -> {
-            platformHelpers.upVoteDeal(deals.get(position).getDealID(), platformHelpers.getCurrentUserID(), platformHelpers.getCurrentUser());
+            platformHelpers.checkIfUserDownVotedDeal(deals.get(position).getDealID(), platformHelpers.getCurrentUserID(), isDownvoted -> {
+                // if user did not downvote, they can upvote
+                if (!isDownvoted) {
+                    platformHelpers.upVoteDeal(deals.get(position).getDealID(), platformHelpers.getCurrentUserID(), platformHelpers.getCurrentUser());
+                }
             });
+        });
 
         // Entire deal card listener
         holder.itemView.setOnClickListener(v -> {
