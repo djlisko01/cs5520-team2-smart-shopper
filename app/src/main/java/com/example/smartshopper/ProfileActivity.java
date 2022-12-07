@@ -37,7 +37,5 @@ public class ProfileActivity extends MenuActivity {
         tv_username.setText(localStorage.getCurrentUser());
 
         platformHelpers.getActivities(localStorage.getCurrentUser(), adapter);
-
-
     }
 }

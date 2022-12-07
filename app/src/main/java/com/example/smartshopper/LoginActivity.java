@@ -15,6 +15,7 @@ public class LoginActivity extends MenuActivity {
   EditText emailAddressET;
   EditText passwordET;
   LocalStorage localStorage;
+  final int FINISH_CODE = 10101;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +43,7 @@ public class LoginActivity extends MenuActivity {
         Toast.makeText(getApplicationContext(), "Welcome back "+ userInterface.getUsername() + "!", Toast.LENGTH_LONG).show();
         Intent mainActivityIntent = new Intent(this, MainActivity.class);
         this.startActivity(mainActivityIntent);
+        this.finish();
       } else {
         Toast.makeText(this, "Invalid Credentials", Toast.LENGTH_SHORT).show();
       }
@@ -55,7 +57,15 @@ public class LoginActivity extends MenuActivity {
 
   public void sendToCreateAccountActivity(View view) {
     Intent createAccountIntent = new Intent(this, CreateAccountActivity.class);
-    startActivity(createAccountIntent);
+    startActivityForResult(createAccountIntent, FINISH_CODE);
+  }
+
+  @Override
+  public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+    super.onActivityResult(requestCode, resultCode, intent);
+    if (resultCode == FINISH_CODE) {
+      this.finish();
+    }
   }
 
 }

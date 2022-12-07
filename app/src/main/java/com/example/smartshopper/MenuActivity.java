@@ -1,15 +1,19 @@
 package com.example.smartshopper;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Intent;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
+
 import com.example.smartshopper.utilities.LocalStorage;
 import com.example.smartshopper.utilities.NavigationDrawer;
 import com.google.android.material.internal.NavigationMenuItemView;
@@ -21,6 +25,7 @@ public class MenuActivity extends AppCompatActivity {
     ActionBarDrawerToggle actionBarDrawerToggle;
     NavigationDrawer navigationDrawer;
     LocalStorage localStorage;
+    NavigationView navigationView;
     NavigationMenuItemView loginMenuItem;
 
     @SuppressLint("RestrictedApi")
@@ -41,7 +46,15 @@ public class MenuActivity extends AppCompatActivity {
         navigationDrawer = new NavigationDrawer(this, drawerLayout, actionBarDrawerToggle);
         // to make the Navigation drawer icon always appear on the action bar
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        navigationView = findViewById(R.id.navigation_view);
         setNavigationViewListener();
+        View navHeader = navigationView.getHeaderView(0);
+        if (localStorage.userIsLoggedIn()) {
+            TextView navText = navHeader.findViewById(R.id.tv_greeting);
+            navText.setText("Hi " + localStorage.getCurrentUser() + "!");
+        } else {
+            navHeader.setVisibility(View.GONE);
+        }
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.navigation_menu, menu);
         return true;
@@ -55,7 +68,6 @@ public class MenuActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
     private void setNavigationViewListener() {
-        NavigationView navigationView = findViewById(R.id.navigation_view);
         navigationView.setNavigationItemSelectedListener(navigationDrawer);
     }
 
@@ -66,10 +78,24 @@ public class MenuActivity extends AppCompatActivity {
             startActivity(loginIntent);
         }
         else {
-            if (loginMenuItem != null) {
-                loginMenuItem.setTitle("Sign In");
-            }
-            localStorage.signOut();
+            AlertDialog signOutAlert = new AlertDialog.Builder(this)
+                    .setMessage("Are you sure you want to sign out?")
+                    .setPositiveButton("Yes", (dialog, which) -> {
+                        dialog.dismiss();
+                        if (loginMenuItem != null) {
+                            loginMenuItem.setTitle("Sign In");
+                        }
+                        localStorage.signOut();
+                        Intent logoutIntent = new Intent(getApplicationContext(), MainActivity.class);
+                        logoutIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        logoutIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        logoutIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(logoutIntent);
+                    })
+                    .setNegativeButton("No", (dialog, which) -> {
+                        dialog.dismiss();
+                    })
+                    .show();
         }
     }
 }
