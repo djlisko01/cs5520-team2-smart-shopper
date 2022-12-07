@@ -12,6 +12,7 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.smartshopper.common.PlatformHelpers;
 import com.example.smartshopper.models.Deal;
+import com.example.smartshopper.models.User;
 import com.example.smartshopper.responseInterfaces.StringInterface;
 import com.example.smartshopper.services.CloudStorageService;
 import com.example.smartshopper.services.RTDBService;
@@ -44,6 +46,8 @@ public class ChangIconActivity extends AppCompatActivity {
     ImageView iv_imagePreview;
     RTDBService rtdbService = new RTDBService();
     Uri image_uri;
+    Button saveProfilePic;
+
 
 
     @Override
@@ -56,6 +60,7 @@ public class ChangIconActivity extends AppCompatActivity {
         fab_gallery = findViewById(R.id.gallery_fab);
         iv_imagePreview = findViewById(R.id.iv_imagePreview);
         iv_imagePreview = findViewById(R.id.iv_imagePreview);
+        saveProfilePic = findViewById(R.id.saveProfilePic);
 
 
         fab_camera = findViewById(R.id.camera_fab);
@@ -80,6 +85,16 @@ public class ChangIconActivity extends AppCompatActivity {
                 Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(galleryIntent, LOAD_IMAGE_CODE);
             }
+        });
+
+        setProfilePicButtonListener();
+    }
+
+    private void setProfilePicButtonListener() {
+            saveProfilePic.setOnClickListener(new Button.OnClickListener() {
+                public void onClick(View v) {
+                    sendProfilePic();
+                }
         });
     }
 
@@ -139,6 +154,24 @@ public class ChangIconActivity extends AppCompatActivity {
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, image_uri);
         startActivityForResult(cameraIntent, IMAGE_CAPTURE_CODE);
+    }
+
+    public void sendProfilePic(){
+        LocalStorage localStorage = new LocalStorage(ChangIconActivity.this);
+        String userID = localStorage.getCurrentUserID();
+
+            // Get image
+        Log.d("profile image:::::", image_uri.toString());
+
+            cloudStorageService.uploadWithURI("images/" + image_uri.getLastPathSegment(), image_uri, new StringInterface() {
+                @Override
+                public void onCallback(String response) {
+                    String downloadURL = response;
+                    rtdbService.setUserProfile(image_uri.toString(), userID);
+                    Intent intent = new Intent(ChangIconActivity.this, ProfileActivity.class);
+                    startActivity(intent);
+                }
+            });
     }
 
 }
