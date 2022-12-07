@@ -1,8 +1,12 @@
 package com.example.smartshopper;
 
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,11 +20,22 @@ public class ProfileActivity extends MenuActivity {
     ProfileAdapter adapter;
     PlatformHelpers platformHelpers;
     TextView tv_username;
+    Button changeIcon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        changeIcon= findViewById(R.id.editButton);
+
+        changeIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(ProfileActivity.this, ChangIconActivity.class);
+                startActivity(intent);
+            }
+        });
 
         platformHelpers = new PlatformHelpers(this);
         adapter = new ProfileAdapter(this);
@@ -32,7 +47,7 @@ public class ProfileActivity extends MenuActivity {
         rv_activity.setAdapter(adapter);
 
         LocalStorage localStorage = new LocalStorage(this);
-        // Username
+
         tv_username = findViewById(R.id.tv_username);
         tv_username.setText(localStorage.getCurrentUser());
 
