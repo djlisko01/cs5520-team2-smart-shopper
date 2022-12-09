@@ -34,7 +34,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class ChangIconActivity extends AppCompatActivity {
+public class ChangIconActivity extends MenuActivity {
 
     private static final int LOAD_IMAGE_CODE = 123;
     public static final int IMAGE_CAPTURE_CODE = 654;

@@ -28,6 +28,7 @@
                 android:layout_height="75dp"
                 android:layout_centerVertical="true"
                 android:contentDescription="@string/picture_of_the_on_sale_item"
+                android:scaleType="centerCrop"
                 app:layout_constraintBottom_toTopOf="@id/tv_dealPostedTime"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -58,13 +59,15 @@
 
             <TextView
                 android:id="@+id/tv_dealTitle"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="1dp"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:text="@string/deal_title"
                 android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/tb_saveDeal"
                 app:layout_constraintHorizontal_bias="0"
                 app:layout_constraintStart_toEndOf="@+id/iv_itemPicture"
                 app:layout_constraintTop_toTopOf="parent" />
