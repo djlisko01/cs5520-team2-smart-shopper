@@ -48,6 +48,7 @@ public class ChangIconActivity extends AppCompatActivity {
     Uri image_uri;
     Button saveProfilePic;
     ImageView profilePic;
+    View loadingAnimation;
 
 
 
@@ -63,6 +64,8 @@ public class ChangIconActivity extends AppCompatActivity {
         iv_imagePreview = findViewById(R.id.iv_imagePreview);
         saveProfilePic = findViewById(R.id.saveProfilePic);
 
+        loadingAnimation = findViewById(R.id.loadingAnimation);
+        loadingAnimation.setVisibility(View.INVISIBLE);
 
         fab_camera = findViewById(R.id.camera_fab);
         fab_gallery = findViewById(R.id.gallery_fab);
@@ -168,18 +171,20 @@ public class ChangIconActivity extends AppCompatActivity {
     }
 
     public void sendProfilePic() {
+        loadingAnimation.setVisibility(View.VISIBLE);
         LocalStorage localStorage = new LocalStorage(ChangIconActivity.this);
         String userID = localStorage.getCurrentUserID();
 
         if (image_uri != null && !image_uri.toString().isEmpty()) {
-
             cloudStorageService.uploadWithURI("images/" + image_uri.getLastPathSegment(), image_uri, new StringInterface() {
                 @Override
                 public void onCallback(String response) {
                     String downloadURL = response;
                     rtdbService.setUserProfile(downloadURL, userID);
                     Intent intent = new Intent(ChangIconActivity.this, ProfileActivity.class);
+                    loadingAnimation.setVisibility(View.GONE);
                     startActivity(intent);
+                    ChangIconActivity.this.finish();
                 }
             });
         }
