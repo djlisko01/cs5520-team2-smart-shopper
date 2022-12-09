@@ -45,6 +45,18 @@ public class LocalStorage {
     editor.commit();
   }
 
+  public void setUserRank(int userRank){
+    SharedPreferences settings = context.getSharedPreferences("UserInfo", 0);
+    SharedPreferences.Editor editor = settings.edit();
+    editor.putInt("userRank", userRank);
+    editor.commit();
+  }
+
+  public int getUserRank(){
+    return context.getSharedPreferences("UserInfo", 0)
+            .getInt("userRank", 9999);
+  }
+
   public void signOut() {
     SharedPreferences settings = context.getSharedPreferences("UserInfo", 0);
     SharedPreferences.Editor editor = settings.edit();

@@ -31,6 +31,7 @@ import com.example.smartshopper.responseInterfaces.BoolInterface;
 import com.example.smartshopper.responseInterfaces.CommentInterface;
 import com.example.smartshopper.responseInterfaces.DealInterface;
 import com.example.smartshopper.responseInterfaces.IntegerInterface;
+import com.example.smartshopper.responseInterfaces.ListInterface;
 import com.example.smartshopper.responseInterfaces.LocationInterface;
 import com.example.smartshopper.responseInterfaces.StringInterface;
 import com.example.smartshopper.responseInterfaces.UserInterface;
@@ -54,10 +55,15 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+
+import okhttp3.internal.Internal;
 
 public class PlatformHelpers {
     private final RTDBService rtdbDatabase;
@@ -685,6 +691,59 @@ public class PlatformHelpers {
         });
     }
 
+    public void getUserRank(ListInterface listInterface){
+        Query allDeals = rtdbDatabase.getAllDeals();
+        allDeals.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                HashMap<String, Integer> dealPostCounts = new HashMap<>();
+                for (DataSnapshot dealSnapshot : snapshot.getChildren()) {
+                    Deal deal = dealSnapshot.getValue(Deal.class);
+                    Integer postCount = 0;
+                    assert deal != null;
+                    String userID = deal.getUserUUID();
+                    if (userID.length() <= 0){
+                        continue;
+                    }
+                    if (dealPostCounts.containsKey(userID)) {
+                        postCount = dealPostCounts.get(userID);
+                        postCount += 1;
+                    }
+                    dealPostCounts.put(userID, postCount);
+                }
+
+                ArrayList<String> sortedUsers = sortPostTotal(dealPostCounts);
+                listInterface.onCallback(sortedUsers);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    // Helper for sorting user total posted deals
+    private static ArrayList<String> sortPostTotal(HashMap<String, Integer> dealPostCounts){
+        ArrayList<String> sortedUsers = new ArrayList<>();
+        ArrayList <Integer> list = new ArrayList<>();
+
+        for (Map.Entry<String, Integer> entry : dealPostCounts.entrySet()) {
+            list.add(entry.getValue());
+        }
+
+        list.sort((o1, o2) -> o2.compareTo(o1));
+
+        for (Integer count : list){
+            for (Map.Entry<String, Integer> entry: dealPostCounts.entrySet()){
+                if (entry.getValue().equals(count)){
+                    sortedUsers.add(entry.getKey());
+                }
+            }
+        }
+        return sortedUsers;
+    }
     // Location
     public void getCurrentLocation(LocationInterface locationInterface) {
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {

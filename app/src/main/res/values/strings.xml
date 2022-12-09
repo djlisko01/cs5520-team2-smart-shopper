@@ -45,4 +45,5 @@
     <string name="sort_by_distance">Sort By Distance</string>
     <string name="sort_by_popularity">Sort by Popularity</string>
     <string name="home">Home</string>
+    <string name="ranking">Your Ranking</string>
 </resources>

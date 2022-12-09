@@ -9,6 +9,7 @@
     <ScrollView
       android:layout_width="match_parent"
       android:layout_height="match_parent">
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -61,14 +62,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="380dp"
+                android:onClick="sendChangIconActivity"
                 android:text="Change Icon"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.503"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_username"
-                app:layout_constraintVertical_bias="1.0"
-                android:onClick="sendChangIconActivity"/>
+                app:layout_constraintVertical_bias="1.0" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/profile_recycler_view"
@@ -79,6 +80,33 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="1.0" />
+
+            <TextView
+                android:textSize="20dp"
+                android:id="@+id/tv_RankHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ranking"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/imgUser"
+                app:layout_constraintEnd_toStartOf="@+id/tv_userRank"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_userRank"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="999999"
+                android:textSize="20dp"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_RankHeader"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/tv_RankHeader"
+                app:layout_constraintTop_toTopOf="@+id/tv_RankHeader" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
