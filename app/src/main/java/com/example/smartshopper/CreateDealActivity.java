@@ -52,7 +52,6 @@ public class CreateDealActivity extends MenuActivity {
     ArrayList<View> formElements = new ArrayList();
     Button buttonOne;
     EditText titleET;
-    EditText upcET;
     EditText descriptionET;
     EditText storeET;
     EditText salePriceET;
@@ -76,12 +75,11 @@ public class CreateDealActivity extends MenuActivity {
         fab_gallery = findViewById(R.id.gallery_fab);
         buttonOne = findViewById(R.id.createDealButton);
         titleET = findViewById(R.id.editTextCreateTitle);
-        upcET = findViewById(R.id.editTextCreateUPC);
         descriptionET = findViewById(R.id.editTextCreateDescription);
         storeET = findViewById(R.id.editTextStore);
         salePriceET = findViewById(R.id.editTextSalePrice);
         originalPriceET = findViewById(R.id.editTextPrice);
-        Collections.addAll(formElements, buttonOne, titleET, fab_camera, fab_gallery, upcET, descriptionET, storeET, salePriceET, originalPriceET);
+        Collections.addAll(formElements, buttonOne, titleET, fab_camera, fab_gallery, descriptionET, storeET, salePriceET, originalPriceET);
 
         if (buttonOne != null) {
             setCreateDealButtonListener();
@@ -187,7 +185,6 @@ public class CreateDealActivity extends MenuActivity {
                 }
                 // Get the deal information from the form
                 String title = titleET.getText().toString();
-                String upc = upcET.getText().toString();
                 String description = descriptionET.getText().toString();
                 String store = storeET.getText().toString();
                 String salePrice = salePriceET.getText().toString();
@@ -217,10 +214,10 @@ public class CreateDealActivity extends MenuActivity {
                     // Create a new deal object
                     Deal deal;
                     if (currentLocation == null) {
-                        deal = new Deal(upc, title, originalPriceDouble, salePriceDouble, description, store, userID);
+                        deal = new Deal("", title, originalPriceDouble, salePriceDouble, description, store, userID);
                     }
                     else {
-                        deal = new Deal(upc,
+                        deal = new Deal("",
                                 title,
                                 originalPriceDouble,
                                 salePriceDouble,
@@ -245,6 +242,7 @@ public class CreateDealActivity extends MenuActivity {
                                 intent.putExtra("dealItem", deal);
                                 loadingAnimation.setVisibility(View.GONE);
                                 startActivity(intent);
+                                CreateDealActivity.this.finish();
                             }
                         });
                         // no image uploaded flow

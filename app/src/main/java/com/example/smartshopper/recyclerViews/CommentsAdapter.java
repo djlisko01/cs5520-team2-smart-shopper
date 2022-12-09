@@ -82,7 +82,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsViewHolder> {
                 platformHelpers.getUserImg(userID, new StringInterface() {
                     @Override
                     public void onCallback(String response) {
-                        PlatformHelpers.loadImg(context, response, holder.img_profilePic, R.drawable.ic_user);
+                        PlatformHelpers.loadImg(context, response, holder.img_profilePic, R.drawable.missing_profile_pic);
                     }
                 });
 

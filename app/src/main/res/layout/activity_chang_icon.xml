@@ -16,6 +16,17 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <ProgressBar
+                android:id="@+id/loadingAnimation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/iv_imagePreview"
+                app:layout_constraintVertical_bias="0.1"/>
+
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/camera_fab"
                 android:layout_width="wrap_content"
@@ -26,6 +37,7 @@
                 android:layout_marginEnd="100dp"
                 android:contentDescription="TODO"
                 android:src="@android:drawable/ic_menu_camera"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/iv_imagePreview" />
 
@@ -39,23 +51,25 @@
                 android:layout_marginTop="40dp"
                 android:contentDescription="TODO"
                 android:src="@android:drawable/ic_menu_gallery"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/iv_imagePreview" />
 
             <ImageView
                 android:id="@+id/iv_imagePreview"
-                android:layout_width="wrap_content"
+                android:layout_width="185dp"
                 android:layout_height="185dp"
                 android:adjustViewBounds="true"
                 android:padding="3dp"
-                android:scaleType="centerInside"
+                android:scaleType="centerCrop"
                 android:src="@drawable/ic_user"
+
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.497"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.253" />
+                app:layout_constraintVertical_bias="0.25" />
 
             <Button
                 android:id="@+id/saveProfilePic"
@@ -64,20 +78,22 @@
                 android:text="Save"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.498"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/iv_imagePreview" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
     <!-- this the navigation view which draws and shows the navigation drawer -->
     <!-- include the menu created in the menu folder -->
-<!--    <com.google.android.material.navigation.NavigationView-->
-<!--        android:id="@+id/navigation_view"-->
-<!--        android:layout_width="200dp"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:layout_gravity="start"-->
-<!--        app:menu="@menu/navigation_menu" />-->
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/navigation_view"
+        android:layout_width="200dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:menu="@menu/navigation_menu"
+        app:headerLayout="@layout/navigation_header" />
 
 
 </androidx.drawerlayout.widget.DrawerLayout>

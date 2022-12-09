@@ -55,7 +55,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                app:layout_constraintBottom_toTopOf="@id/create_upc_text_input_layout"
+                app:layout_constraintBottom_toTopOf="@id/create_description_text_input_layout"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/camera_fab">
@@ -76,32 +76,6 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/create_upc_text_input_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                app:layout_constraintBottom_toTopOf="@id/create_description_text_input_layout"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/create_deal_text_input_layout">
-
-                <EditText
-                    android:id="@+id/editTextCreateUPC"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:autofillHints="AUTOFILL_HINT_UPC"
-                    android:backgroundTint="#00FFFFFF"
-                    android:ems="10"
-                    android:hint="@string/upc_hint"
-                    android:inputType="textEmailAddress"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/create_description_text_input_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -110,7 +84,7 @@
                 app:layout_constraintBottom_toTopOf="@id/create_store_text_input_layout"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/create_upc_text_input_layout">
+                app:layout_constraintTop_toBottomOf="@id/create_deal_text_input_layout">
 
                 <EditText
                     android:id="@+id/editTextCreateDescription"
