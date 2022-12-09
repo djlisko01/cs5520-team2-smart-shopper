@@ -97,7 +97,6 @@ public class ChangIconActivity extends AppCompatActivity {
             @Override
             public void onCallback(String response) {
                 PlatformHelpers.loadImg(getApplicationContext(), response, profilePic, R.drawable.ic_user);
-                Log.d("IMG URL:::", response);
             }
         });
     }
