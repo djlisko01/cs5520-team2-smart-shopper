@@ -6,11 +6,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.example.smartshopper.common.PlatformHelpers;
+import com.example.smartshopper.models.Comment;
 import com.example.smartshopper.models.Deal;
 import com.example.smartshopper.recyclerViews.CommentsAdapter;
 import com.example.smartshopper.utilities.CommentInputDialog;
@@ -18,7 +21,13 @@ import com.example.smartshopper.utilities.LocalStorage;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
 
 public class DealDetailsActivity extends MenuActivity {
     PlatformHelpers platformHelpers;
@@ -29,6 +38,7 @@ public class DealDetailsActivity extends MenuActivity {
     TextView tv_numDownvotes;
     ImageView iv_downVote;
     ImageView iv_upVote;
+    SearchView sv_searchBar;
     FloatingActionButton btn_AddComment;
     TextInputEditText commentInput;
     RecyclerView rv_comments;
@@ -53,6 +63,7 @@ public class DealDetailsActivity extends MenuActivity {
         tv_numDownvotes = findViewById(R.id.tv_numDownVotes);
         iv_upVote = findViewById(R.id.iv_upVote);
         iv_downVote = findViewById(R.id.iv_downVote);
+        sv_searchBar = findViewById(R.id.sv_searchBar);
 
         if(!localStorage.userIsLoggedIn()){
             btn_AddComment.setVisibility(View.GONE);
@@ -77,6 +88,32 @@ public class DealDetailsActivity extends MenuActivity {
                     iv_deal_img,
                     R.drawable.ic_baseline_shopping_basket_large);
         }
+
+        // Search for user posts
+        sv_searchBar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            final List<Comment> filteredList = new ArrayList<>();
+            final Collection<Comment> comments = deal.getComments().values();
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String textInput) {
+
+
+                for (Comment comment: comments){
+                    String userName = comment.getAuthor().getUsername().toLowerCase();
+
+                    if (userName.contains(textInput)){
+                        filteredList.add(comment);
+                    }
+                }
+
+                adapter.updateComments(filteredList);
+                return false;
+            }
+        });
 
 
         // BUTTONS For Activity
