@@ -50,11 +50,6 @@ public class LoginActivity extends MenuActivity {
     });
   }
 
-  public void sendToForgotPasswordActivity(View view) {
-    Intent forgotPasswordIntent = new Intent(this, ForgotPasswordActivity.class);
-    startActivity(forgotPasswordIntent);
-  }
-
   public void sendToCreateAccountActivity(View view) {
     Intent createAccountIntent = new Intent(this, CreateAccountActivity.class);
     startActivityForResult(createAccountIntent, FINISH_CODE);

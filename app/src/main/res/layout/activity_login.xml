@@ -97,27 +97,11 @@
         android:text="@string/login_button_text"
         tools:layout_editor_absoluteX="151dp"
         tools:layout_editor_absoluteY="357dp"
-        app:layout_constraintBottom_toTopOf="@id/forgotPasswordButton"
+        app:layout_constraintBottom_toTopOf="@id/createAccountButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/password_text_input_layout"
         />
-
-    <Button
-        android:id="@+id/forgotPasswordButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="100dp"
-        android:layout_marginRight="100dp"
-        android:layout_marginBottom="10dp"
-        android:text="@string/forgot_password_button"
-        tools:layout_editor_absoluteX="155dp"
-        tools:layout_editor_absoluteY="301dp"
-        app:layout_constraintBottom_toTopOf="@id/createAccountButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/loginButton"
-        android:onClick="sendToForgotPasswordActivity"/>
 
     <Button
         android:id="@+id/createAccountButton"
@@ -133,7 +117,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/forgotPasswordButton"
+        app:layout_constraintTop_toBottomOf="@id/loginButton"
         android:onClick="sendToCreateAccountActivity"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

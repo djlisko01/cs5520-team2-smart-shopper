@@ -71,11 +71,7 @@
             android:name=".LoginActivity"
             android:configChanges="orientation|screenSize"
             android:parentActivityName=".MainActivity" />
-        <activity
-            android:name=".ForgotPasswordActivity"
-            android:configChanges="orientation|screenSize"
-            android:parentActivityName=".LoginActivity" />
-        <activity
+      <activity
             android:name=".MainActivity"
             android:exported="true"
             android:configChanges="orientation|screenSize">
