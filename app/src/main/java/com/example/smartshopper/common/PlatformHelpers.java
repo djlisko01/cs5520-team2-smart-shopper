@@ -106,6 +106,24 @@ public class PlatformHelpers {
 
     }
 
+    public void getUserByUsername (String username, StringInterface stringInterface){
+        Query query = rtdbDatabase.getUser(username);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot child : snapshot.getChildren()) {
+                    stringInterface.onCallback(child.getKey());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+
+
+    }
+
     // Get user by id
     public void getUserByUUID(String userUUID, UserInterface userInterface) {
         Query query = rtdbDatabase.getUserByKey(userUUID);
@@ -479,6 +497,7 @@ public class PlatformHelpers {
         });
 
     }
+
 
     /**
      * Loads picture using Glide Library

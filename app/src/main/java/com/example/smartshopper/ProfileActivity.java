@@ -32,6 +32,7 @@ public class ProfileActivity extends MenuActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+        LocalStorage localStorage = new LocalStorage(this);
 
         changeIcon= findViewById(R.id.editButton);
 
@@ -44,22 +45,17 @@ public class ProfileActivity extends MenuActivity {
         });
 
         platformHelpers = new PlatformHelpers(this);
-        adapter = new ProfileAdapter(this);
 
-        // RecyclerView
         adapter = new ProfileAdapter(this);
-        rv_activity= findViewById(R.id.profile_recycler_view);
+        rv_activity = findViewById(R.id.profile_recycler_view);
         rv_activity.setLayoutManager(new LinearLayoutManager(this));
         rv_activity.setAdapter(adapter);
-
-        LocalStorage localStorage = new LocalStorage(this);
 
         profilePic = findViewById(R.id.iv_user);
         platformHelpers.getUserImg(localStorage.getCurrentUserID(), new StringInterface() {
             @Override
             public void onCallback(String response) {
                 PlatformHelpers.loadImg(getApplicationContext(), response, profilePic, R.drawable.ic_user);
-                Log.d("IMG URL:::", response);
             }
         });
 

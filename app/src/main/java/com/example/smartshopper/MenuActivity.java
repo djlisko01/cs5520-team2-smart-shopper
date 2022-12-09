@@ -54,6 +54,9 @@ public class MenuActivity extends AppCompatActivity {
             navText.setText("Hi " + localStorage.getCurrentUser() + "!");
         } else {
             navHeader.setVisibility(View.GONE);
+            Menu nav_Menu = navigationView.getMenu();
+            nav_Menu.findItem(R.id.nav_account).setVisible(false);
+            nav_Menu.findItem(R.id.nav_savedDeals).setVisible(false);
         }
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.navigation_menu, menu);
