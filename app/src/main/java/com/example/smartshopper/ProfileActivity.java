@@ -3,8 +3,10 @@ package com.example.smartshopper;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -13,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.smartshopper.common.PlatformHelpers;
 import com.example.smartshopper.recyclerViews.ProfileAdapter;
+import com.example.smartshopper.responseInterfaces.StringInterface;
+import com.example.smartshopper.services.RTDBService;
 import com.example.smartshopper.utilities.LocalStorage;
 
 public class ProfileActivity extends MenuActivity {
@@ -21,6 +25,8 @@ public class ProfileActivity extends MenuActivity {
     PlatformHelpers platformHelpers;
     TextView tv_username;
     Button changeIcon;
+    ImageView profilePic;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +53,18 @@ public class ProfileActivity extends MenuActivity {
         rv_activity.setAdapter(adapter);
 
         LocalStorage localStorage = new LocalStorage(this);
+
+        profilePic = findViewById(R.id.iv_user);
+        platformHelpers.getUserImg(localStorage.getCurrentUserID(), new StringInterface() {
+            @Override
+            public void onCallback(String response) {
+                PlatformHelpers.loadImg(getApplicationContext(), response, profilePic, R.drawable.ic_user);
+                Log.d("IMG URL:::", response);
+            }
+        });
+
+
+
 
         tv_username = findViewById(R.id.tv_username);
         tv_username.setText(localStorage.getCurrentUser());

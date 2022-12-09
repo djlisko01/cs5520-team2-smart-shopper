@@ -47,6 +47,7 @@ public class ChangIconActivity extends AppCompatActivity {
     RTDBService rtdbService = new RTDBService();
     Uri image_uri;
     Button saveProfilePic;
+    ImageView profilePic;
 
 
 
@@ -88,6 +89,17 @@ public class ChangIconActivity extends AppCompatActivity {
         });
 
         setProfilePicButtonListener();
+
+        LocalStorage localStorage = new LocalStorage(this);
+        profilePic = findViewById(R.id.iv_imagePreview);
+
+        platformHelpers.getUserImg(localStorage.getCurrentUserID(), new StringInterface() {
+            @Override
+            public void onCallback(String response) {
+                PlatformHelpers.loadImg(getApplicationContext(), response, profilePic, R.drawable.ic_user);
+                Log.d("IMG URL:::", response);
+            }
+        });
     }
 
     private void setProfilePicButtonListener() {
@@ -156,22 +168,22 @@ public class ChangIconActivity extends AppCompatActivity {
         startActivityForResult(cameraIntent, IMAGE_CAPTURE_CODE);
     }
 
-    public void sendProfilePic(){
+    public void sendProfilePic() {
         LocalStorage localStorage = new LocalStorage(ChangIconActivity.this);
         String userID = localStorage.getCurrentUserID();
 
-            // Get image
-        Log.d("profile image:::::", image_uri.toString());
+        if (image_uri != null && !image_uri.toString().isEmpty()) {
 
             cloudStorageService.uploadWithURI("images/" + image_uri.getLastPathSegment(), image_uri, new StringInterface() {
                 @Override
                 public void onCallback(String response) {
                     String downloadURL = response;
-                    rtdbService.setUserProfile(image_uri.toString(), userID);
+                    rtdbService.setUserProfile(downloadURL, userID);
                     Intent intent = new Intent(ChangIconActivity.this, ProfileActivity.class);
                     startActivity(intent);
                 }
             });
+        }
     }
 
 }
