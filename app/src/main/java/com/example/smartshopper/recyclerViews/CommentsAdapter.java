@@ -75,12 +75,17 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsViewHolder> {
 //        holder.rv_responses.setLayoutManager(new LinearLayoutManager(context));
 
         // Load user profile picture.
-        // TODO: change imgURI from empty string
-        platformHelpers.getUserImg(localStorage.getCurrentUserID(), new StringInterface() {
+
+        platformHelpers.getUserByUsername(username, new StringInterface() {
             @Override
-            public void onCallback(String response) {
-                PlatformHelpers.loadImg(context, response, holder.img_profilePic, R.drawable.ic_user);
-                Log.d("IMG URL:::", response);
+            public void onCallback(String userID) {
+                platformHelpers.getUserImg(userID, new StringInterface() {
+                    @Override
+                    public void onCallback(String response) {
+                        PlatformHelpers.loadImg(context, response, holder.img_profilePic, R.drawable.ic_user);
+                    }
+                });
+
             }
         });
 
