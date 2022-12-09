@@ -26,6 +26,7 @@ public class CreateAccountActivity extends AppCompatActivity {
   LocalStorage localStorage;
   NavigationMenuItemView signinButton;
   CheckBox agreeToTerms;
+  final int FINISH_CODE = 10101;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +71,8 @@ public class CreateAccountActivity extends AppCompatActivity {
           signIn(userInterface);
           Intent mainActivityIntent = new Intent(context, MainActivity.class);
           context.startActivity(mainActivityIntent);
+          setResult(FINISH_CODE);
+          this.finish();
         }
         else {
           Toast.makeText(context, "Username or email taken. Please try again.", Toast.LENGTH_LONG).show();

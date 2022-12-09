@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -36,19 +37,14 @@ public class MainActivity extends MenuActivity {
   LocalStorage localStorage;
   FusedLocationProviderClient fusedLocationProviderClient;
   private final static int COARSE_REQUEST_CODE = 100;
+  private final int SORT_BY_DISTANCE = 0;
+  private final int SORT_BY_POPULARITY = 1;
   Context context = this;
   Location currentLocation;
   MaterialButton toggleSortDistance;
   MaterialButton toggleSortPopularity;
   MaterialButtonToggleGroup buttonGroup;
   ImageView sortIcon;
-
-
-  @Override
-  protected void onResume() {
-    super.onResume();
-    checkLocationPermissionAndGetLocation();
-  }
 
   @SuppressLint("ResourceAsColor")
   @Override
@@ -90,19 +86,45 @@ public class MainActivity extends MenuActivity {
 
     toggleSortPopularity.addOnCheckedChangeListener((button, isChecked) -> {
       if (button.getId() == R.id.toggle_sortByPopularity) {
-        toggleSortPopularity.setBackgroundColor(Color.parseColor("#B3D1B9"));
-        toggleSortDistance.setBackgroundColor(Color.parseColor("#BEBEBE"));
-        sortDealsBy(button);
+        if (isChecked) {
+            localStorage.setSortPreference(SORT_BY_POPULARITY);
+            toggleSortDistance.setChecked(false);
+            toggleSortPopularity.setBackgroundColor(Color.parseColor("#B3D1B9"));
+            toggleSortDistance.setBackgroundColor(Color.parseColor("#BEBEBE"));
+            sortDealsBy(button);
+        }
       }
     });
+
     toggleSortDistance.addOnCheckedChangeListener((button, isChecked) -> {
       if (button.getId() == R.id.toggle_sortByDistance) {
-        toggleSortPopularity.setBackgroundColor(Color.parseColor("#BEBEBE"));
-        toggleSortDistance.setBackgroundColor(Color.parseColor("#B3D1B9"));
-        sortDealsBy(button);
+          if (isChecked) {
+              localStorage.setSortPreference(SORT_BY_DISTANCE);
+              toggleSortPopularity.setChecked(false);
+              toggleSortPopularity.setBackgroundColor(Color.parseColor("#BEBEBE"));
+              toggleSortDistance.setBackgroundColor(Color.parseColor("#B3D1B9"));
+              sortDealsBy(button);
+          }
       }
     });
+
+    toggleSortDistance.setOnClickListener(v -> {
+        if (currentLocation == null) {
+            Toast.makeText(this, "Unable to fetch your location. Please check your location settings.", Toast.LENGTH_SHORT).show();
+            toggleSortDistance.setChecked(false);
+            toggleSortPopularity.setChecked(true);
+        }
+    });
   }
+
+    @Override
+    protected void onRestart() {
+      super.onRestart();
+      if (localStorage.userIsLoggedIn()) {
+          platformHelpers.createNotifChannel();
+      }
+      checkLocationPermissionAndGetLocation();
+    }
 
     private void setSearchListener() {
         SearchView searchView = findViewById(R.id.sv_searchBar);
@@ -155,6 +177,8 @@ public class MainActivity extends MenuActivity {
                 platformHelpers.getCurrentLocation(location -> {
                     if (location != null) {
                         currentLocation = location;
+                        toggleSortPopularity.setChecked(false);
+                        toggleSortDistance.setChecked(true);
                         platformHelpers.getDealsAndUpdateMainRV(adapter, null, currentLocation, loadingAnimation);
                     }
                 });
@@ -173,7 +197,18 @@ public class MainActivity extends MenuActivity {
             platformHelpers.getCurrentLocation(location -> {
                 if (location != null) {
                     currentLocation = location;
-                    platformHelpers.getDealsAndUpdateMainRV(adapter, null, currentLocation, loadingAnimation);
+                    if (localStorage.getSortPreference() == SORT_BY_DISTANCE) {
+                        toggleSortPopularity.setChecked(false);
+                        toggleSortDistance.setChecked(true);
+                    } else {
+                        // if user prefers to sort by popularity
+                        toggleSortDistance.setChecked(false);
+                        toggleSortPopularity.setChecked(true);
+                    }
+                } else {
+                    // if location was null
+                    toggleSortDistance.setChecked(false);
+                    toggleSortPopularity.setChecked(true);
                 }
             });
         }

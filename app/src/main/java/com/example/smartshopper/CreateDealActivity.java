@@ -254,6 +254,7 @@ public class CreateDealActivity extends MenuActivity {
                         // Go to detailed view of the deal
                         intent.putExtra("dealItem", deal);
                         startActivity(intent);
+                        CreateDealActivity.this.finish();
                     }
                 }
             }

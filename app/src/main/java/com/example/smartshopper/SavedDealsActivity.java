@@ -33,4 +33,10 @@ public class SavedDealsActivity extends MenuActivity {
         rv_savedDeals.setAdapter(adapter);
         platformHelpers.getSavedDealsAndUpdateRV(adapter, tv_noSavedDeals, loadingAnimation);
     }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        platformHelpers.getSavedDealsAndUpdateRV(adapter, tv_noSavedDeals, loadingAnimation);
+    }
 }
