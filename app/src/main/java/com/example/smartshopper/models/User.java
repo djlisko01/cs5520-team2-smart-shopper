@@ -8,7 +8,6 @@ public class User implements Serializable {
     String email;
     String password;
     String fcmToken;
-    String profileImgUrl;
 
     // For use with firebase to make a user object from a json object (what snapshot.getValue returns)
     public User() {
@@ -48,9 +47,4 @@ public class User implements Serializable {
     public String toString() {
         return this.username;
     }
-
-    public String getProfileImgUrl() { return profileImgUrl;}
-
-    public void setProfileImgUrl(String profileImgUrl) { this.profileImgUrl=profileImgUrl; }
-
 }
