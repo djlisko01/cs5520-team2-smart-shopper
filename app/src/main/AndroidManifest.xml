@@ -56,6 +56,14 @@
                 android:value="" />
         </activity>
         <activity
+            android:name=".ChangIconActivity"
+            android:exported="false"
+            android:configChanges="orientation|screenSize">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".CreateAccountActivity"
             android:configChanges="orientation|screenSize"
             android:parentActivityName=".LoginActivity" />
@@ -82,5 +90,4 @@
                 android:value="" />
         </activity>
     </application>
-
 </manifest>

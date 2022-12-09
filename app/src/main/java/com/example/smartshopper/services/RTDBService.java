@@ -247,4 +247,11 @@ public class RTDBService {
         ref.child(Constants.USERS).child(userID).child(Constants.SAVED_DEALS).child(dealID).removeValue();
     }
 
+    //UPDATE METHODS
+
+   public void setUserProfile(String url, String userID) {
+        ref.child(Constants.USERS).child(userID).child("profileImgUrl").setValue(url);
+
+   }
+
 }

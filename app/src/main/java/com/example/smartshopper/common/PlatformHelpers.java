@@ -91,6 +91,21 @@ public class PlatformHelpers {
 //
 //    }
 
+    public void getUserImg(String userID, StringInterface stringInterface) {
+        Query query = rtdbDatabase.getUserByKey(userID);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                stringInterface.onCallback(snapshot.child("profileImgUrl").getValue(String.class));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+
+    }
+
     // Get user by id
     public void getUserByUUID(String userUUID, UserInterface userInterface) {
         Query query = rtdbDatabase.getUserByKey(userUUID);

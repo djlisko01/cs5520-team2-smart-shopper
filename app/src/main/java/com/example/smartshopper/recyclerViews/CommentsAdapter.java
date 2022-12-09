@@ -2,6 +2,7 @@ package com.example.smartshopper.recyclerViews;
 
 import android.content.Context;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import com.example.smartshopper.common.PlatformHelpers;
 import com.example.smartshopper.models.Comment;
 import com.example.smartshopper.models.Deal;
 
+import com.example.smartshopper.responseInterfaces.StringInterface;
 import com.example.smartshopper.utilities.LocalStorage;
 
 import java.util.ArrayList;
@@ -24,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CommentsAdapter extends RecyclerView.Adapter<CommentsViewHolder> {
+    PlatformHelpers platformHelpers;
     List<Comment> comments;
 //    List<Comment> responses;
     Context context;
@@ -39,6 +42,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsViewHolder> {
         this.comments = new ArrayList<>();
         this.context = context;
         this.deal = deal;
+        platformHelpers = new PlatformHelpers(context);
 //        this.depth = 0;
 //        this.isChildComment = false;
     }
@@ -72,10 +76,13 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsViewHolder> {
 
         // Load user profile picture.
         // TODO: change imgURI from empty string
-        PlatformHelpers.loadImg(context,
-                "",
-                holder.img_profilePic,
-                R.drawable.missing_profile_pic);
+        platformHelpers.getUserImg(localStorage.getCurrentUserID(), new StringInterface() {
+            @Override
+            public void onCallback(String response) {
+                PlatformHelpers.loadImg(context, response, holder.img_profilePic, R.drawable.ic_user);
+                Log.d("IMG URL:::", response);
+            }
+        });
 
         // Hide Reply for users that aren't logged in.
 //        if (!localStorage.userIsLoggedIn()) {
