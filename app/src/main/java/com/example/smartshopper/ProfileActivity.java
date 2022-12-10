@@ -1,5 +1,6 @@
 package com.example.smartshopper;
 
+import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.os.Bundle;
@@ -27,9 +28,10 @@ public class ProfileActivity extends MenuActivity {
     PlatformHelpers platformHelpers;
     TextView tv_username;
     TextView tv_userRank;
+    TextView tv_noActivities;
     Button changeIcon;
     ImageView profilePic;
-
+    ImageView rankInfo;
 
 
     @Override
@@ -40,6 +42,7 @@ public class ProfileActivity extends MenuActivity {
 
         changeIcon= findViewById(R.id.editButton);
         tv_userRank = findViewById(R.id.tv_userRank);
+        rankInfo = findViewById(R.id.iv_rankInfo);
 
         changeIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,14 +67,24 @@ public class ProfileActivity extends MenuActivity {
             }
         });
 
-        tv_userRank.setText(String.format(Locale.US, "%d",localStorage.getUserRank()));
+        tv_userRank.setText(String.format(Locale.US, "%d", localStorage.getUserRank()));
 
         tv_username = findViewById(R.id.tv_username);
         tv_username.setText(localStorage.getCurrentUser());
 
-        platformHelpers.getActivities(localStorage.getCurrentUser(), adapter);
+        tv_noActivities = findViewById(R.id.tv_noActivities);
+
+        platformHelpers.getActivities(localStorage.getCurrentUser(), adapter, tv_noActivities);
     }
 
-
+    public void displayRankInfo(View view) {
+        AlertDialog rankInfoDialog = new AlertDialog.Builder(this)
+                .setMessage("Posting rank is determined by how many deals you have posted relative to other users." +
+                        "\nRaise your rank by posting more deals!")
+                .setPositiveButton("Got It", (dialog, which) -> {
+                    dialog.dismiss();
+                })
+                .show();
+    }
 
 }

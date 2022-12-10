@@ -57,6 +57,20 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.293" />
 
+            <TextView
+                android:id="@+id/tv_noActivities"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no_user_activities"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:textSize="24sp"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.5" />
+
             <Button
                 android:id="@+id/editButton"
                 android:layout_width="wrap_content"
@@ -80,6 +94,18 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="1.0" />
+
+            <ImageView
+                android:id="@+id/iv_rankInfo"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="14dp"
+                app:layout_constraintEnd_toStartOf="@+id/tv_RankHeader"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintHorizontal_bias="0.94"
+                android:onClick="displayRankInfo"
+                app:srcCompat="@drawable/ic_info" />
 
             <TextView
                 android:textSize="20dp"
@@ -107,8 +133,6 @@
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/tv_RankHeader"
                 app:layout_constraintTop_toTopOf="@+id/tv_RankHeader" />
-
-
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
     <com.google.android.material.navigation.NavigationView
