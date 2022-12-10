@@ -98,7 +98,7 @@ public class DealDetailsActivity extends MenuActivity {
                     for (Comment comment : comments) {
                         String userName = comment.getAuthor().getUsername().toLowerCase();
 
-                        if (userName.contains(textInput)) {
+                        if (userName.contains(textInput.toLowerCase())) {
                             filteredList.add(comment);
                         }
                     }
