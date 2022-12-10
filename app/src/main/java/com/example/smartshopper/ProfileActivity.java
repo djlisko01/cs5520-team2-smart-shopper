@@ -1,5 +1,6 @@
 package com.example.smartshopper;
 
+import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.os.Bundle;
@@ -30,6 +31,7 @@ public class ProfileActivity extends MenuActivity {
     TextView tv_noActivities;
     Button changeIcon;
     ImageView profilePic;
+    ImageView rankInfo;
 
 
     @Override
@@ -40,6 +42,7 @@ public class ProfileActivity extends MenuActivity {
 
         changeIcon= findViewById(R.id.editButton);
         tv_userRank = findViewById(R.id.tv_userRank);
+        rankInfo = findViewById(R.id.iv_rankInfo);
 
         changeIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,6 +77,14 @@ public class ProfileActivity extends MenuActivity {
         platformHelpers.getActivities(localStorage.getCurrentUser(), adapter, tv_noActivities);
     }
 
-
+    public void displayRankInfo(View view) {
+        AlertDialog rankInfoDialog = new AlertDialog.Builder(this)
+                .setMessage("Posting rank is determined by how many deals you have posted relative to other users." +
+                        "\nRaise your rank by posting more deals!")
+                .setPositiveButton("Got It", (dialog, which) -> {
+                    dialog.dismiss();
+                })
+                .show();
+    }
 
 }

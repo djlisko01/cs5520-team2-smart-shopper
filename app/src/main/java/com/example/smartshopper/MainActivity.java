@@ -88,15 +88,6 @@ public class MainActivity extends MenuActivity {
                     userRank++;
                 }
           localStorage.setUserRank(userRank);
-          Toast.makeText(this,
-                          "You're ranked: " + userRank,
-                          Toast.LENGTH_SHORT)
-                  .show();
-          Toast.makeText(this,
-                          "Post more deals to move up!",
-                          Toast.LENGTH_SHORT)
-                  .show();
-
       });
     } else {
         buttonOne.setVisibility(View.INVISIBLE);
