@@ -49,8 +49,10 @@ public class MenuActivity extends AppCompatActivity {
         setNavigationViewListener();
         View navHeader = navigationView.getHeaderView(0);
         if (localStorage.userIsLoggedIn()) {
-            TextView navText = navHeader.findViewById(R.id.tv_greeting);
-            navText.setText("Hi " + localStorage.getCurrentUser() + "!");
+            TextView greetingText = navHeader.findViewById(R.id.tv_greeting);
+            TextView rankText = navHeader.findViewById(R.id.tv_postingRank);
+            greetingText.setText("Hi " + localStorage.getCurrentUser() + "!");
+            rankText.setText("Posting Rank: " + localStorage.getUserRank());
         } else {
             navHeader.setVisibility(View.GONE);
             Menu nav_Menu = navigationView.getMenu();

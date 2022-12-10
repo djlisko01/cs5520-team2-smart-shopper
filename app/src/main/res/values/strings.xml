@@ -46,4 +46,5 @@
     <string name="sort_by_popularity">Sort by Popularity</string>
     <string name="home">Home</string>
     <string name="ranking">Your Ranking</string>
+    <string name="no_user_activities">Post or comment to see your activity!</string>
 </resources>

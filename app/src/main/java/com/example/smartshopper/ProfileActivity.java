@@ -27,9 +27,9 @@ public class ProfileActivity extends MenuActivity {
     PlatformHelpers platformHelpers;
     TextView tv_username;
     TextView tv_userRank;
+    TextView tv_noActivities;
     Button changeIcon;
     ImageView profilePic;
-
 
 
     @Override
@@ -64,12 +64,14 @@ public class ProfileActivity extends MenuActivity {
             }
         });
 
-        tv_userRank.setText(String.format(Locale.US, "%d",localStorage.getUserRank()));
+        tv_userRank.setText(String.format(Locale.US, "%d", localStorage.getUserRank()));
 
         tv_username = findViewById(R.id.tv_username);
         tv_username.setText(localStorage.getCurrentUser());
 
-        platformHelpers.getActivities(localStorage.getCurrentUser(), adapter);
+        tv_noActivities = findViewById(R.id.tv_noActivities);
+
+        platformHelpers.getActivities(localStorage.getCurrentUser(), adapter, tv_noActivities);
     }
 
 

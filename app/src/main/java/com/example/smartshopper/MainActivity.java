@@ -44,8 +44,8 @@ public class MainActivity extends MenuActivity {
   MaterialButton toggleSortDistance;
   MaterialButton toggleSortPopularity;
   MaterialButtonToggleGroup buttonGroup;
+  FloatingActionButton buttonOne;
   ImageView sortIcon;
-  int userRank = 1;
 
   @SuppressLint("ResourceAsColor")
   @Override
@@ -63,6 +63,7 @@ public class MainActivity extends MenuActivity {
     toggleSortDistance = findViewById(R.id.toggle_sortByDistance);
     toggleSortPopularity = findViewById(R.id.toggle_sortByPopularity);
     sortIcon = findViewById(R.id.sortIcon);
+    buttonOne = findViewById(R.id.fab);
 
     // Recycler View setup
     rv_dealsRecyclerView = findViewById(R.id.rv_dealsRecyclerView);
@@ -75,17 +76,18 @@ public class MainActivity extends MenuActivity {
     // Setup button listener on add deal (+) button
     setCreateDealButtonListener();
 
-    // Notification channel
     if (localStorage.userIsLoggedIn()) {
       platformHelpers.createNotifChannel();
+      buttonOne.setVisibility(View.VISIBLE);
       platformHelpers.getUserRank(sortedList -> {
+          int userRank = 1;
                 for(Object userID:sortedList){
                     if (userID.equals(localStorage.getCurrentUserID())){
                         break;
                     }
                     userRank++;
-                    localStorage.setUserRank(userRank);
                 }
+          localStorage.setUserRank(userRank);
           Toast.makeText(this,
                           "You're ranked: " + userRank,
                           Toast.LENGTH_SHORT)
@@ -96,9 +98,10 @@ public class MainActivity extends MenuActivity {
                   .show();
 
       });
+    } else {
+        buttonOne.setVisibility(View.INVISIBLE);
+        buttonOne.setEnabled(false);
     }
-
-
 
     platformHelpers.getDealsAndUpdateMainRV(adapter, null, null, loadingAnimation);
 
@@ -175,7 +178,6 @@ public class MainActivity extends MenuActivity {
     }
 
     private void setCreateDealButtonListener() {
-        FloatingActionButton buttonOne = (FloatingActionButton) findViewById(R.id.fab);
         buttonOne.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, CreateDealActivity.class));

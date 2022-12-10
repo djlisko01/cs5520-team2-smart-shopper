@@ -464,7 +464,7 @@ public class PlatformHelpers {
 //
 //    }
 
-    public void getActivities(String username, ProfileAdapter adapter) {
+    public void getActivities(String username, ProfileAdapter adapter, TextView noActivities) {
         Query query = rtdbDatabase.getAllDeals();
         query.addValueEventListener(new ValueEventListener() {
             @Override
@@ -476,7 +476,6 @@ public class PlatformHelpers {
                     assert deal != null;
 
                     if(deal.getUserUUID().equals(localStorage.getCurrentUserID())){
-
                         activities.add(new ActivityTimestamp("You posted "+ deal.getTitle(), deal.getTimePosted()));
                     }
 
@@ -490,10 +489,12 @@ public class PlatformHelpers {
 
                     }
                 }
+                if (!activities.isEmpty()) {
+                    noActivities.setVisibility(View.GONE);
+                }
                 Collections.sort(activities);
                 Collections.reverse(activities);
                 adapter.updateTitle(activities);
-
             }
 
             @Override
