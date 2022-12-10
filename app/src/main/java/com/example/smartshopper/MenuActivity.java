@@ -83,7 +83,7 @@ public class MenuActivity extends AppCompatActivity {
         }
         else {
             AlertDialog signOutAlert = new AlertDialog.Builder(this)
-                    .setMessage("Are you sure you want to sign out?")
+                    .setMessage("Are you sure you want to sign out? This will clear your session and history.")
                     .setPositiveButton("Yes", (dialog, which) -> {
                         dialog.dismiss();
                         if (loginMenuItem != null) {
