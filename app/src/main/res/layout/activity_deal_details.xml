@@ -27,7 +27,7 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:iconifiedByDefault="false"
-          android:queryHint="Search Here"
+          android:queryHint="Search for Users' Comments Here"
           app:layout_constraintBottom_toTopOf="@+id/constraintLayout2"
           app:layout_constraintEnd_toEndOf="parent"
           app:layout_constraintHorizontal_bias="0.5"
