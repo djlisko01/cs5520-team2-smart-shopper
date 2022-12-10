@@ -45,6 +45,7 @@ public class MainActivity extends MenuActivity {
   MaterialButton toggleSortPopularity;
   MaterialButtonToggleGroup buttonGroup;
   ImageView sortIcon;
+  int userRank = 1;
 
   @SuppressLint("ResourceAsColor")
   @Override
@@ -77,7 +78,27 @@ public class MainActivity extends MenuActivity {
     // Notification channel
     if (localStorage.userIsLoggedIn()) {
       platformHelpers.createNotifChannel();
+      platformHelpers.getUserRank(sortedList -> {
+                for(Object userID:sortedList){
+                    if (userID.equals(localStorage.getCurrentUserID())){
+                        break;
+                    }
+                    userRank++;
+                    localStorage.setUserRank(userRank);
+                }
+          Toast.makeText(this,
+                          "You're ranked: " + userRank,
+                          Toast.LENGTH_SHORT)
+                  .show();
+          Toast.makeText(this,
+                          "Post more deals to move up!",
+                          Toast.LENGTH_SHORT)
+                  .show();
+
+      });
     }
+
+
 
     platformHelpers.getDealsAndUpdateMainRV(adapter, null, null, loadingAnimation);
 

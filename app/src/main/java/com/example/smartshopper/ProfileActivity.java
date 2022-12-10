@@ -19,13 +19,17 @@ import com.example.smartshopper.responseInterfaces.StringInterface;
 import com.example.smartshopper.services.RTDBService;
 import com.example.smartshopper.utilities.LocalStorage;
 
+import java.util.Locale;
+
 public class ProfileActivity extends MenuActivity {
     RecyclerView rv_activity;
     ProfileAdapter adapter;
     PlatformHelpers platformHelpers;
     TextView tv_username;
+    TextView tv_userRank;
     Button changeIcon;
     ImageView profilePic;
+
 
 
     @Override
@@ -35,6 +39,7 @@ public class ProfileActivity extends MenuActivity {
         LocalStorage localStorage = new LocalStorage(this);
 
         changeIcon= findViewById(R.id.editButton);
+        tv_userRank = findViewById(R.id.tv_userRank);
 
         changeIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,8 +64,7 @@ public class ProfileActivity extends MenuActivity {
             }
         });
 
-
-
+        tv_userRank.setText(String.format(Locale.US, "%d",localStorage.getUserRank()));
 
         tv_username = findViewById(R.id.tv_username);
         tv_username.setText(localStorage.getCurrentUser());
