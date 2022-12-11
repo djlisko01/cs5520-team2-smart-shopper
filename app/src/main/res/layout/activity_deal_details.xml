@@ -65,8 +65,9 @@
           android:layout_marginTop="16dp"
           android:layout_marginBottom="16dp"
           app:layout_constraintBottom_toTopOf="@+id/rv_comments"
-          app:layout_constraintTop_toBottomOf="@+id/tv_productDescription"
-          tools:layout_editor_absoluteX="0dp">
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toBottomOf="@+id/tv_productDescription">
 
         <ImageView
             android:id="@+id/iv_upVote"
@@ -120,8 +121,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.891"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_dealTitle"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.5" />
 
       </androidx.constraintlayout.widget.ConstraintLayout>
 
